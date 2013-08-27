@@ -28,7 +28,7 @@ def jeanneHeaton(request, instructor_url_name):
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBAKYrGa3uyfkzYlkrTmLF763DdUrhfOAwInLXNW32rBZCnleGXryz3SlDjyspGfZB2yYSFUWfZCk2nS7n4RHbx7pfApVsZCv6Nh8Ybx0kyrPfwnFNPv1WpyCxGTc3EIgqEce8vAWU9b1QNgPyEwPZCyNuzzHFPj9qecWt8SFIA4PEmuVR1yaXyMMnKVUHQmHHSpKYzBOwgf3eu2QemvzkeKGFRChNLHwZDZD'
+    token = 'CAACEdEose0cBAJujc3fbZAhSEcs9nTpdZAuy9iwrie8wZANtTt69rQmjztPUzbUpELDxBu2WECmqGKZBOZAYV5Y6bZCFFzOVqQYcmCk1S7sYkvmzbh8ATUe9oOIXZB78ypix2Lj2otSQ38ARX3UFZBQioictrG7AG22cOJfoyKVygL6h4ZCZAcM1sJByl7qbbLJpDlSPjHqMCs1mfd0wprM3WKHdBCGsZC1lWRfUew3ftPGIAZDZD'
     graph = facebook.GraphAPI(token)
     instructors = Instructor.objects.filter(name_url=instructor_url_name)
     instructor = instructors[0]
