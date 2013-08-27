@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Max Zalota's site</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    {% load staticfiles %}
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet" media="screen" type="text/css">
+    <link href="{% static "fbwall.css" %}" rel="stylesheet" media="screen" type="text/css">
+
+
+    {% load facebook %}
+    {% facebook_init %}
+        {% block facebook_code %}{% endblock %}
+    {% endfacebook %}
+
+</head>
+
+<body>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="span2">
+            <!--Sidebar content-->
+            left nav
+        </div>
+        <div class="span8">
+            <!--Body  content-->
+
+            {% load sitetree %}
+            <div class="navbar">
+                <a class="brand" href="/">Max Zalota's Site</a>
+                <div class="navbar-inner">
+                    {% sitetree_menu from "main_tree" include "trunk" template "sitetree/menu_bootstrap.html" %}
+                </div>
+            </div>
+
+            {% sitetree_breadcrumbs from "main_tree" template "breadcrumbs.html" %}
+
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="span2">
+            <!--Sidebar content-->
+            this is right nav
+        </div>
+    </div>
+</div>
+
+</body>
+{% facebook_load %}
+</html>

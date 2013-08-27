@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% for instructor in instructors %}
+        <h2>{{ instructor.instructor_name }}</h2>
+        <p>{{ instructor.url_facebook }}</p>
+        <p>Created on pure:{{ instructor.created_on }}</p>
+        <p>Modified on pure: {{ instructor.modified_on }}</p>
+        <p>{{ instructor.modified_on|date:"l, F jS" }}</p>
+
+        <img  src="http://graph.facebook.com/{{ instructor.fb_userid }}/picture?type=large"/>
+        <!-- <img  src="http://graph.facebook.com/JeanneEllenHeaton/picture?type=large"/> -->
+
+    {% endfor %}
+
+{% endblock %}
+
