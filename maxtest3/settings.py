@@ -111,7 +111,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_facebook.middleware.FacebookMiddleware',
+    'django_facebook.middleware.FacebookMiddleware', #django_facebook.middleware.FacebookCanvasMiddleWare
 )
 
 ROOT_URLCONF = 'maxtest3.urls'
@@ -170,6 +170,7 @@ LOGGING = {
 
 FACEBOOK_APP_ID = '168665979983590'
 FACEBOOK_SECRET_KEY = '3902fc0c920f171bfd34bdde65415459'
+FACEBOOK_APP_SECRET = ''
 
 # Optionally set default permissions to request, e.g: ['email', 'user_about_me']
 FACEBOOK_SCOPE = []

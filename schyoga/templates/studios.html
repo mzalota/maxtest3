@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Here are the studios</h1>
+    <h1>Here are the studios</h1>
 
-{% for studio in studios %}
+    {% for studio in studios %}
 
-<h2>Name: {{ studio.name }}</h2>
-<p>Name URL: {{ studio.name_url }}</p>
-<p>State: {{ studio.name_url }}</p>
-<p>URL Home: {{ studio.url_home }}</p>
-<p>URL Schedule: {{ studio.url_schedule }}</p>
-<p>mindbodyonline_id: {{ studio.mindbodyonline_id }}</p>
+        <h2>Name: {{ studio.name }}</h2>
+        <p>Name URL: {{ studio.name_url }}</p>
+        <p>State: {{ studio.name_url }}</p>
+        <p>URL Home: {{ studio.url_home }}</p>
+        <p>URL Schedule: {{ studio.url_schedule }}</p>
+        <p>mindbodyonline_id: {{ studio.mindbodyonline_id }}</p>
 
-<p>Created On: {{ studio.created_on }}</p>
-<p>Modified On: {{ studio.modified_on|date:"l, F jS" }}</p>
+        <p>Created On: {{ studio.created_on }}</p>
+        <p>Modified On: {{ studio.modified_on|date:"l, F jS" }}</p>
 
-{% endfor %}
+    {% endfor %}
 
 {% endblock %}

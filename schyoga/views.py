@@ -20,7 +20,10 @@ def shoutOuts(request):
     return render_to_response('shout-outs.html', {}, RequestContext(request))
 
 
-def jeanneHeaton(request, instructor_url_name):
+def instructorSchedule(request, instructor_url_name):
+    return render_to_response('instructor-schedule.html', {}, RequestContext(request))
+
+def instructor(request, instructor_url_name):
 
     #https://www.facebook.com/JeanneEllenHeaton
     #https://graph.facebook.com/JeanneEllenHeaton/feed?access_token=CAAAAAITEghMBAIeRlyE803IvUcjjQ43WPkM44b36XLAnCVZBFjJEF76ZBBXaiDS7kBfSY4fqrEphDiXVZBl9ot9WFGZBCKpP7U9CcMMZCMIhmZBb0BBF5D7NLWY3a9XAj02EZCaOeksYFpm2bP4rWWthGN2X6MhWuCmokuZAnZAHSa8LYx21FmomqrvoJgtUmO0HhOkTGpqFU0DZA8wy9eKpGwDpxIvim1DhSGbYpK0LSABwZDZD
@@ -28,7 +31,7 @@ def jeanneHeaton(request, instructor_url_name):
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBAJujc3fbZAhSEcs9nTpdZAuy9iwrie8wZANtTt69rQmjztPUzbUpELDxBu2WECmqGKZBOZAYV5Y6bZCFFzOVqQYcmCk1S7sYkvmzbh8ATUe9oOIXZB78ypix2Lj2otSQ38ARX3UFZBQioictrG7AG22cOJfoyKVygL6h4ZCZAcM1sJByl7qbbLJpDlSPjHqMCs1mfd0wprM3WKHdBCGsZC1lWRfUew3ftPGIAZDZD'
+    token = 'CAACEdEose0cBAJSs975MvefBBnlOtqRYYSgAjwttXe3gdjwAnjxB2dHoCwDWRbr23pLQoaExJTDmj81Nuq16Qda6agyMFSezhRLjVK8044glnYxosedOLR4zLtZC8NqiDKBt2gH3rjMTh8x0LWtJIPDBkJUeD8zD4EiQ7aynXAcx62jGIp4ZCCZAIqIPpNIhJVguaGxDnWNJHjyDiZCkpRSbXBSIEd3McgcuBj7NKQZDZD'
     graph = facebook.GraphAPI(token)
     instructors = Instructor.objects.filter(name_url=instructor_url_name)
     instructor = instructors[0]
@@ -38,7 +41,7 @@ def jeanneHeaton(request, instructor_url_name):
     #friends = graph.get_connections("me", "friends")
     #friend_list = [friend['name'] for friend in friends['data']]
 
-    if fbUserId != None:
+    if fbUserId is not None:
         fbFeed = graph.get_connections(fbUserId, "feed")
         feeds = fbFeed['data']
     else:
@@ -46,7 +49,7 @@ def jeanneHeaton(request, instructor_url_name):
 
     return render_to_response('instructor.html',
                           { 'instructor': instructor, 'feeds': feeds, },
-                          context_instance=RequestContext(request))
+                            RequestContext(request))
 
 
 def instructors(request):
@@ -54,15 +57,18 @@ def instructors(request):
     instructors = Instructor.objects.all()
 
     return render_to_response('instructors.html',
-                          {'instructors': instructors, },
-                          context_instance=RequestContext(request))
+                            { 'instructors': instructors, },
+                            context_instance=RequestContext(request))
 
 
 def studios(request):
     studios = Studio.objects.all()
-    t = loader.get_template("studios.html")
-    c = Context({'studios': studios})
-    return HttpResponse(t.render(c))
+    #t = loader.get_template("studios.html")
+    #c = Context({'studios': studios})
+    #return HttpResponse(t.render(c))
+    return render_to_response('studios.html',
+                            { 'studios': studios, },
+                            context_instance=RequestContext(request))
 
 
 def events(request):
@@ -74,6 +80,10 @@ def events(request):
     t = loader.get_template("events.html")
     c = Context({ 'events': events})
     return HttpResponse(t.render(c))
+
+
+
+
 
  #def friends(request):
      #django_facebook.middleware.FacebookMiddleware.get_fb_user()
