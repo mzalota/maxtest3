@@ -22,6 +22,8 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
+        .bs-sidebar .nav  .active  ul { display: block; margin-bottom: 8px; }
     </style>
 
     {% load facebook %}
@@ -42,7 +44,7 @@
             <!--Sidebar content-->
             left nav
         </div>
-        <div class="span8">
+        <div class="span10">
             <!--Body  content-->
 
             {% load sitetree %}
@@ -58,10 +60,7 @@
             {% block content %}
             {% endblock %}
         </div>
-        <div class="span2">
-            <!--Sidebar content-->
-            this is right nav
-        </div>
+
     </div>
 </div>
 

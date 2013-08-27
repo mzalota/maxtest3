@@ -2,42 +2,73 @@
 {% block content %}
 
     <h1>{{ instructor.instructor_name }}</h1>
-    <p>FaceBook ID is {{ instructor.fb_userid }}</p>
 
-{% if feeds %}
-    {% load maxcustomfilter1 %}
-    {% load humanize %}
 
-    <div id="page">
-        <div id="wall" class="facebookWall">
-            <ul>
-            {% for feed in feeds %}
-                <li>
-                    <a href="http://www.facebook.com/profile.php?id={{ feed.from.id }}" target="_blank">
-                        <img src="http://graph.facebook.com/{{ feed.from.id }}/picture?type=small" class="avatar" alt="{{ feed.from.name }}">
-                    </a>
-                    <div class="status">
-                        <h2>{{ feed.story }}</h2>
-                        <p class="message">{{ feed.message }} </p>
 
-                        <div class="attachment">
-                            <img class="picture" src="{{ feed.picture }}">
-                            <div class="attachment-data">
-                                <p class="name"><a href="{{ feed.link }}" target="_blank">{{ feed.name }}</a>
-                                </p>
-                                <p class="caption">{{ feed.caption }}</p>
-                                <p class="description"> {{ feed.description }} </p>
-                            </div>
-                        </div>
+    <div class="row-fluid">
+        <div class="span2">
+            <div class="sidebar-nav">
+                <ul class="nav nav-pills nav-stacked">
+                  <li class="active"><a href="#">Profile</a></li>
+                  <li><a href="#">Facebook feed</a></li>
+                  <li><a href="#">Philosophy</a></li>
+                  <li><a href="#">Schedule</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="span4">
+            <h3> {{ instructor.instructor_name }}'s Profile: </h3>
+            <blockquote>
+                <p>
+                 Jeanne's journey to Bikram Yoga began with a deep realization that if she were to save her life she would need to change it, entirely. An actress, she arrived in NYC in search of fame and fortune but instead found drugs and alcohol. There, she checked herself into a long-term residential rehab facility to finally detox all drugs. But when she re-entered the world, the physical damage to her body was taking its toll and that's when her friend bought her a 30-day Bikram Yoga introductory package. Bikram Yoga turned out to be the missing puzzle piece to her recovery. Jeanne is the proud recipient of Bikram's 2010 Teacher Training Scholarship. Her mission is to teach all people, especially recovering drug addicts, that no matter how bad you think it is, it's never too late to start from the scratch, one posture at a time.
+                </p>
+
+                <small>From <cite title="Source Title"> <a href="http://www.bikramyoganyc.com/about-us/our-instructors/"></a> Bikram Yoga NYC website</cite>
+             </small>
+        </blockquote>
+
+        </div>
+        <div class="span6">
+            {% if feeds %}
+                {% load maxcustomfilter1 %}
+                {% load humanize %}
+
+                <div id="page">
+                    <div id="wall" class="facebookWall">
+                    <h2>
+                        <a href="http://facebook.com/{{ instructor.fb_userid }}">{{ instructor.instructor_name }}'s Facebook feed:
+                            <img class="img-thumbnail" alt="{{ instructor.instructor_name }}'s Facebook profile picture"  src="http://graph.facebook.com/{{ instructor.fb_userid }}/picture?type=large"/>
+                        </a>
+                    </h2>
+                        <ul>
+                        {% for feed in feeds %}
+                            <li>
+                                <a href="http://www.facebook.com/profile.php?id={{ feed.from.id }}" target="_blank">
+                                    <img src="http://graph.facebook.com/{{ feed.from.id }}/picture?type=small" class="avatar" alt="{{ feed.from.name }}">
+                                </a>
+                                <div class="status">
+                                    <h2>{{ feed.story }}</h2>
+                                    <p class="message">{{ feed.message }} </p>
+
+                                    <div class="attachment">
+                                        <img class="picture" src="{{ feed.picture }}">
+                                        <div class="attachment-data">
+                                            <p class="name"><a href="{{ feed.link }}" target="_blank">{{ feed.name }}</a>
+                                            </p>
+                                            <p class="caption">{{ feed.caption }}</p>
+                                            <p class="description"> {{ feed.description }} </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="meta">{{ feed.created_time|convertfbdate|naturaltime}} ·      {{ feed.comments.data|length }} Comments   ·      {{ feed.likes.count }} Likes    </p>
+                            </li>
+                        {% endfor %}
+                        </ul>
                     </div>
-
-                    <p class="meta">{{ feed.created_time|convertfbdate|naturaltime}} ·      {{ feed.comments.data|length }} Comments   ·      {{ feed.likes.count }} Likes    </p>
-                </li>
-            {% endfor %}
-            </ul>
+                </div>
+            {% endif %}
         </div>
     </div>
-{% endif %}
-
 {% endblock %}
 

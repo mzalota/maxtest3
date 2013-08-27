@@ -31,7 +31,7 @@ def instructor(request, instructor_url_name):
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBAJSs975MvefBBnlOtqRYYSgAjwttXe3gdjwAnjxB2dHoCwDWRbr23pLQoaExJTDmj81Nuq16Qda6agyMFSezhRLjVK8044glnYxosedOLR4zLtZC8NqiDKBt2gH3rjMTh8x0LWtJIPDBkJUeD8zD4EiQ7aynXAcx62jGIp4ZCCZAIqIPpNIhJVguaGxDnWNJHjyDiZCkpRSbXBSIEd3McgcuBj7NKQZDZD'
+    token = 'CAACEdEose0cBAJY5FQ24RrfZBCjgPtqL1i4oYaKXNwQOVeI3KSDjTQnf2gZBeRtK4Gl5pFAN33NRmtseoGpOsGaWGSIpXG50oiEVLsMvQQJJaHDTFPZBmDYWw73iYaGUoZBZBfDJULibzR22Yasobsb0WOyXSKpUzxhYNOpw9Jz2xZCZBJzxgzZAtaOV7PWFkKSOzqLry90vjGZAVAx9sEiVNSwqNZBZALRZBZCyFJHY9EZCjR8gZDZD'
     graph = facebook.GraphAPI(token)
     instructors = Instructor.objects.filter(name_url=instructor_url_name)
     instructor = instructors[0]
