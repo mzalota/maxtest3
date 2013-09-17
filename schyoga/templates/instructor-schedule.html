@@ -1,165 +1,297 @@
 {% extends "base.html" %}
 {% block content %}
 
+<h1>Yoga Instructor {{ instructor.instructor_name }}</h1>
 
-<div class="table-responsive">
-    <table class="calendar table table-striped table-bordered table-condensed table-hover">
-        <tbody>
-        <tr>
-            <th>Start Time</th>
-            <th class="cal_info_cell">
-                <div class="text-center">Tue</div>
-                <div class="text-center" style="white-space: nowrap;">Sep 03</div>
-            </th>
-            <th class="cal_info_cell">
-                <div class="text-center">Wed</div>
-                <div class="text-center" style="white-space: nowrap;">Sep 04</div>
-            </th>
-            <th class="cal_info_cell">
-                <div class="text-center">Thu</div>
-                <div class="text-center" style="white-space: nowrap;">Sep 05</div>
-            </th>
-            <th class="cal_info_cell">
-                <div class="text-center">Fri</div>
-                <div class="text-center" style="white-space: nowrap;">Sep 06</div>
-            </th>
-            <th class="cal_info_cell">
-                <div class="text-center">Sat</div>
-                <div class="text-center" style="white-space: nowrap;">Sep 07</div>
-            </th>
-            <th class="cal_info_cell_sunday">
-            </th>
-            <th class="cal_info_cell">
-                <div class="text-center">Sun</div>
-                <div class="text-center" style="white-space: nowrap;">Sep 08</div>
-            </th>
-            <th class="cal_info_cell">
-                <div class="text-center">Mon</div>
-                <div class="text-center" style="white-space: nowrap;">Sep 09</div>
-            </th>
-        </tr>
-        <tr>
-            <td class="cal_time_cell">
-                <span class="carrot_compact"> &nbsp;</span>
-                <div class="text-left" style="white-space: nowrap;"> 10:00 AM </div>
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td style="min-width: 65px;">
-                <div class="text-center text-info"><strong> Bikram Yoga </strong></div>
 
-                <hr>
+<h3> Dictionary start times </h3>
 
-                <span class="glyphicon glyphicon-time"></span>
-                1hr &amp; 30min
+    count of start times:  {{ startTimes }}
 
-                    <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
+{% for key, value in startTimes.item %}
+    aaa
+  <li>{{key}} - {{value}}</li>
+ {% endfor %}
 
-                        <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-04.html"
-                           title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
-                             <abbr title="Studio: Bikram Yoga Grand Central">
-                                <span class="glyphicon glyphicon-home"></span>
-                                 Bikram Yoga Grand Central
-                             </abbr>
-                        </a>
+
+
+<h3> Unique start times </h3>
+{% for startTime, vals in startTimes.iteritems %}
+    event #{{ forloop.counter }} <br>
+    Start time: {{ startTime }} <br>
+    Start time: {{ vals }}
+    <hr>
+{% endfor %}
+
+<h3> Found {{ events.count }} classes </h3>
+
+
+{% for event in events %}
+    event #{{ forloop.counter }} <br>
+    Start time: {{ event.start_time }} <br>
+    Start time filter: {{ event.start_time|date:"D d M Y T" }} <br>
+
+    Class Name: {{ event.comments }}
+    <hr>
+{% endfor %}
+
+ <div class="row-fluid">
+    <div class="span10">
+
+        <div class="tabbable">
+            {% load sitetree %}
+            {% sitetree_menu from "instructor-tree" include "trunk" template "instructors-submenu.html" %}
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+
+
+
+                    <div class="table-responsive">
+                        <table class="calendar table table-striped table-bordered table-condensed table-hover">
+                            <tbody>
+                            <tr>
+                                <th>Start Time</th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Tue</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 03</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Wed</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 04</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Thu</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 05</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Fri</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 06</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Sat</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 07</div>
+                                </th>
+                                <th class="cal_info_cell_sunday">
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Sun</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 08</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Mon</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 09</div>
+                                </th>
+                            </tr>
+
+                            {% for startTime, eventsByDate in startTimes.iteritems %}
+                            <tr>
+                                <td class="cal_time_cell">
+                                    <span class="carrot_compact"> &nbsp;</span>
+                                    <div class="text-left" style="white-space: nowrap;"> {{ startTime }} </div>
+                                </td>
+                                {% for calDate in calendarDates %}
+                                    {%  if calDate in eventsByDate %}
+                                        found entry in eventsByDate  for date: {{ calDate }} -- {{ eventsByDate|get_key:calDate}} <br>
+                                        {% for events in eventsByDate.calDate %}
+                                            {% for event in events %}
+                                                <td style="min-width: 65px;">
+                                                    <div class="text-center text-info"><strong> {{ event.comments }} </strong></div>
+
+                                                    <hr>
+
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                    1hr &amp; 30min
+
+                                                    <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
+
+                                                        <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-04.html"
+                                                           title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
+                                                             <abbr title="Studio: Bikram Yoga Grand Central">
+                                                                <span class="glyphicon glyphicon-home"></span>
+                                                                 Bikram Yoga Grand Central
+                                                             </abbr>
+                                                        </a>
+                                                    </div>
+                                                </td>
+
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {%  else %}
+                                        <td class="cal_info_cell summary">
+                                        </td>
+                                    {%  endif %}
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                       </div>
+
+
+                    <div class="table-responsive">
+                        <table class="calendar table table-striped table-bordered table-condensed table-hover">
+                            <tbody>
+                            <tr>
+                                <th>Start Time</th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Tue</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 03</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Wed</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 04</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Thu</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 05</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Fri</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 06</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Sat</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 07</div>
+                                </th>
+                                <th class="cal_info_cell_sunday">
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Sun</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 08</div>
+                                </th>
+                                <th class="cal_info_cell">
+                                    <div class="text-center">Mon</div>
+                                    <div class="text-center" style="white-space: nowrap;">Sep 09</div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td class="cal_time_cell">
+                                    <span class="carrot_compact"> &nbsp;</span>
+                                    <div class="text-left" style="white-space: nowrap;"> 10:00 AM </div>
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td style="min-width: 65px;">
+                                    <div class="text-center text-info"><strong> Bikram Yoga </strong></div>
+
+                                    <hr>
+
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    1hr &amp; 30min
+
+                                        <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
+
+                                            <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-04.html"
+                                               title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
+                                                 <abbr title="Studio: Bikram Yoga Grand Central">
+                                                    <span class="glyphicon glyphicon-home"></span>
+                                                     Bikram Yoga Grand Central
+                                                 </abbr>
+                                            </a>
+                                        </div>
+                                    </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell_sunday">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="cal_time_cell">
+                                    <span class="carrot_compact"> &nbsp;</span>
+                                    <div class="text-left" style="white-space: nowrap;">11:00 AM </div>
+                                </td>
+                                <td class="cal_info_cell summary">
+                                    <div class="summary text-left text-success">
+
+                                        <strong>Find Your Balance $8 class</strong> <span class="glyphicon glyphicon-info-sign"></span></div>
+                                    <hr>
+                                    <span class="glyphicon glyphicon-time"></span>
+                                    1hr 30mins
+
+
+                                    <div class="location cal_studio_name" style="">
+                                        <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-03.html"
+                                           title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
+                                             <abbr title="Studio: Bikram Yoga Grand Central">
+                                                 <span class="glyphicon glyphicon-home"></span>
+                                                 Bikram Yoga Grand Central </abbr>
+                                        </a>
+                                    </div>
+                                 </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                    <abbr class="dtstart" title="2013-09-03T11:00:00.000">
+
+                                        <div class="summary">Find Your Balance $8 class (1 hour &amp; 30 minutes)</div>
+
+                                        <div class="location cal_studio_name">
+                                            Studio:
+                                            <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-05.html"
+                                               title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
+                                                Bikram Yoga Grand Central
+                                            </a>
+                                        </div>
+                                    </abbr></td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell_sunday">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="cal_time_cell">
+                                    <span class="carrot_compact"> &nbsp;</span>
+                                    <div class="text-left" style="white-space: nowrap;"> 4:00 PM</div>
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                    <abbr class="dtstart" title="2013-09-03T16:00:00.000">
+
+                                        <div class="summary">Bikram Yoga (1 hour &amp; 30 minutes)</div>
+
+                                        <div class="location cal_studio_name">
+                                            Studio:
+                                            <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-04.html"
+                                               title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
+                                                Bikram Yoga Grand Central
+                                            </a>
+                                        </div>
+                                    </abbr></td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell_sunday">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                                <td class="cal_info_cell summary">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell_sunday">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-        </tr>
-        <tr>
-            <td class="cal_time_cell">
-                <span class="carrot_compact"> &nbsp;</span>
-                <div class="text-left" style="white-space: nowrap;">11:00 AM </div>
-            </td>
-            <td class="cal_info_cell summary">
-                <div class="summary text-left text-success">
-
-                    <strong>Find Your Balance $8 class</strong> <span class="glyphicon glyphicon-info-sign"></span></div>
-                <hr>
-                <span class="glyphicon glyphicon-time"></span>
-                1hr 30mins
-
-
-                <div class="location cal_studio_name" style="">
-                    <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-03.html"
-                       title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
-                         <abbr title="Studio: Bikram Yoga Grand Central">
-                             <span class="glyphicon glyphicon-home"></span>
-                             Bikram Yoga Grand Central </abbr>
-                    </a>
                 </div>
-             </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-                <abbr class="dtstart" title="2013-09-03T11:00:00.000">
-
-                    <div class="summary">Find Your Balance $8 class (1 hour &amp; 30 minutes)</div>
-
-                    <div class="location cal_studio_name">
-                        Studio:
-                        <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-05.html"
-                           title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
-                            Bikram Yoga Grand Central
-                        </a>
-                    </div>
-                </abbr></td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell_sunday">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-        </tr>
-        <tr>
-            <td class="cal_time_cell">
-                <span class="carrot_compact"> &nbsp;</span>
-                <div class="text-left" style="white-space: nowrap;"> 4:00 PM</div>
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-                <abbr class="dtstart" title="2013-09-03T16:00:00.000">
-
-                    <div class="summary">Bikram Yoga (1 hour &amp; 30 minutes)</div>
-
-                    <div class="location cal_studio_name">
-                        Studio:
-                        <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-04.html"
-                           title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
-                            Bikram Yoga Grand Central
-                        </a>
-                    </div>
-                </abbr></td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell_sunday">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-            <td class="cal_info_cell summary">
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+            </div>
+        </div>
+    </div>
+ </div>
 {% endblock %}

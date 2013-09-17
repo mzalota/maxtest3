@@ -7,6 +7,7 @@ from django.conf.urls import *
 urlpatterns = patterns('schyoga.views',
     url(r'^events/', 'events'),
     url(r'^studios/', 'studios', name = 'studios'),
+    url(r'^instructors/(?P<instructor_url_name>\S+)/facebook-feed.html$', 'instructorFacebookFeed', name='instructor-facebook-feed'),
     url(r'^instructors/(?P<instructor_url_name>\S+)/schedule.html$', 'instructorSchedule', name='instructor-schedule'),
     url(r'^instructors/(?P<instructor_url_name>\S+)/$', 'instructor', name='instructor'),
     url(r'^instructors/$', 'instructors', name='instructors'),

@@ -8,6 +8,8 @@ from schyoga.models import Instructor
 from schyoga.models import Studio
 from schyoga.models import Event
 
+import collections
+import datetime
 #from django_facebook.middleware import FacebookMiddleware
 import facebook
 
@@ -21,17 +23,55 @@ def shoutOuts(request):
 
 
 def instructorSchedule(request, instructor_url_name):
-    return render_to_response('instructor-schedule.html', {}, RequestContext(request))
+    instructors = Instructor.objects.filter(name_url=instructor_url_name)
+    instructor = instructors[0]
+    events = instructor.event_set.all().order_by('start_time')
 
-def instructor(request, instructor_url_name):
 
+    #startTimes dictionary - key is event start_time and value is array of events that start at that time.
+    startTimes = collections.OrderedDict()
+    for event in events:
+        startTimeStr = event.start_time.strftime('%H:%M')
+        dayOfWeek = event.start_time.strftime('%x')
+        if not startTimeStr in startTimes:
+            startTimes[startTimeStr] = collections.OrderedDict() # dict() #first time that a key is inserted to the dictionary initalize value to be a list
+
+        if not dayOfWeek in startTimes[startTimeStr]:
+            startTimes[startTimeStr][dayOfWeek] = list() #first time that a key is inserted to the dictionary initalize value to be a list
+
+        startTimes[startTimeStr][dayOfWeek].append(event)
+
+
+
+    calendarDates = [datetime.datetime(2013, 8, 5).strftime('%x'),
+                     datetime.datetime(2013, 8, 6).strftime('%x'),
+                     datetime.datetime(2013, 8, 7).strftime('%x'),
+                     datetime.datetime(2013, 8, 8).strftime('%x'),
+                     datetime.datetime(2013, 8, 9).strftime('%x'),
+                     datetime.datetime(2013, 8, 10).strftime('%x'),
+                     datetime.datetime(2013, 8, 11).strftime('%x'),
+                     datetime.datetime(2013, 8, 12).strftime('%x'),
+                     datetime.datetime(2013, 8, 13).strftime('%x'),
+                     datetime.datetime(2013, 8, 14).strftime('%x'),
+                     datetime.datetime(2013, 8, 15).strftime('%x'),
+                     datetime.datetime(2013, 8, 16).strftime('%x'),
+                     datetime.datetime(2013, 8, 17).strftime('%x'),
+                     datetime.datetime(2013, 8, 18).strftime('%x'),
+                     datetime.datetime(2013, 8, 19).strftime('%x'),]
+
+    return render_to_response('instructor-schedule.html',
+                              {'instructor': instructor, 'events': events, 'startTimes': startTimes , 'calendarDates': calendarDates, },
+                              RequestContext(request))
+
+
+def instructorFacebookFeed(request, instructor_url_name):
     #https://www.facebook.com/JeanneEllenHeaton
     #https://graph.facebook.com/JeanneEllenHeaton/feed?access_token=CAAAAAITEghMBAIeRlyE803IvUcjjQ43WPkM44b36XLAnCVZBFjJEF76ZBBXaiDS7kBfSY4fqrEphDiXVZBl9ot9WFGZBCKpP7U9CcMMZCMIhmZBb0BBF5D7NLWY3a9XAj02EZCaOeksYFpm2bP4rWWthGN2X6MhWuCmokuZAnZAHSa8LYx21FmomqrvoJgtUmO0HhOkTGpqFU0DZA8wy9eKpGwDpxIvim1DhSGbYpK0LSABwZDZD
     #https://graph.facebook.com/me/feed?access_token=CAACZAZApvSluYBAPdgdAF0A2ZCPCnZBOYHHcPmte2ZCuzqkrDZAGLCM1xRQ9eanr8IQBJP09eGFQBHLFN641g1BeJZCj4HZA9xnq3D5i4d0q9OPNXbSjZAiZAaoGVnE54zGAIROMuTSOotXuaFPjK4uZBMXBCZCqy954MGZB7mX91i6bzolsIQG2wzTMdpJeSSKfODwUBTsSJYUV6aypVDyGVLEOedNAYNVUzTHQMCCQLqZCu7QQZDZD
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBAJY5FQ24RrfZBCjgPtqL1i4oYaKXNwQOVeI3KSDjTQnf2gZBeRtK4Gl5pFAN33NRmtseoGpOsGaWGSIpXG50oiEVLsMvQQJJaHDTFPZBmDYWw73iYaGUoZBZBfDJULibzR22Yasobsb0WOyXSKpUzxhYNOpw9Jz2xZCZBJzxgzZAtaOV7PWFkKSOzqLry90vjGZAVAx9sEiVNSwqNZBZALRZBZCyFJHY9EZCjR8gZDZD'
+    token = 'CAACEdEose0cBAPRt0rH9X9mvuKZCV660ZB41ONNneZAexC88FDSE6W2UA46AIEidssNXdj90thR9tgqa89U1AUWW2X61Qu151Wa6rIBTuZBVMAn9bjwNUuuOUZAps6CR3HZCGzF0KztC5MZAyiM2MhHuOGocAk7kyxSZB7E41KJHNHEamH5HJMkk68sQ4KWTU3OZAVdOZBazj8LADysmlpgZAYNsc23i27HxEkZA8XeaJMQXBQZDZD'
     graph = facebook.GraphAPI(token)
     instructors = Instructor.objects.filter(name_url=instructor_url_name)
     instructor = instructors[0]
@@ -47,8 +87,20 @@ def instructor(request, instructor_url_name):
     else:
         feeds = None
 
-    return render_to_response('instructor.html',
+    return render_to_response('instructor-facebook-feed.html',
                           { 'instructor': instructor, 'feeds': feeds, },
+                            RequestContext(request))
+
+
+def instructor(request, instructor_url_name):
+
+    instructors = Instructor.objects.filter(name_url=instructor_url_name)
+    instructor = instructors[0]
+
+
+
+    return render_to_response('instructor.html',
+                          { 'instructor': instructor,},
                             RequestContext(request))
 
 
