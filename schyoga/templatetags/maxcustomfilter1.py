@@ -3,9 +3,18 @@ import pytz
 
 register = template.Library()
 import datetime
-
+from django.conf import settings
 
 from django.template.defaultfilters import stringfilter
+
+
+@register.filter(name='get')
+def get(o, index):
+    try:
+        return o[index]
+    except:
+        return settings.TEMPLATE_STRING_IF_INVALID
+
 
 @register.filter(name='convertfbdate')
 @stringfilter

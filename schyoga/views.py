@@ -42,7 +42,6 @@ def instructorSchedule(request, instructor_url_name):
 
         startTimes[startTimeStr][dayOfWeek].append(event)
 
-
     calendarDates = [datetime.datetime(2013, 8, 5).strftime('%x'),
                      datetime.datetime(2013, 8, 6).strftime('%x'),
                      datetime.datetime(2013, 8, 7).strftime('%x'),

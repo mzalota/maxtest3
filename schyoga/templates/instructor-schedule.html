@@ -3,6 +3,7 @@
 
 <h1>Yoga Instructor {{ instructor.instructor_name }}</h1>
 
+{% load maxcustomfilter1 %}
 
 <h3> Dictionary start times </h3>
 
@@ -92,30 +93,24 @@
                                 </td>
                                 {% for calDate in calendarDates %}
                                     {%  if calDate in eventsByDate %}
-                                        found entry in eventsByDate  for date: {{ calDate }} -- {{ eventsByDate|get_key:calDate}} <br>
-                                        {% for events in eventsByDate.calDate %}
-                                            {% for event in events %}
-                                                <td style="min-width: 65px;">
-                                                    <div class="text-center text-info"><strong> {{ event.comments }} </strong></div>
+                                        {% for event in eventsByDate|get:calDate %}
+                                            <td style="min-width: 65px;">
+                                                <div class="text-center text-info"><strong> {{ event.comments }} </strong></div>
+                                                <hr>
+                                                <span class="glyphicon glyphicon-time"></span>
+                                                1hr &amp; 30min
 
-                                                    <hr>
+                                                <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
 
-                                                    <span class="glyphicon glyphicon-time"></span>
-                                                    1hr &amp; 30min
-
-                                                    <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
-
-                                                        <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-04.html"
-                                                           title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
-                                                             <abbr title="Studio: Bikram Yoga Grand Central">
-                                                                <span class="glyphicon glyphicon-home"></span>
-                                                                 Bikram Yoga Grand Central
-                                                             </abbr>
-                                                        </a>
-                                                    </div>
-                                                </td>
-
-                                            {% endfor %}
+                                                    <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-04.html"
+                                                       title="Schedule for Yoga Studio: Bikram Yoga Grand Central">
+                                                         <abbr title="Studio: Bikram Yoga Grand Central">
+                                                            <span class="glyphicon glyphicon-home"></span>
+                                                             Bikram Yoga Grand Central
+                                                         </abbr>
+                                                    </a>
+                                                </div>
+                                            </td>
                                         {% endfor %}
                                     {%  else %}
                                         <td class="cal_info_cell summary">
