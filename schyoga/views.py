@@ -8,6 +8,7 @@ from schyoga.models import Instructor
 from schyoga.models import Studio
 from schyoga.models import Event
 
+
 import collections
 import datetime
 #from django_facebook.middleware import FacebookMiddleware
@@ -42,7 +43,6 @@ def instructorSchedule(request, instructor_url_name):
         startTimes[startTimeStr][dayOfWeek].append(event)
 
 
-
     calendarDates = [datetime.datetime(2013, 8, 5).strftime('%x'),
                      datetime.datetime(2013, 8, 6).strftime('%x'),
                      datetime.datetime(2013, 8, 7).strftime('%x'),
@@ -71,7 +71,7 @@ def instructorFacebookFeed(request, instructor_url_name):
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBAPRt0rH9X9mvuKZCV660ZB41ONNneZAexC88FDSE6W2UA46AIEidssNXdj90thR9tgqa89U1AUWW2X61Qu151Wa6rIBTuZBVMAn9bjwNUuuOUZAps6CR3HZCGzF0KztC5MZAyiM2MhHuOGocAk7kyxSZB7E41KJHNHEamH5HJMkk68sQ4KWTU3OZAVdOZBazj8LADysmlpgZAYNsc23i27HxEkZA8XeaJMQXBQZDZD'
+    token = 'CAACEdEose0cBAFN6ojoBZBPq9vXv9iOJ5WPWHSLQ8jQb4ZC5waEzyYfvUnoMKiTN1Uz6NlWclZCekB2zBahrN2gMZBkUNxCr6VoPOV091AlbeF0HkqmGHMtsbGoUoZAOpmO7ISbFQmDDHRbGiVYgb5QcJpeCtwV5TRebuQaqg7ccwcp0bRkpQQjZB5noudVErpbWypL0pevKYxo0Pk5cAprmLPy8bNypkU35eD2Xx6GQZDZD'
     graph = facebook.GraphAPI(token)
     instructors = Instructor.objects.filter(name_url=instructor_url_name)
     instructor = instructors[0]

@@ -2,7 +2,10 @@
 {% block content %}
 
     {% for instructor in instructors %}
-        <h2>{{ instructor.instructor_name }}</h2>
+        {% url 'schyoga.views.instructor' instructor.name_url as url_to_instructor_page %}
+
+        <h2><a href="{{ url_to_instructor_page }}">{{ instructor.instructor_name }}</a></h2>
+        <p> Url is {{ url_to_instructor_page }}</p>
         <p>{{ instructor.url_facebook }}</p>
         <p>Created on pure:{{ instructor.created_on }}</p>
         <p>Modified on pure: {{ instructor.modified_on }}</p>
