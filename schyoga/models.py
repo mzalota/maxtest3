@@ -88,6 +88,7 @@ class Event(models.Model):
     modified_on = models.DateTimeField()
     #modified_on = UnixTimestampField(auto_created=True)
     instructor = models.ForeignKey("Instructor")
+    studio = models.ForeignKey("Studio")
     #studio_id
     class Meta:
         ordering = ('-modified_on',)

@@ -8,6 +8,13 @@ from django.conf import settings
 from django.template.defaultfilters import stringfilter
 
 
+@register.assignment_tag
+def getEventsFromCalendar(o, eventDate, eventTime):
+    try:
+        return o.getEventsByDateAndTime(eventDate,eventTime)
+    except:
+        return settings.TEMPLATE_STRING_IF_INVALID
+
 @register.filter(name='get')
 def get(o, index):
     try:

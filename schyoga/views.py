@@ -15,6 +15,96 @@ import datetime
 import facebook
 
 
+class Schedule():
+    def __init__(self, events):
+        self.events = events
+
+        startTimes = []
+        calendarDates = []
+        for event in self.events:
+            startTimeStr = event.start_time.strftime('%H:%M')
+            dateStr = event.start_time.strftime('%x')
+            if not startTimeStr in startTimes:
+                startTimes.append(startTimeStr)
+
+            if not dateStr in calendarDates:
+                calendarDates.append(dateStr)
+
+        calendarDates.sort()
+        startTimes.sort()
+        self.startTimes = startTimes
+        self.calendarDatesss = calendarDates
+
+    def getEventsByDateAndTime(self, eventDate, eventTime):
+        orgEvents = self.organizedEvents()
+        if not eventTime in orgEvents:
+            return None;
+
+        if not eventDate in orgEvents[eventTime]:
+            return None
+
+        return orgEvents[eventTime][eventDate]
+
+
+    def organizedEvents(self):
+        """
+        returns  dictionary - key is event start_time and value is array of events that start at that time.
+
+        :return: collections.OrderedDict
+        """
+        startTimes = collections.OrderedDict()
+        for event in self.events:
+            startTimeStr = event.start_time.strftime('%H:%M')
+            dayOfWeek = event.start_time.strftime('%x')
+            if not startTimeStr in startTimes:
+                startTimes[startTimeStr] = collections.OrderedDict() # dict() #first time that a key is inserted to the dictionary initalize value to be a list
+
+            if not dayOfWeek in startTimes[startTimeStr]:
+                startTimes[startTimeStr][dayOfWeek] = list() #first time that a key is inserted to the dictionary initalize value to be a list
+
+            startTimes[startTimeStr][dayOfWeek].append(event)
+
+        return startTimes
+
+    def calendarDates(self):
+        #TODO: Deal with Locale. So that the dates/times are not in GMT, but in EST
+        calendarDates = [datetime.datetime(2013, 8, 5).strftime('%x'),
+                 datetime.datetime(2013, 8, 6).strftime('%x'),
+                 datetime.datetime(2013, 8, 7).strftime('%x'),
+                 datetime.datetime(2013, 8, 8).strftime('%x'),
+                 datetime.datetime(2013, 8, 9).strftime('%x'),
+                 datetime.datetime(2013, 8, 10).strftime('%x'),
+                 datetime.datetime(2013, 8, 11).strftime('%x'),
+                 datetime.datetime(2013, 8, 12).strftime('%x'),
+                 datetime.datetime(2013, 8, 13).strftime('%x'),
+                 datetime.datetime(2013, 8, 14).strftime('%x'),
+                 datetime.datetime(2013, 8, 15).strftime('%x'),
+                 datetime.datetime(2013, 8, 16).strftime('%x'),
+                 datetime.datetime(2013, 8, 17).strftime('%x'),
+                 datetime.datetime(2013, 8, 18).strftime('%x'),
+                 datetime.datetime(2013, 8, 19).strftime('%x'),]
+
+        return calendarDates
+
+    def calendarDatesTimeStamp(self):
+        calendarDates = [datetime.datetime(2013, 8, 5),
+                 datetime.datetime(2013, 8, 6),
+                 datetime.datetime(2013, 8, 7),
+                 datetime.datetime(2013, 8, 8),
+                 datetime.datetime(2013, 8, 9),
+                 datetime.datetime(2013, 8, 10),
+                 datetime.datetime(2013, 8, 11),
+                 datetime.datetime(2013, 8, 12),
+                 datetime.datetime(2013, 8, 13),
+                 datetime.datetime(2013, 8, 14),
+                 datetime.datetime(2013, 8, 15),
+                 datetime.datetime(2013, 8, 16),
+                 datetime.datetime(2013, 8, 17),
+                 datetime.datetime(2013, 8, 18),
+                 datetime.datetime(2013, 8, 19),]
+        return calendarDates
+
+
 def siteMap(request):
     return render_to_response('site-map.html', {}, RequestContext(request))
 
@@ -26,40 +116,19 @@ def shoutOuts(request):
 def instructorSchedule(request, instructor_url_name):
     instructors = Instructor.objects.filter(name_url=instructor_url_name)
     instructor = instructors[0]
-    events = instructor.event_set.all().order_by('start_time')
+    eventsTmp = instructor.event_set.all().order_by('start_time')
 
-
-    #startTimes dictionary - key is event start_time and value is array of events that start at that time.
-    startTimes = collections.OrderedDict()
-    for event in events:
-        startTimeStr = event.start_time.strftime('%H:%M')
-        dayOfWeek = event.start_time.strftime('%x')
-        if not startTimeStr in startTimes:
-            startTimes[startTimeStr] = collections.OrderedDict() # dict() #first time that a key is inserted to the dictionary initalize value to be a list
-
-        if not dayOfWeek in startTimes[startTimeStr]:
-            startTimes[startTimeStr][dayOfWeek] = list() #first time that a key is inserted to the dictionary initalize value to be a list
-
-        startTimes[startTimeStr][dayOfWeek].append(event)
-
-    calendarDates = [datetime.datetime(2013, 8, 5).strftime('%x'),
-                     datetime.datetime(2013, 8, 6).strftime('%x'),
-                     datetime.datetime(2013, 8, 7).strftime('%x'),
-                     datetime.datetime(2013, 8, 8).strftime('%x'),
-                     datetime.datetime(2013, 8, 9).strftime('%x'),
-                     datetime.datetime(2013, 8, 10).strftime('%x'),
-                     datetime.datetime(2013, 8, 11).strftime('%x'),
-                     datetime.datetime(2013, 8, 12).strftime('%x'),
-                     datetime.datetime(2013, 8, 13).strftime('%x'),
-                     datetime.datetime(2013, 8, 14).strftime('%x'),
-                     datetime.datetime(2013, 8, 15).strftime('%x'),
-                     datetime.datetime(2013, 8, 16).strftime('%x'),
-                     datetime.datetime(2013, 8, 17).strftime('%x'),
-                     datetime.datetime(2013, 8, 18).strftime('%x'),
-                     datetime.datetime(2013, 8, 19).strftime('%x'),]
+    sched = Schedule(eventsTmp)
+    events = sched.events
+    startTimes = sched.startTimes
+    calendarDates = sched.calendarDates
 
     return render_to_response('instructor-schedule.html',
-                              {'instructor': instructor, 'events': events, 'startTimes': startTimes , 'calendarDates': calendarDates, },
+                                {'instructor': instructor,
+                                 'events': events,
+                                 'startTimes': startTimes ,
+                                 'calendarDates': calendarDates,
+                                 'calendar': sched, },
                               RequestContext(request))
 
 
@@ -95,8 +164,6 @@ def instructor(request, instructor_url_name):
 
     instructors = Instructor.objects.filter(name_url=instructor_url_name)
     instructor = instructors[0]
-
-
 
     return render_to_response('instructor.html',
                           { 'instructor': instructor,},
