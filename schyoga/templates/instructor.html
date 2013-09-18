@@ -1,36 +1,14 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "instructor-base.html" %}
 
-    <h1>Yoga Instructor {{ instructor.instructor_name }}</h1>
+{% block instructor-main-conent %}
+    <h3> {{ instructor.instructor_name }}'s Profile: </h3>
+    <blockquote>
+        <p>
+         Jeanne's journey to Bikram Yoga began with a deep realization that if she were to save her life she would need to change it, entirely. An actress, she arrived in NYC in search of fame and fortune but instead found drugs and alcohol. There, she checked herself into a long-term residential rehab facility to finally detox all drugs. But when she re-entered the world, the physical damage to her body was taking its toll and that's when her friend bought her a 30-day Bikram Yoga introductory package. Bikram Yoga turned out to be the missing puzzle piece to her recovery. Jeanne is the proud recipient of Bikram's 2010 Teacher Training Scholarship. Her mission is to teach all people, especially recovering drug addicts, that no matter how bad you think it is, it's never too late to start from the scratch, one posture at a time.
+        </p>
 
-    <div class="row-fluid">
-        <div class="span10">
-            <div class="tabbable">
-
-                {% load sitetree %}
-                {% sitetree_menu from "instructor-tree" include "trunk" template "instructors-submenu.html" %}
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab1">
-                        <h3> {{ instructor.instructor_name }}'s Profile: </h3>
-                        <blockquote>
-                            <p>
-                             Jeanne's journey to Bikram Yoga began with a deep realization that if she were to save her life she would need to change it, entirely. An actress, she arrived in NYC in search of fame and fortune but instead found drugs and alcohol. There, she checked herself into a long-term residential rehab facility to finally detox all drugs. But when she re-entered the world, the physical damage to her body was taking its toll and that's when her friend bought her a 30-day Bikram Yoga introductory package. Bikram Yoga turned out to be the missing puzzle piece to her recovery. Jeanne is the proud recipient of Bikram's 2010 Teacher Training Scholarship. Her mission is to teach all people, especially recovering drug addicts, that no matter how bad you think it is, it's never too late to start from the scratch, one posture at a time.
-                            </p>
-
-                            <small>From <cite title="Source Title"> <a href="http://www.bikramyoganyc.com/about-us/our-instructors/"></a> Bikram Yoga NYC website</cite>
-                            </small>
-                        </blockquote>
-                    </div>
-                    <div class="tab-pane" id="tab2">
-                      <p>Howdy, I'm in Section 2.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="span2">
-            right side
-        </div>
-    </div>
+        <small>From <cite title="Source Title"> <a href="http://www.bikramyoganyc.com/about-us/our-instructors/"></a> Bikram Yoga NYC website</cite>
+        </small>
+    </blockquote>
 {% endblock %}
 
