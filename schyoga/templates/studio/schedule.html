@@ -41,7 +41,7 @@ $(function() {  // DOM READY shorthand
                 {%  if not events %}
                     <td class="cal_info_cell summary"> </td>
                 {%  else %}
-                    {% include "snippet-calendar-event-studio.html" with events=events only %}
+                    {% include "studio/snippet-calendar-event.html" with events=events only %}
                 {%  endif %}
             {% endfor %}
         </tr>

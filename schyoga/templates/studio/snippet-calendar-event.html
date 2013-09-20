@@ -6,7 +6,7 @@
         <hr>
         <!-- <span class="glyphicon glyphicon-time"></span> 1hr &amp; 30min -->
         <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
-            {% url 'instructor' event.instructor.name_url as url_to_instructor_page %}
+            {% url 'teacher-profile' event.instructor.name_url as url_to_instructor_page %}
 
             <a href="{{ url_to_instructor_page }}"
                title="Schedule for Yoga Teaccher: {{ event.instructor.instructor_name }}">

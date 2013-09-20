@@ -2,9 +2,9 @@ from django.template import loader, Context, RequestContext
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 
-from schyoga.models import Instructor
+#from schyoga.models import Instructor
 from schyoga.models import Studio
-from schyoga.models import Event
+#from schyoga.models import Event
 
 from schyoga.bizobj.schedule import Schedule
 

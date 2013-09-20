@@ -1,7 +1,7 @@
 #from django.conf.urls.defaults import *
 from django.conf.urls import *
 
-#from schyoga.views import instructors
+#from schyoga.views import list
 
 
 urlpatterns = patterns('schyoga.views',
@@ -12,10 +12,10 @@ urlpatterns = patterns('schyoga.views',
     url(r'^studios/(?P<studio_url_name>\S+)/facebook-feed.html$', 'studios.facebookFeed', name='studio-facebook-feed'),
     url(r'^studios/', 'studios.list', name='studios'),
 
-    url(r'^instructors/(?P<instructor_url_name>\S+)/facebook-feed.html$', 'instructors.instructorFacebookFeed', name='instructor-facebook-feed'),
-    url(r'^instructors/(?P<instructor_url_name>\S+)/schedule.html$', 'instructors.instructorSchedule', name='instructor-schedule'),
-    url(r'^instructors/(?P<instructor_url_name>\S+)/$', 'instructors.instructor', name='instructor'),
-    url(r'^instructors/$', 'instructors.instructors', name='instructors'),
+    url(r'^teachers/(?P<teacher_url_name>\S+)/facebook-feed.html$', 'teachers.facebookFeed', name='teacher-facebook-feed'),
+    url(r'^teachers/(?P<teacher_url_name>\S+)/schedule.html$', 'teachers.schedule', name='teacher-schedule'),
+    url(r'^teachers/(?P<teacher_url_name>\S+)/$', 'teachers.profile', name='teacher-profile'),
+    url(r'^teachers/$', 'teachers.list', name='teachers'),
 
     url(r'^site-map.html$', 'other.siteMap', name='site-map'),
     url(r'^shout-outs.html$', 'other.shoutOuts', name='shout-outs'),
