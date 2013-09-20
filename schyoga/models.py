@@ -47,6 +47,7 @@ class Instructor(models.Model):
     #body = models.TextField()
     created_on = models.DateTimeField(blank=True)
     modified_on = models.DateTimeField()
+    state = 'new-york'
     #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
         ordering = ('-modified_on',)

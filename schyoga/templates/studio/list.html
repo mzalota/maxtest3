@@ -5,7 +5,7 @@
 
     {% for studio in studios %}
 
-        {% url 'studio-profile' studio.name_url as url_to_studio_page %}
+        {% url 'studio-profile' studio.state studio.name_url as url_to_studio_page %}
 
         <h2><a href="{{ url_to_studio_page }}">{{ studio.name }}</a></h2>
 

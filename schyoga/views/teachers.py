@@ -14,7 +14,7 @@ import datetime
 
 import facebook
 
-def schedule(request, teacher_url_name):
+def schedule(request, state_url_name, teacher_url_name):
     instructors = Instructor.objects.filter(name_url=teacher_url_name)
     instructor = instructors[0]
     eventsTmp = instructor.event_set.all().order_by('start_time')
@@ -27,7 +27,7 @@ def schedule(request, teacher_url_name):
                                 RequestContext(request))
 
 
-def facebookFeed(request, teacher_url_name):
+def facebookFeed(request, state_url_name, teacher_url_name):
     #https://www.facebook.com/JeanneEllenHeaton
     #https://graph.facebook.com/JeanneEllenHeaton/feed?access_token=CAAAAAITEghMBAIeRlyE803IvUcjjQ43WPkM44b36XLAnCVZBFjJEF76ZBBXaiDS7kBfSY4fqrEphDiXVZBl9ot9WFGZBCKpP7U9CcMMZCMIhmZBb0BBF5D7NLWY3a9XAj02EZCaOeksYFpm2bP4rWWthGN2X6MhWuCmokuZAnZAHSa8LYx21FmomqrvoJgtUmO0HhOkTGpqFU0DZA8wy9eKpGwDpxIvim1DhSGbYpK0LSABwZDZD
     #https://graph.facebook.com/me/feed?access_token=CAACZAZApvSluYBAPdgdAF0A2ZCPCnZBOYHHcPmte2ZCuzqkrDZAGLCM1xRQ9eanr8IQBJP09eGFQBHLFN641g1BeJZCj4HZA9xnq3D5i4d0q9OPNXbSjZAiZAaoGVnE54zGAIROMuTSOotXuaFPjK4uZBMXBCZCqy954MGZB7mX91i6bzolsIQG2wzTMdpJeSSKfODwUBTsSJYUV6aypVDyGVLEOedNAYNVUzTHQMCCQLqZCu7QQZDZD
@@ -51,24 +51,26 @@ def facebookFeed(request, teacher_url_name):
         feeds = None
 
     return render_to_response('teacher/facebook-feed.html',
-                          { 'instructor': instructor, 'feeds': feeds, },
+                          { 'instructor': instructor,
+                            'feeds': feeds, },
                             RequestContext(request))
 
 
-def profile(request, teacher_url_name):
+def profile(request, state_url_name, teacher_url_name):
 
     instructors = Instructor.objects.filter(name_url=teacher_url_name)
     instructor = instructors[0]
 
     return render_to_response('teacher/profile.html',
-                          { 'instructor': instructor,},
+                          { 'instructor': instructor, },
                             RequestContext(request))
 
 
-def list(request):
+def list(request, state_url_name):
     #list = Instructor.objects.filter(instructor_name="Jeanne Heaton")
     instructors = Instructor.objects.all()
 
     return render_to_response('teacher/list.html',
-                            { 'instructors': instructors, },
+                            { 'instructors': instructors,
+                              'state_url_name': state_url_name, },
                             context_instance=RequestContext(request))
