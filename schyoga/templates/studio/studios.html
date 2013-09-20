@@ -5,9 +5,11 @@
 
     {% for studio in studios %}
 
-        <h2>Name: {{ studio.name }}</h2>
-        <p>Name URL: {{ studio.name_url }}</p>
-        <p>State: {{ studio.name_url }}</p>
+        {% url 'studio-profile' studio.name_url as url_to_studio_page %}
+
+        <h2><a href="{{ url_to_studio_page }}">{{ studio.name }}</a></h2>
+
+        <p>State: {{ studio.state }}</p>
         <p>URL Home: {{ studio.url_home }}</p>
         <p>URL Schedule: {{ studio.url_schedule }}</p>
         <p>mindbodyonline_id: {{ studio.mindbodyonline_id }}</p>

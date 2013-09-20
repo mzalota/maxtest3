@@ -1,0 +1,37 @@
+{% extends "studio/studio-base.html" %}
+
+{% block studio-main-conent %}
+    <h3> {{ studio.name }}'s Profile: </h3>
+
+
+        <h2>Name: {{ studio.name }}</h2>
+        <p>Name URL: {{ studio.name_url }}</p>
+        <p>State: {{ studio.name_url }}</p>
+        <p>URL Home: {{ studio.url_home }}</p>
+        <p>URL Schedule: {{ studio.url_schedule }}</p>
+        <p>mindbodyonline_id: {{ studio.mindbodyonline_id }}</p>
+
+        <p>Created On: {{ studio.created_on }}</p>
+        <p>Modified On: {{ studio.modified_on|date:"l, F jS" }}</p>
+
+
+    <blockquote>
+
+    <p><strong>WELCOME TO BALANCED YOGA </strong><br>
+        <em>Your neighborhood studio</em><br>
+        A place where we come together to practice all levels, all love, all the time.</p>
+
+    <p>If you are new to Balanced, we welcome you to our sacred, fun, and open-hearted studio. You will find that every student who walks through the door of Balanced is met with an open heart both on and off the mat.</p>
+
+    <p>We offer a variety of classes at Balanced because we believe in the intrinsic healing power of all forms of asana as well as the lifestyle lived by the yogi/yogini. We are a place where competition is left behind, as we offer all level classes, all the time. </p>
+
+    <p>Classes are open to every(body) to promote a caring, non-competitive environment where you can relax, work up a sweat and have fun. So if you are new to yoga, pick a class and start your journey. If you have been practicing a day or a year, keep coming and grow your practice, because every day is a beginner day.  </p>
+
+    <p>Namaste</p>
+
+
+        <small>From <cite title="Source Title"> <a href="http://balancedyoga.us/about-bys/"></a> Balanced Yoga website</cite>
+        </small>
+    </blockquote>
+{% endblock %}
+

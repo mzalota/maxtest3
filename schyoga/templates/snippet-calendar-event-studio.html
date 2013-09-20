@@ -6,13 +6,13 @@
         <hr>
         <!-- <span class="glyphicon glyphicon-time"></span> 1hr &amp; 30min -->
         <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
-            {% url 'schyoga.views.instructor' instructor.name_url as url_to_instructor_page %}
+            {% url 'instructor' event.instructor.name_url as url_to_instructor_page %}
 
-            <a href="/studios/new-york/bikram-yoga-grand-central/2013-09-04.html"
-               title="Schedule for Yoga Studio: {{ event.studio.name }}">
-                 <abbr title="Studio:{{ event.studio.name }}">
-                    <span class="glyphicon glyphicon-home"></span>
-                    {{ event.studio.name }}
+            <a href="{{ url_to_instructor_page }}"
+               title="Schedule for Yoga Teaccher: {{ event.instructor.instructor_name }}">
+                 <abbr title="Yoga Teacher:{{ event.instructor.instructor_name }}">
+                    <span class="glyphicon glyphicon-user"></span>
+                    {{ event.instructor.instructor_name }}
                  </abbr>
             </a>
         </div>

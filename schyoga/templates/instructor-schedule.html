@@ -11,7 +11,7 @@
 $(function() {  // DOM READY shorthand
   $("#nextBtn, #prevBtn").click(function() {
     var dir = this.id=="nextBtn" ? '+=' : '-=' ;
-    $("#scrollableCalendar").stop().animate({scrollLeft: dir+'400'}, 1000);
+    $("#scrollableCalendar").stop().animate({scrollLeft: dir+'400'}, 500);
   });
 
 });
@@ -41,7 +41,7 @@ $(function() {  // DOM READY shorthand
                 {%  if not events %}
                     <td class="cal_info_cell summary"> </td>
                 {%  else %}
-                    {% include "snippet-calendar-event.html" with events=events only %}
+                    {% include "snippet-calendar-event-instructor.html" with events=events only %}
                 {%  endif %}
             {% endfor %}
         </tr>
