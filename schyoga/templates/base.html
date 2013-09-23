@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Max Zalota's site</title>
+    {% block header %}
+    {% endblock %}
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
     {% load staticfiles %}
-    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet" media="screen" type="text/css">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+
+
+    <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> -->
+    <!-- <link href="{% static "css/bootstrap.css" %}" rel="stylesheet" media="screen" type="text/css"> -->
     <link href="{% static "fbwall.css" %}" rel="stylesheet" media="screen" type="text/css">
 
 
@@ -35,23 +47,23 @@
 
 <body>
     <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <!-- <script src="{% static "js/bootstrap.min.js" %}"></script>-->
 
-<div class="container-fluid">
+<div class="container">
     <div class="row">
 
-        <div class="span2">
+        <div class="col-md-2">
             <!--Sidebar content-->
             left nav
         </div>
-        <div class="span10">
+        <div class="col-md-10">
             <!--Body  content-->
 
             {% load sitetree %}
             <div class="navbar">
-                <a class="brand" href="/">Max Zalota's Site</a>
+                <a class="navbar-brand" href="/">Max Zalota's Site</a>
                 <div class="navbar-inner">
-                    {% sitetree_menu from "main_tree" include "trunk" template "sitetree/menu_bootstrap.html" %}
+                    {% sitetree_menu from "main_tree" include "trunk" template "top-menu.html" %}
                 </div>
             </div>
 
@@ -59,10 +71,30 @@
 
             {% block content %}
             {% endblock %}
+
+            <div class="container text-center">
+
+                    <span>
+                        <a href="/about-us/" title="About Us: The ScheduleYoga.com Story">About Us </a> |
+                    </span>
+                    <span>
+                        <a href="/privacy-policy/" target="new" title="ScheduleYoga.com Privacy Policy">Privacy Policy</a> |
+                    </span>
+                    <span>
+                       Copyright <span class="glyphicon glyphicon-copyright-mark"></span> 2011 <a href="/" title="ScheduleYoga.com">ScheduleYoga.com</a>. All rights reserved.
+                    </span>
+
+            </div>
+
         </div>
 
+
+
     </div>
+
 </div>
+
+
 
 </body>
 {% facebook_load %}

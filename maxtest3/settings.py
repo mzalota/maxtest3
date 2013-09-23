@@ -6,7 +6,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Developer of SchYoga', 'mzalota@yahoo.com'),
 )
 
 MANAGERS = ADMINS
@@ -36,9 +36,6 @@ TIME_ZONE = 'America/Chicago'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
-
-USE_I18N = True
-USE_L10N = True
 
 SITE_ID = 1
 
@@ -112,6 +109,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_facebook.middleware.FacebookMiddleware', #django_facebook.middleware.FacebookCanvasMiddleWare
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'maxtest3.urls'
@@ -129,10 +127,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'django.contrib.flatpages',
     'schyoga',
     'django_facebook',
     'django.contrib.humanize',

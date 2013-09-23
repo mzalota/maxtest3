@@ -3,6 +3,7 @@ from schyoga.models import Event
 import collections
 import datetime
 
+from operator import itemgetter, attrgetter
 
 class Schedule():
     def __init__(self, events, startDate, numDays = 14):
@@ -57,6 +58,26 @@ class Schedule():
             startTimes[startTimeStr][dayOfWeek].append(event)
 
         return startTimes
+
+    def getNumOfEvents(self):
+        return self.events.count()
+
+    def getDistinctStudios(self):
+        studios = set()
+        for event in self.events:
+            studios.add(event.studio)
+
+        sortedStudios = sorted(studios, key=attrgetter('name'))
+        return sortedStudios
+
+
+    def getDistinctInstructors(self):
+        instructors = set()
+        for event in self.events:
+            instructors.add(event.instructor)
+
+        sortedInstructors = sorted(instructors, key=attrgetter('instructor_name'))
+        return sortedInstructors
 
 
     def getEventsByDateAndTime(self, eventDate, eventTimeStr):

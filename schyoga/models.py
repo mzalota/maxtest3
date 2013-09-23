@@ -8,6 +8,9 @@ from time import strftime
 #
 # Custom field types in here.
 #
+from schyoga.bizobj.state import State
+
+
 class UnixTimestampField(models.DateTimeField):
     """UnixTimestampField: creates a DateTimeField that is represented on the
     database as a TIMESTAMP field rather than the usual DATETIME field.
@@ -61,21 +64,35 @@ admin.site.register(Instructor, InstructorAdmin)
 
 class Studio(models.Model):
     name = models.CharField(max_length=100)
-    name_url = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
+    nameForURL = models.CharField(max_length=100, db_column='name_url')
+    state_name_url = models.CharField(max_length=100, db_column='state')
     url_home = models.URLField()
     url_schedule = models.URLField()
     xpath = models.CharField(max_length=1024)
     mindbodyonline_id = models.CharField(max_length=10)
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
+    fbPageID = 'balancedyoga'
     #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
         ordering = ('-modified_on',)
 
 
+    @property
+    def state(self):
+        """
+        :return: State
+        """
+        return State.createFromUrlName(self.state_name_url)
+
+
+    # @stateObj.setter
+    # def stateObj(self, value):
+    #     bla-bla
+
+
 class StudioAdmin(admin.ModelAdmin):
-    list_display = ('id', 'state', 'name', 'name_url', 'url_home', 'url_schedule', 'modified_on', 'created_on')
+    list_display = ('id', 'state_name_url', 'name', 'nameForURL', 'url_home', 'url_schedule', 'modified_on', 'created_on')
 
 
 admin.site.register(Studio, StudioAdmin)

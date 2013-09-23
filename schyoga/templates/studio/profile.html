@@ -1,8 +1,10 @@
 {% extends "studio/studio-base.html" %}
 
 {% block studio-main-conent %}
-    <h3> {{ studio.name }}'s Profile: </h3>
 
+    {% include "studio/snippet-submenu.html" with curPage=curPage state=state studio=studio only %}
+
+    <h3> {{ studio.name }}'s Profile: </h3>
 
         <h2>Name: {{ studio.name }}</h2>
         <p>Name URL: {{ studio.name_url }}</p>

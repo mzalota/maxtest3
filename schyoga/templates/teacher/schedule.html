@@ -1,6 +1,17 @@
 {% extends "teacher/teacher-base.html" %}
 {% block teacher-main-conent %}
 
+<p>
+    Yoga Teacher {{ instructor.instructor_name }}'s schedule over two weeks
+    {% if calendar.getNumOfEvents == 0  %}
+        has no classes
+    {% elif calendar.getNumOfEvents == 1 %}
+        has one class.
+    {% else %}
+        has {{ calendar.getNumOfEvents }} classes.
+    {% endif %}
+</p>
+
 {% load maxcustomfilter1 %}
 
 <button id="prevBtn" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-left"></span> Prev</button>
@@ -18,7 +29,7 @@ $(function() {  // DOM READY shorthand
 </script>
 
 
-<div id="scrollableCalendar" style="max-width: 780px; overflow-x: hidden">
+<div id="scrollableCalendar" style="overflow-x: hidden">
     <table class="calendar table table-responsive table-striped table-bordered table-condensed table-hover" >
         <tbody>
         <tr>
@@ -50,7 +61,21 @@ $(function() {  // DOM READY shorthand
     </table>
 </div>
 
+{% if calendar.getNumOfEvents > 0  %}
+<p>
+   The schedule for Yoga Teacher {{ instructor.instructor_name }} presented above was built from the schedules at the following yoga studios:
+</p>
 
+<ul>
+{% for studio in calendar.getDistinctStudios %}
+<li>
+    {% url 'studio-schedule' studio.state.nameForURL studio.nameForURL as url_to_studio_page %}
+    <a href="{{ url_to_studio_page }}" title="Yoga studio {{ studio.name }} schedule"> {{ studio.name }} </a>
+</li>
+{% endfor %}
+</ul>
+
+{% endif %}
 
 <div class="table-responsive">
     <table class="calendar table table-striped table-bordered table-condensed table-hover">

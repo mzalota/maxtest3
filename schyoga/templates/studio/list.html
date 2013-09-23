@@ -1,22 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h1>Here are the studios</h1>
+    <h1>View Schedule at Yoga Studios in {{ state.name }}:</h1>
 
+    <ol>
     {% for studio in studios %}
 
-        {% url 'studio-profile' studio.state studio.name_url as url_to_studio_page %}
+        {% url 'studio-profile' state.nameForURL studio.nameForURL as url_to_studio_page %}
 
-        <h2><a href="{{ url_to_studio_page }}">{{ studio.name }}</a></h2>
-
-        <p>State: {{ studio.state }}</p>
-        <p>URL Home: {{ studio.url_home }}</p>
-        <p>URL Schedule: {{ studio.url_schedule }}</p>
-        <p>mindbodyonline_id: {{ studio.mindbodyonline_id }}</p>
-
-        <p>Created On: {{ studio.created_on }}</p>
-        <p>Modified On: {{ studio.modified_on|date:"l, F jS" }}</p>
+        <li><a href="{{ url_to_studio_page }}">{{ studio.name }}</a></li>
 
     {% endfor %}
-
+    </ol>
 {% endblock %}

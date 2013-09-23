@@ -1,8 +1,9 @@
 from django.template import loader, Context, RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 
 #from schyoga.models import Instructor
+from schyoga.bizobj.state import State
 from schyoga.models import Studio
 #from schyoga.models import Event
 
@@ -13,35 +14,68 @@ import facebook
 
 #TODO: Need to provide state_url_name variable in every page so that top-level menus would work properly
 
+
+class StudioPage:
+    ENUM_STUDIO_PROFILE = 1
+    ENUM_STUDIO_SCHEDULE = 2
+    ENUM_STUDIO_FACEBOOKFEED = 3
+
+    def __init__(self, curPageID):
+        self.id = curPageID
+
+
+
 def list(request, state_url_name):
-    studios = Studio.objects.all()
+
+    state = State.createFromUrlName(state_url_name)
+    if state is None:
+        raise Http404
+
+    studios = Studio.objects.all().filter(state_name_url=state_url_name).order_by('name')
     #t = loader.get_template("list.html")
     #c = Context({'studios': studios})
     #return HttpResponse(t.render(c))
+
+
     return render_to_response('studio/list.html',
                             { 'studios': studios,
-                              'state_url_name': state_url_name, },
+                              'state': state, },
                             context_instance=RequestContext(request))
 
 def profile(request, state_url_name, studio_url_name):
 
-    studios = Studio.objects.filter(name_url=studio_url_name)
+    state = State.createFromUrlName(state_url_name)
+
+    #person = get_object_or_404(Studio, nameForURL=studio_url_name)
+
+    studios = Studio.objects.filter(nameForURL=studio_url_name)
     studio = studios[0]
 
-    return render_to_response('studio/studio-profile.html',
-                          { 'studio': studio,},
+    curPage = StudioPage(StudioPage.ENUM_STUDIO_PROFILE)
+
+    return render_to_response('studio/profile.html',
+                          { 'studio': studio,
+                            'state': state,
+                            'curPage': curPage},
                             RequestContext(request))
 
 
 def schedule(request, state_url_name, studio_url_name):
-    studios = Studio.objects.filter(name_url=studio_url_name)
+
+    state = State.createFromUrlName(state_url_name)
+
+    studios = Studio.objects.filter(nameForURL=studio_url_name)
     studio = studios[0]
     eventsTmp = studio.event_set.all().order_by('start_time')
 
     sched = Schedule(eventsTmp, datetime.datetime(2013, 8, 6), 14)
 
+    curPage = StudioPage(StudioPage.ENUM_STUDIO_SCHEDULE)
+
     return render_to_response('studio/schedule.html',
                                 {'studio': studio,
+                                 'state': state,
+                                 'curPage': curPage,
                                  'calendar': sched, },
                               RequestContext(request))
 
@@ -52,9 +86,12 @@ def facebookFeed(request, state_url_name, studio_url_name):
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBAGpZAAjtasaei8JiZCnh6Moob5Bp2YDRwcoxGS9r7v8nV9I5LFl23pLOd443MXyRWEr0vWiynv6IkJ0K3ZBOqe3RI6w7z81ZBlzhRBBrYZAPnrZCYkM0S8gpqXs7rOmyVHuYN548hzocoFAlRodWGxPH3ENqZASlaHAVBgTU7SAc873TTbT9UZAjPN1bi0SeoVKe0CBkuykmzIbtUXM1yqK9cf5L5D63YwZDZD'
+    state = State.createFromUrlName(state_url_name)
+
+
+    token = 'CAACEdEose0cBAAZBO48lL1H0fcHRBVZA97YVpM3q11MOb7xPBUhJTmZAXeyFYaqNU4ZAXz34Mw51EaNoCsak1hvczyxVgGz8A7JsmZCf4drZADmZB3w3gQRoQur3mTdqMHOwBc5eAiwYogSVLvqZCJIRkTYPbbh5o7PCKPQxhTRxli7E93JLtNH2UMftJkv8huq9Q4JvoHk7ERZBzgBbwSgYtBpn2SanAKVyBTjNZAdwN7vwZDZD'
     graph = facebook.GraphAPI(token)
-    studios = Studio.objects.filter(name_url=studio_url_name)
+    studios = Studio.objects.filter(nameForURL=studio_url_name)
     studio = studios[0]
     fbUserId = 'balancedyoga' #instructor.fb_userid
 
@@ -68,8 +105,12 @@ def facebookFeed(request, state_url_name, studio_url_name):
     else:
         feeds = None
 
+    curPage = StudioPage(StudioPage.ENUM_STUDIO_FACEBOOKFEED)
+
     return render_to_response('studio/facebook-feed.html',
                            {'studio': studio,
+                            'state': state,
+                            'curPage': curPage,
                             'feeds': feeds, },
                             RequestContext(request))
 

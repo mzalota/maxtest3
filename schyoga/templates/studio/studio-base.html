@@ -5,16 +5,7 @@
 
     <div class="row-fluid">
         <div class="span12">
-            <div class="tabbable">
-                {% load sitetree %}
-                {% sitetree_menu from "instructor-tree" include "trunk" template "instructors-submenu.html" %}
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab1">
-                        {% block studio-main-conent %}{% endblock %}
-                    </div> <!-- class tab-pane active -->
-                </div>
-            </div>
+            {% block studio-main-conent %}{% endblock %}
         </div>
     </div>
 {% endblock %}

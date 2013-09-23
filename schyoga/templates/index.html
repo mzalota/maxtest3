@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Schedule for Yoga Studios in:</div>
+  <!-- List group -->
+  <div class="list-group">
+    <a href="{% url 'studios' 'new-york' %}" class="list-group-item"> New York</a>
+    <a href="{% url 'studios' 'connecticut' %}" class="list-group-item"> Connecticut (New Haven area)</a>
+    <a href="{% url 'studios' 'massachusetts' %}" class="list-group-item"> Massachusetts (Boston)</a>
+  </div>
+</div>
+
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Schedule for Yoga Teachers in:</div>
+  <!-- List group -->
+  <div class="list-group">
+    <a href="{% url 'teachers' 'new-york' %}" class="list-group-item"> New York</a>
+    <a href="{% url 'teachers' 'connecticut' %}" class="list-group-item"> Connecticut (New Haven area)</a>
+    <a href="{% url 'teachers' 'massachusetts' %}" class="list-group-item"> Massachusetts (Boston)</a>
+  </div>
+</div>
+
+{% endblock %}

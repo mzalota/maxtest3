@@ -4,6 +4,8 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
+#handler404 = 'schyoga.views.other.page404'
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'maxtest3.views.home', name='home'),

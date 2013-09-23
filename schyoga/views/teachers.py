@@ -17,13 +17,16 @@ import facebook
 def schedule(request, state_url_name, teacher_url_name):
     instructors = Instructor.objects.filter(name_url=teacher_url_name)
     instructor = instructors[0]
-    eventsTmp = instructor.event_set.all().order_by('start_time')
+    events = instructor.event_set.all().order_by('start_time')
 
-    sched = Schedule(eventsTmp, datetime.datetime(2013, 8, 6), 14)
+    #TODO: filter events from DB by date, so that dates on the calendar correspond with what was pulled from DB
+
+    sched = Schedule(events, datetime.datetime(2013, 8, 5), 14)
 
     return render_to_response('teacher/schedule.html',
                                 {'instructor': instructor,
-                                 'calendar': sched, },
+                                 'calendar': sched,
+                                 'num_events': events.count(),},
                                 RequestContext(request))
 
 

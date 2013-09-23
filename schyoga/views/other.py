@@ -2,7 +2,7 @@
 
 from django.template import loader, Context, RequestContext
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 
 from schyoga.models import Instructor
 from schyoga.models import Studio
@@ -14,6 +14,16 @@ import datetime
 
 import facebook
 
+
+def page404(request):
+    response = render(request, "404.html")
+    response.status_code = 404
+    return response
+    #return render(request, '404.html')
+
+
+def index(request):
+    return render_to_response('index.html', {}, RequestContext(request))
 
 def siteMap(request):
     return render_to_response('site-map.html', {}, RequestContext(request))
@@ -32,6 +42,7 @@ def events(request):
     t = loader.get_template("events.html")
     c = Context({ 'events': events})
     return HttpResponse(t.render(c))
+
 
 
 
