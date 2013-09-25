@@ -1,17 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
+<h1>View Schedule for Yoga Teachers in {{ state.name }}:</h1>
 
-    {% for instructor in instructors %}
-        {% url 'teacher-profile' instructor.state instructor.name_url as url_to_instructor_page %}
+<div class="row">
+    <div class="col-md-9">
+        {% load staticfiles %}
+        <img src="{% static "img/doing-yoga-with-a-yoga-teacher.jpg" %}" class="img-thumbnail pull-right" alt="Doing Yoga with a Yoga Teacher" title="Doing Yoga with a Yoga Teacher" />
 
-        <h2><a href="{{ url_to_instructor_page }}">{{ instructor.instructor_name }}</a></h2>
-        <p> Url is {{ url_to_instructor_page }}</p>
-        <p>{{ instructor.url_facebook }}</p>
-        <p>Created on pure:{{ instructor.created_on }}</p>
-        <p>Modified on pure: {{ instructor.modified_on }}</p>
-        <p>{{ instructor.modified_on|date:"l, F jS" }}</p>
-
-    {% endfor %}
+        <ol>
+        {% for instructor in instructors %}
+            {% url 'teacher-profile' state.nameForURL instructor.name_url as url_to_instructor_page %}
+            <li><a href="{{ url_to_instructor_page }}" title="Schedule for Yoga Teacher {{ instructor.instructor_name }} in {{ state.name }}">{{ instructor.instructor_name }}</a></li>
+        {% endfor %}
+        </ol>
+    </div>
+    <div class="col-md-3">
+        Right Nav
+    </div>
+</div>
 
 {% endblock %}
 

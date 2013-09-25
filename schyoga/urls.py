@@ -16,6 +16,8 @@ urlpatterns = patterns('schyoga.views',
     url(r'^(?P<state_url_name>\S+)/teachers/(?P<teacher_url_name>\S+)/$', 'teachers.profile', name='teacher-profile'),
     url(r'^(?P<state_url_name>\S+)/teachers/$', 'teachers.list', name='teachers'),
 
+    url(r'^(?P<state_url_name>\S+)/$', 'other.states', name='states'),
+
     url(r'^site-map.html$', 'other.siteMap', name='site-map'),
     url(r'^shout-outs.html$', 'other.shoutOuts', name='shout-outs'),
     url(r'^$', 'other.index', name='index'),

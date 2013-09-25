@@ -46,7 +46,7 @@ class Instructor(models.Model):
     instructor_name = models.CharField(max_length=150)
     name_url = models.CharField(max_length=150)
     aliases = models.CharField(max_length=1000,blank=True)
-    fb_userid = models.CharField(max_length=150, blank=True)
+    fb_userid = 'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
     #body = models.TextField()
     created_on = models.DateTimeField(blank=True)
     modified_on = models.DateTimeField()
@@ -54,6 +54,8 @@ class Instructor(models.Model):
     #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
         ordering = ('-modified_on',)
+#TODO: introduce State attribute (One-to-Many) to Instructor objects
+
 
 class InstructorAdmin(admin.ModelAdmin):
     list_display = ('id', 'instructor_name', 'name_url', 'modified_on', 'created_on')

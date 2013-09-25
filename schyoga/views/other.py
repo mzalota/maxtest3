@@ -3,6 +3,7 @@
 from django.template import loader, Context, RequestContext
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, render
+from schyoga.bizobj.state import State
 
 from schyoga.models import Instructor
 from schyoga.models import Studio
@@ -24,6 +25,14 @@ def page404(request):
 
 def index(request):
     return render_to_response('index.html', {}, RequestContext(request))
+
+
+def states(request, state_url_name):
+
+    state = State.createFromUrlName(state_url_name)
+
+    return render_to_response('state.html', {'state': state}, RequestContext(request))
+
 
 def siteMap(request):
     return render_to_response('site-map.html', {}, RequestContext(request))

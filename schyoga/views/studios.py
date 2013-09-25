@@ -1,8 +1,9 @@
-from django.template import loader, Context, RequestContext
-from django.http import HttpResponse, Http404
+from django.template import RequestContext
+from django.http import Http404
 from django.shortcuts import render_to_response
 
 #from schyoga.models import Instructor
+from schyoga.bizobj.page import Page
 from schyoga.bizobj.state import State
 from schyoga.models import Studio
 #from schyoga.models import Event
@@ -13,15 +14,6 @@ import datetime
 import facebook
 
 #TODO: Need to provide state_url_name variable in every page so that top-level menus would work properly
-
-
-class StudioPage:
-    ENUM_STUDIO_PROFILE = 1
-    ENUM_STUDIO_SCHEDULE = 2
-    ENUM_STUDIO_FACEBOOKFEED = 3
-
-    def __init__(self, curPageID):
-        self.id = curPageID
 
 
 
@@ -51,7 +43,7 @@ def profile(request, state_url_name, studio_url_name):
     studios = Studio.objects.filter(nameForURL=studio_url_name)
     studio = studios[0]
 
-    curPage = StudioPage(StudioPage.ENUM_STUDIO_PROFILE)
+    curPage = Page(Page.ENUM_STUDIO_PROFILE)
 
     return render_to_response('studio/profile.html',
                           { 'studio': studio,
@@ -70,7 +62,7 @@ def schedule(request, state_url_name, studio_url_name):
 
     sched = Schedule(eventsTmp, datetime.datetime(2013, 8, 6), 14)
 
-    curPage = StudioPage(StudioPage.ENUM_STUDIO_SCHEDULE)
+    curPage = Page(Page.ENUM_STUDIO_SCHEDULE)
 
     return render_to_response('studio/schedule.html',
                                 {'studio': studio,
@@ -89,7 +81,7 @@ def facebookFeed(request, state_url_name, studio_url_name):
     state = State.createFromUrlName(state_url_name)
 
 
-    token = 'CAACEdEose0cBAAZBO48lL1H0fcHRBVZA97YVpM3q11MOb7xPBUhJTmZAXeyFYaqNU4ZAXz34Mw51EaNoCsak1hvczyxVgGz8A7JsmZCf4drZADmZB3w3gQRoQur3mTdqMHOwBc5eAiwYogSVLvqZCJIRkTYPbbh5o7PCKPQxhTRxli7E93JLtNH2UMftJkv8huq9Q4JvoHk7ERZBzgBbwSgYtBpn2SanAKVyBTjNZAdwN7vwZDZD'
+    token = 'CAACEdEose0cBAG8x9q0N2tLroTKDxesFcv12fAnpZC0Uenv43Epeia61ZAYJG2hk0etlQJFlTkRVUhUY8DhY8arGaJZAgIPfviyUTOVHWDibr2KZCQ2LEdTyRsQ8GRQY8gTymAAHKSdWnMLDM6c5NtKuhhMvgisNZB3KwRZBI61LgZBpVNtvWFsxJb4ppYg84llTruiakpyGNYo7koZAVQNoHONW9an5bHm1sFZAWDkLd4wZDZD'
     graph = facebook.GraphAPI(token)
     studios = Studio.objects.filter(nameForURL=studio_url_name)
     studio = studios[0]
@@ -105,7 +97,7 @@ def facebookFeed(request, state_url_name, studio_url_name):
     else:
         feeds = None
 
-    curPage = StudioPage(StudioPage.ENUM_STUDIO_FACEBOOKFEED)
+    curPage = Page(Page.ENUM_STUDIO_FACEBOOKFEED)
 
     return render_to_response('studio/facebook-feed.html',
                            {'studio': studio,

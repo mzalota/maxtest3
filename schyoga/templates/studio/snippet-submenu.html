@@ -1,16 +1,16 @@
 <ul class="nav nav-tabs">
     <li class="{% ifequal curPage.id curPage.ENUM_STUDIO_PROFILE %}active{% endifequal %}">
-        {% url 'studio-profile' state.nameForURL studio.nameForURL as url_to_studio_profile %}
-        <a href="{{ url_to_studio_profile }}">Profile</a>
+        {% url 'studio-profile' stateNameForURL studio.nameForURL as url_to_studio_profile %}
+        <a href="{{ url_to_studio_profile }}" title="Profile of Yoga Studio: {{ studio.name }}">Profile</a>
     </li>
     <li class="{% ifequal curPage.id curPage.ENUM_STUDIO_SCHEDULE %}active{% endifequal %}">
-        {% url 'studio-schedule' state.nameForURL studio.nameForURL as url_to_studio_schedule %}
-        <a href="{{ url_to_studio_schedule }}">Schedule</a>
+        {% url 'studio-schedule' stateNameForURL studio.nameForURL as url_to_studio_schedule %}
+        <a href="{{ url_to_studio_schedule }}" title="Schedule for Yoga Studio: {{ studio.name }}">Schedule</a>
     </li>
     {% if studio.fbPageID %}
     <li class="{% ifequal curPage.id curPage.ENUM_STUDIO_FACEBOOKFEED %}active{% endifequal %}">
-        {% url 'studio-facebook-feed' state.nameForURL studio.nameForURL as url_to_studio_facebook_feed %}
-        <a href="{{ url_to_studio_facebook_feed }}">Facebook Feed</a>
+        {% url 'studio-facebook-feed' stateNameForURL studio.nameForURL as url_to_studio_facebook_feed %}
+        <a href="{{ url_to_studio_facebook_feed }}" title="Facebook Feed for Yoga Studio: {{ studio.name }}">Facebook Feed</a>
     </li>
     {% endif %}
 </ul>

@@ -2,7 +2,7 @@
 
 {% block studio-main-conent %}
 
-    {% include "studio/snippet-submenu.html" with curPage=curPage state=state studio=studio only %}
+    {% include "studio/snippet-submenu.html" with curPage=curPage stateNameForURL=state.nameForURL studio=studio only %}
 
     <h3> {{ studio.name }}'s Profile: </h3>
 
