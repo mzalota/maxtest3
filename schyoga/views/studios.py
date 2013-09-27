@@ -3,6 +3,7 @@ from django.http import Http404
 from django.shortcuts import render_to_response
 
 #from schyoga.models import Instructor
+from django.template.response import TemplateResponse, SimpleTemplateResponse
 from schyoga.bizobj.page import Page
 from schyoga.bizobj.state import State
 from schyoga.models import Studio
@@ -10,11 +11,56 @@ from schyoga.models import Studio
 
 from schyoga.bizobj.schedule import Schedule
 
+from django.views.generic.base import View, ContextMixin, TemplateResponseMixin
+from django.shortcuts import render
+
 import datetime
 import facebook
 
 #TODO: Need to provide state_url_name variable in every page so that top-level menus would work properly
 
+class MaximkaResponse(TemplateResponse):
+    def get_context_data(self, **kwargs):
+        context = super(RandomNumberView, self).get_context_data(**kwargs)
+        context['kuku'] = 'bla, bla, bla'
+        return context
+
+
+class Profile( View):
+
+    #template_name='studio/profile.html'
+    def get(self, request, state_url_name, studio_url_name):
+        # <view logic>
+
+        state = State.createFromUrlName(state_url_name)
+        #state = State.createFromUrlName('michigan')
+
+        #person = get_object_or_404(Studio, nameForURL=studio_url_name)
+
+
+        studios = Studio.objects.filter(nameForURL=studio_url_name)
+        studio = studios[0]
+
+        curPage = Page(Page.ENUM_STUDIO_PROFILE)
+
+        # return render(request, 'studio/profile.html', { 'studio': studio,
+        #                     'state': state,
+        #                      'curPage': curPage})
+
+        # return self.render_to_response({ 'studio': studio,
+        #                     'state': state,
+        #                      'curPage': curPage} )
+
+        return render_to_response('studio/profile.html',
+                          { 'studio': studio,
+                            'state': state,
+                            'curPage': curPage},
+                            RequestContext(request))
+
+    def get_context_data(self, **kwargs):
+        context = super(Profile, self).get_context_data(**kwargs)
+        context['kuku'] = 'bla, bla, bla'
+        return context
 
 
 def list(request, state_url_name):
@@ -28,28 +74,10 @@ def list(request, state_url_name):
     #c = Context({'studios': studios})
     #return HttpResponse(t.render(c))
 
-
     return render_to_response('studio/list.html',
                             { 'studios': studios,
                               'state': state, },
                             context_instance=RequestContext(request))
-
-def profile(request, state_url_name, studio_url_name):
-
-    state = State.createFromUrlName(state_url_name)
-
-    #person = get_object_or_404(Studio, nameForURL=studio_url_name)
-
-    studios = Studio.objects.filter(nameForURL=studio_url_name)
-    studio = studios[0]
-
-    curPage = Page(Page.ENUM_STUDIO_PROFILE)
-
-    return render_to_response('studio/profile.html',
-                          { 'studio': studio,
-                            'state': state,
-                            'curPage': curPage},
-                            RequestContext(request))
 
 
 def schedule(request, state_url_name, studio_url_name):
@@ -81,17 +109,17 @@ def facebookFeed(request, state_url_name, studio_url_name):
     state = State.createFromUrlName(state_url_name)
 
 
-    token = 'CAACEdEose0cBAG8x9q0N2tLroTKDxesFcv12fAnpZC0Uenv43Epeia61ZAYJG2hk0etlQJFlTkRVUhUY8DhY8arGaJZAgIPfviyUTOVHWDibr2KZCQ2LEdTyRsQ8GRQY8gTymAAHKSdWnMLDM6c5NtKuhhMvgisNZB3KwRZBI61LgZBpVNtvWFsxJb4ppYg84llTruiakpyGNYo7koZAVQNoHONW9an5bHm1sFZAWDkLd4wZDZD'
+    token = 'CAACEdEose0cBACiZARJONieRJo4EJbiR9kZAeP299ZBzybETe02ANnfELjyCWuLJwsz2Go2aZCKmdwWah8xnVB0lH2voBIwZANTRGTKmeBU26cRtPpjHUsYDV9ZBU0sPvZCX8xmKv8kuarMZBuU73M3qPnbfUfRkDdYVZALNeFlcGr37beZCRUGsUub4DWfls3aVL9GSNRvpZBdHPnjqni0aklAaH2KltQkV0GL88Dxa15iMQZDZD'
     graph = facebook.GraphAPI(token)
     studios = Studio.objects.filter(nameForURL=studio_url_name)
     studio = studios[0]
-    fbUserId = 'balancedyoga' #instructor.fb_userid
+    fbUserId = studio.fbPageID  #'balancedyoga' #instructor.fb_userid
 
     #profile = graph.get_object("me")
     #friends = graph.get_connections("me", "friends")
     #friend_list = [friend['name'] for friend in friends['data']]
 
-    if fbUserId is not None:
+    if fbUserId:
         fbFeed = graph.get_connections(fbUserId, "feed")
         feeds = fbFeed['data']
     else:

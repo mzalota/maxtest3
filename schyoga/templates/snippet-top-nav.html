@@ -1,0 +1,9 @@
+    {% load sitetree %}
+    <div class="navbar">
+        <a class="navbar-brand" href="/">Max Zalota's Site</a>
+        <div class="navbar-inner">
+            {% sitetree_menu from "main_tree" include "trunk" template "top-menu.html" %}
+        </div>
+    </div>
+
+    {% sitetree_breadcrumbs from "main_tree" template "breadcrumbs.html" %}

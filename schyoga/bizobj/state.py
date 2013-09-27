@@ -1,8 +1,10 @@
 
 class State():
 
+    nameForURL = 'new-jersey'
+
     @classmethod
-    def createFromUrlName(self, stateUrlName):
+    def createFromUrlName(self, stateUrlName='new-jersey'):
         cls = self()
 
         stateName = cls.__convertNameFromURLToHuman(stateUrlName)
@@ -12,8 +14,6 @@ class State():
 
         cls.nameForURL = stateUrlName
         return cls
-
-    nameForURL = 'new-york'
 
     @property
     def name(self):

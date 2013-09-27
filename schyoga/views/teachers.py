@@ -44,13 +44,16 @@ def profile(request, state_url_name, teacher_url_name):
 
     instructors = Instructor.objects.filter(name_url=teacher_url_name)
     instructor = instructors[0]
+    events = instructor.event_set.all().order_by('start_time')
+    sched = Schedule(events)
 
     curPage = Page(Page.ENUM_TEACHER_PROFILE)
 
     return render_to_response('teacher/profile.html',
                           { 'instructor': instructor,
                             'state': state,
-                            'curPage': curPage,},
+                            'curPage': curPage,
+                            'calendar': sched,},
                             RequestContext(request))
 
 
@@ -88,7 +91,7 @@ def facebookFeed(request, state_url_name, teacher_url_name):
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBAG8x9q0N2tLroTKDxesFcv12fAnpZC0Uenv43Epeia61ZAYJG2hk0etlQJFlTkRVUhUY8DhY8arGaJZAgIPfviyUTOVHWDibr2KZCQ2LEdTyRsQ8GRQY8gTymAAHKSdWnMLDM6c5NtKuhhMvgisNZB3KwRZBI61LgZBpVNtvWFsxJb4ppYg84llTruiakpyGNYo7koZAVQNoHONW9an5bHm1sFZAWDkLd4wZDZD'
+    token = 'CAACEdEose0cBACiZARJONieRJo4EJbiR9kZAeP299ZBzybETe02ANnfELjyCWuLJwsz2Go2aZCKmdwWah8xnVB0lH2voBIwZANTRGTKmeBU26cRtPpjHUsYDV9ZBU0sPvZCX8xmKv8kuarMZBuU73M3qPnbfUfRkDdYVZALNeFlcGr37beZCRUGsUub4DWfls3aVL9GSNRvpZBdHPnjqni0aklAaH2KltQkV0GL88Dxa15iMQZDZD'
     graph = facebook.GraphAPI(token)
     instructors = Instructor.objects.filter(name_url=teacher_url_name)
     instructor = instructors[0]

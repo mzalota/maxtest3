@@ -1,8 +1,6 @@
 {% extends "studio/studio-base.html" %}
 {% block studio-main-conent %}
 
-    {% include "studio/snippet-submenu.html" with curPage=curPage stateNameForURL=state.nameForURL studio=studio only %}
-
     {% if feeds %}
         {% load maxcustomfilter1 %}
         {% load humanize %}

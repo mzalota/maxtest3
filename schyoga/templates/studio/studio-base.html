@@ -4,7 +4,11 @@
     <h1>Yoga Studio: {{ studio.name }}</h1>
 
     <div class="row-fluid">
-        <div class="span12">
+        <div class="col-md-12">
+            {% include "studio/snippet-submenu.html" with curPage=curPage stateNameForURL=state.nameForURL studio=studio only %}
+
+            <div style="margin-top: 25px; "></div>
+
             {% block studio-main-conent %}{% endblock %}
         </div>
     </div>

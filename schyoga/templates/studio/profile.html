@@ -2,21 +2,26 @@
 
 {% block studio-main-conent %}
 
-    {% include "studio/snippet-submenu.html" with curPage=curPage stateNameForURL=state.nameForURL studio=studio only %}
+<div class="row">
+    <div class="col-md-9">
 
-    <h3> {{ studio.name }}'s Profile: </h3>
+        <div class="panel panel-primary">
 
-        <h2>Name: {{ studio.name }}</h2>
-        <p>Name URL: {{ studio.name_url }}</p>
-        <p>State: {{ studio.name_url }}</p>
-        <p>URL Home: {{ studio.url_home }}</p>
-        <p>URL Schedule: {{ studio.url_schedule }}</p>
-        <p>mindbodyonline_id: {{ studio.mindbodyonline_id }}</p>
+              <div class="panel-heading">Original Information sources about Yoga Studio "{{ studio.name }}" in {{ state.name }}:</div>
 
-        <p>Created On: {{ studio.created_on }}</p>
-        <p>Modified On: {{ studio.modified_on|date:"l, F jS" }}</p>
+              <div class="list-group">
+                <a href="{{ studio.url_home }}" class="list-group-item" alt="{{ studio.name }} home page" title="{{ studio.name }} home page" target="_blank"> Original Homepage </a>
+                <a href="{{ studio.url_schedule }}" class="list-group-item" alt="{{ studio.name }} page with schedule" title="{{ studio.name }} page with schedule" target="_blank"> Original Schedule page</a>
+
+              </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+    </div>
+</div>
 
 
+    {% comment %}
     <blockquote>
 
     <p><strong>WELCOME TO BALANCED YOGA </strong><br>
@@ -35,5 +40,6 @@
         <small>From <cite title="Source Title"> <a href="http://balancedyoga.us/about-bys/"></a> Balanced Yoga website</cite>
         </small>
     </blockquote>
+    {% endcomment %}
 {% endblock %}
 

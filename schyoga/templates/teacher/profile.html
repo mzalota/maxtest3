@@ -2,6 +2,36 @@
 
 {% block teacher-main-conent %}
 
+<div class="row">
+    <div class="col-md-9">
+    {% if not calendar.getDistinctStudios or calendar.getDistinctStudios.count == 0  %}
+        <h4> At this time we do not have any information about {{ instructor.instructor_name }} </h4>
+    {% else %}
+        <h4>According to our records yoga teacher {{ instructor.instructor_name }} is: </h4>
+
+        <div class="panel panel-primary">
+
+            <div class="panel-heading"> Teaching at the following Yoga Studios::</div>
+
+            <div class="list-group">
+
+            {% for studio in calendar.getDistinctStudios %}
+                {% url 'studio-profile' studio.state.nameForURL studio.nameForURL as url_to_studio_page %}
+                <a href="{{ url_to_studio_page }}" class="list-group-item" alt="Yoga Studio: {{ studio.name }}" title="Yoga Studio: {{ studio.name }}">
+                    <span class="glyphicon glyphicon-home"></span> {{ studio.name }}
+                </a>
+            {% endfor %}
+
+            </div>
+        </div>
+    {% endif %}
+    </div>
+    <div class="col-md-3">
+    </div>
+</div>
+
+    {% comment %}
+
     <h3> {{ instructor.instructor_name }}'s Profile: </h3>
     <blockquote>
         <p>
@@ -11,5 +41,7 @@
         <small>From <cite title="Source Title"> <a href="http://www.bikramyoganyc.com/about-us/our-instructors/"></a> Bikram Yoga NYC website</cite>
         </small>
     </blockquote>
+    {% endcomment %}
+
 {% endblock %}
 

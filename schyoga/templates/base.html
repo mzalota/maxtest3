@@ -54,20 +54,14 @@
 
         <div class="col-md-2">
             <!--Sidebar content-->
-            left nav
+
         </div>
         <div class="col-md-10">
             <!--Body  content-->
 
-            {% load sitetree %}
-            <div class="navbar">
-                <a class="navbar-brand" href="/">Max Zalota's Site</a>
-                <div class="navbar-inner">
-                    {% sitetree_menu from "main_tree" include "trunk" template "top-menu.html" %}
-                </div>
-            </div>
+            {% load maxcustomfilter1 %}
+            {% show_top_nav %}
 
-            {% sitetree_breadcrumbs from "main_tree" template "breadcrumbs.html" %}
 
             {% block content %}
             {% endblock %}

@@ -74,7 +74,7 @@ class Studio(models.Model):
     mindbodyonline_id = models.CharField(max_length=10)
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
-    fbPageID = 'balancedyoga'
+    fbPageID = None #'balancedyoga'
     #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
         ordering = ('-modified_on',)

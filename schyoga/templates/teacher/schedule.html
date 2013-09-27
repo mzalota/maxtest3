@@ -70,12 +70,16 @@ $(function() {  // DOM READY shorthand
 {% for studio in calendar.getDistinctStudios %}
 <li>
     {% url 'studio-schedule' studio.state.nameForURL studio.nameForURL as url_to_studio_page %}
-    <a href="{{ url_to_studio_page }}" title="Yoga studio {{ studio.name }} schedule"> {{ studio.name }} </a>
+    <a href="{{ url_to_studio_page }}" title="Yoga studio {{ studio.name }} schedule">
+        <span class="glyphicon glyphicon-home"></span> {{ studio.name }}
+    </a>
 </li>
 {% endfor %}
 </ul>
 
 {% endif %}
+
+{% comment %}
 
 <div class="table-responsive">
     <table class="calendar table table-striped table-bordered table-condensed table-hover">
@@ -237,4 +241,7 @@ $(function() {  // DOM READY shorthand
         </tbody>
     </table>
 </div>
+
+{% endcomment %}
+
 {% endblock %}
