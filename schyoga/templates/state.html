@@ -4,27 +4,27 @@
 
     <h1>Schedule for Yoga Studios and Teachers in {{ state.name }}</h1>
 
-<div class="row">
-    <div class="col-md-4">
+    <div class="row">
+        <div class="col-md-4">
 
-        <div class="panel panel-primary">
-            <!-- Default panel contents -->
-            <div class="panel-heading">Schedule for:</div>
-            <!-- List group -->
-            <div class="list-group">
-                <a href="{% url 'teachers' state.nameForURL %}" class="list-group-item" title="Schedule for Yoga Teachers in {{ state.name }}"> Yoga Teachers</a>
-                <a href="{% url 'studios' state.nameForURL %}" class="list-group-item" title="Schedule for Yoga Studios in {{ state.name }}"> Yoga Studios</a>
+            <div class="panel panel-primary">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Schedule for:</div>
+                <!-- List group -->
+                <div class="list-group">
+                    <a href="{% url 'teachers' state.nameForURL %}" class="list-group-item" title="Schedule for Yoga Teachers in {{ state.name }}"> Yoga Teachers</a>
+                    <a href="{% url 'studios' state.nameForURL %}" class="list-group-item" title="Schedule for Yoga Studios in {{ state.name }}"> Yoga Studios</a>
+                </div>
             </div>
+        </div>\
+
+        <div class="col-md-5">
+            {% load staticfiles %}
+            <img src="{% static "img/yoga-flexibility-pose.jpg" %}" class="img-thumbnail pull-right" alt="Yoga Flexibility Pose in a Yoga Studio" title="Yoga Flexibility Pose in a Yoga Studio" />
         </div>
-    </div>\
+        <div class="col-md-3">
 
-    <div class="col-md-5">
-        {% load staticfiles %}
-        <img src="{% static "img/yoga-flexibility-pose.jpg" %}" class="img-thumbnail pull-right" alt="Yoga Flexibility Pose in a Yoga Studio" title="Yoga Flexibility Pose in a Yoga Studio" />
+        </div>
     </div>
-    <div class="col-md-3">
-
-    </div>
-</div>
 
 {% endblock %}

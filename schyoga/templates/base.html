@@ -4,18 +4,22 @@
     {% block header %}
     {% endblock %}
 
+    {% load staticfiles %}
+    <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.css">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.css">
 
+    <link rel="stylesheet" href="{% static "css/bootstrap-customizations.css" %}">
+
+    <script src="http://code.jquery.com/jquery.js"></script>
     <!-- Latest compiled and minified JavaScript -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
-    {% load staticfiles %}
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.js"></script>
 
 
     <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"> -->
@@ -46,13 +50,13 @@
 </head>
 
 <body>
-    <script src="http://code.jquery.com/jquery.js"></script>
+
     <!-- <script src="{% static "js/bootstrap.min.js" %}"></script>-->
 
 <div class="container">
     <div class="row">
 
-        <div class="col-md-2">
+        <div class="col-md-1">
             <!--Sidebar content-->
 
         </div>
@@ -62,7 +66,6 @@
             {% load maxcustomfilter1 %}
             {% show_top_nav %}
 
-
             {% block content %}
             {% endblock %}
 
@@ -70,16 +73,13 @@
 
             <div class="container text-center">
                     <span>
-                        <a href="/about-us/" title="About Us: The ScheduleYoga.com Story">About Us </a> |
+                        <a href="{% url 'about-us' %}" title="About Us: The ScheduleYoga.com Story">About Us </a> |
                     </span>
                     <span>
-                        <a href="/privacy-policy/" target="new" title="ScheduleYoga.com Privacy Policy">Privacy Policy</a> |
+                        <a href="{% url 'privacy-policy' %}" target="new" title="ScheduleYoga.com Privacy Policy">Privacy Policy</a> |
                     </span>
                     <span>
-                        <a href="/shout-outs.html" title="Thanks to the Community">Shout-Outs! </a> |
-                    </span>
-                    <span>
-                        <a href="/site-map.html" title="Site Map">Site Map </a>
+                        <a href="{% url 'shout-outs' %}" title="Thanks to the Community">Shout-Outs </a>
                     </span>
                     <br>
                     <span>
@@ -87,8 +87,10 @@
                     </span>
             </div>
         </div>
+        <div class="col-md-1">
+            <!--Sidebar content-->
 
-
+        </div>
     </div>
 
 </div>

@@ -2,9 +2,17 @@
 from django.conf.urls import *
 
 #from schyoga.views import list
+from django.views.generic import TemplateView
 from schyoga.views.studios import Profile
 
 urlpatterns = patterns('schyoga.views',
+
+
+    #url(r'^favicon.ico$', TemplateView.as_view(template_name="favicon.ico"), name='favicon'),
+
+    url(r'^about-us.html$', TemplateView.as_view(template_name="about-us.html"), name='about-us'),
+    url(r'^privacy-policy.html$', TemplateView.as_view(template_name="privacy-policy.html"), name='privacy-policy'),
+
     url(r'^site-map.html$', 'other.siteMap', name='site-map'),
     url(r'^shout-outs.html$', 'other.shoutOuts', name='shout-outs'),
 
@@ -21,7 +29,7 @@ urlpatterns = patterns('schyoga.views',
     url(r'^(?P<state_url_name>\S+)/teachers/(?P<teacher_url_name>\S+)/$', 'teachers.profile', name='teacher-profile'),
     url(r'^(?P<state_url_name>\S+)/teachers/$', 'teachers.list', name='teachers'),
 
-    #url(r'^(?P<state_url_name>\S+)/$', 'other.states', name='states'),
+    url(r'^(?P<state_url_name>\S+)/$', 'other.states', name='states'),
 
     url(r'^$', 'other.index', name='index'),
     #url(r'^$', archive),

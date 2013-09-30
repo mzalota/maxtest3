@@ -1,10 +1,10 @@
 
 class State():
 
-    nameForURL = 'new-jersey'
+    nameForURL = 'new-york'
 
     @classmethod
-    def createFromUrlName(self, stateUrlName='new-jersey'):
+    def createFromUrlName(self, stateUrlName='new-york'):
         cls = self()
 
         stateName = cls.__convertNameFromURLToHuman(stateUrlName)

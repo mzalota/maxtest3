@@ -1,0 +1,34 @@
+
+.breadcrumb {
+    /*background-color: #FBEFD5;*/
+    background-color: #efc5ae;
+}
+
+.breadcrumb > .active {
+color: #157e5e;
+}
+
+.navbar {
+    background-image: linear-gradient(to bottom, #ffffff 0%, #ef9e73 100%);
+}
+
+.navbar .navbar-nav > .active > a {
+    background-image: linear-gradient(to top, #ffffff 0%, #ef9e73 100%);
+    /*background-color: #ef9e73;*/
+    /*#FBEFD5;*/
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+    background-image: linear-gradient(to bottom, #eeeeee 0%, #ef9e73 100%);
+}
+
+.breadcrumb > li + li:before {
+    color: #5b2204;
+}
+a, a:hover, a:focus {
+    color: #5b2204;
+}
+
+a {
+    color: #5b2204;
+}

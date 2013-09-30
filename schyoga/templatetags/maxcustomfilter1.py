@@ -2,6 +2,7 @@ from django import template
 from django.template import RequestContext
 import pytz
 from schyoga.bizobj.state import State
+from copy import copy
 
 register = template.Library()
 import datetime
@@ -13,6 +14,7 @@ from django.template.defaultfilters import stringfilter
 @register.inclusion_tag('snippet-top-nav.html', takes_context=True)
 def show_top_nav(context):
     request = context['request']
+
     try:
         state_url_name = request.resolver_match.kwargs['state_url_name']
         state = State.createFromUrlName(state_url_name)
@@ -22,7 +24,12 @@ def show_top_nav(context):
     if not state:
         state = State.createFromUrlName()
 
-    return {'request': request, 'state': state, }
+    inclusionContext = copy(context)
+    inclusionContext.update({
+        'state': state,
+    })
+
+    return inclusionContext
 
 
 @register.assignment_tag

@@ -3,3 +3,18 @@ This file was created by PyCharm 2.7.3 for binding GitHub repository
 
 Check out page where Skype is asking me to fill out my Profile
 https://secure.skype.com/portal/overview
+
+
+#TODO
+Show badge on Schedule Tab to show how many events we have there
+Show badge on Facebook Feed Tab to show how many posts we have there
+
+Introduce empty line between Saturday and Sunday on the calendar to deliniate begining of the week
+
+Make Prev and Next buttons as overlays over the sides of the schedule
+
+Make the Start Time flow as Next and Prev buttons are clicked
+
+Make 404.html page and 500 Error page look pretty in production
+
+Test how the page schedule looks with IE 9 (make sure Top Nav menu is not wierd)

@@ -1,18 +1,29 @@
 {% load sitetree %}
 {% if sitetree_items|length_is:"0" %}
 {% else %}
-<ul class="breadcrumb">
-    <li>
-        <a href="/">Home</a>
-    </li>
-    {% for item in sitetree_items %}
-        {% if not forloop.last %}
-            <li>
-                <a href="{% sitetree_url for item %}">{{ item.title_resolved }}</a>
-            </li>
-        {% else %}
-            <li class="active">{{ item.title_resolved }}</li>
-        {% endif %}
-    {% endfor %}
-</ul>
+    <ul class="breadcrumb">
+        <li>
+            <a href="/">Home</a>
+        </li>
+        {% for item in sitetree_items %}
+            {#  Insert Link to the State page before Teachers and Studio #}
+            {% ifequal item.alias 'teachers' %}
+                {% url 'states' state.nameForURL as url_state %}
+                <li><a href="{{ url_state }}">{{ state.name }}</a></li>
+            {% endifequal %}
+
+            {% ifequal item.alias 'studios' %}
+                {% url 'states' state.nameForURL as url_state %}
+                <li><a href="{{ url_state }}">{{ state.name }}</a></li>
+            {% endifequal %}
+
+            {% if not forloop.last %}
+                <li>
+                    <a href="{% sitetree_url for item %}">{{ item.title_resolved }}</a>
+                </li>
+            {% else %}
+                <li class="active">{{ item.title_resolved }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 {% endif %}
