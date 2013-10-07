@@ -6,7 +6,7 @@
             <a href="/">Home</a>
         </li>
         {% for item in sitetree_items %}
-            {#  Insert Link to the State page before Teachers and Studio #}
+            {#  Insert Link to the State page before Teachers and Studio items in BreadCrumbs #}
             {% ifequal item.alias 'teachers' %}
                 {% url 'states' state.nameForURL as url_state %}
                 <li><a href="{{ url_state }}">{{ state.name }}</a></li>

@@ -1,7 +1,6 @@
 # Django settings for maxtest3 project.
 from django.conf import global_settings
 
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -118,7 +117,7 @@ ROOT_URLCONF = 'maxtest3.urls'
 WSGI_APPLICATION = 'maxtest3.wsgi.application'
 
 import os
-TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
+TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '../../..//', 'templates').replace('\\','/'),)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

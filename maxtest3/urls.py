@@ -5,13 +5,13 @@ from django.contrib import admin
 admin.autodiscover()
 
 #handler404 = 'schyoga.views.other.page404'
+#handler500 = 'schyoga.views.other.page404'
+
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'maxtest3.views.home', name='home'),
     # url(r'^maxtest3/', include('maxtest3.foo.urls')),
-
-
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

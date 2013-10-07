@@ -1,4 +1,20 @@
 
+/*
+Colors
+Pink: ebacb9
+slightly lighter pink: ffbfc6
+
+Green (opposite): 157e5e
+
+Breadcrumbs:  #efc5ae
+
+Navbar:  ef9e73
+*/
+
+.text-info {
+color: #157e5e;
+}
+
 .breadcrumb {
     /*background-color: #FBEFD5;*/
     background-color: #efc5ae;
@@ -31,4 +47,35 @@ a, a:hover, a:focus {
 
 a {
     color: #5b2204;
+}
+
+.panel-primary {
+border-color: #540415;
+}
+
+.panel-primary > .panel-heading {
+color: #ffffff;
+background-color: #540415;
+border-color: #540415;
+}
+
+.panel-primary > .panel-heading {
+background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffbfc6), to(#540415)); /* 428bca 357ebd  07 */
+background-image: -webkit-linear-gradient(top, #ffbfc6, 0%, #540415, 100%);
+background-image: -moz-linear-gradient(top, #ffbfc6 0%, #540415 100%);
+background-image: linear-gradient(to bottom, #ffbfc6 0%, #540415 100%);
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+color: #ffffff;
+background-color: #540415;
+border-color: #540415;
+}
+
+.btn-primary {
+background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffbfc6), to(#540415));
+background-image: -webkit-linear-gradient(top, #ffbfc6, 0%, #540415, 100%);
+background-image: -moz-linear-gradient(top, #ffbfc6 0%, #540415 100%);
+background-image: linear-gradient(to bottom, #ffbfc6 0%, #540415 100%);
+border-color: #540415;
 }

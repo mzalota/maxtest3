@@ -24,6 +24,7 @@ def show_top_nav(context):
     if not state:
         state = State.createFromUrlName()
 
+    #pass full copy of context to the template. sitetree will need it for resolving Instructor and Studio variable for constructing correct URLs
     inclusionContext = copy(context)
     inclusionContext.update({
         'state': state,

@@ -4,10 +4,9 @@ This file was created by PyCharm 2.7.3 for binding GitHub repository
 Check out page where Skype is asking me to fill out my Profile
 https://secure.skype.com/portal/overview
 
-
 #TODO
-Show badge on Schedule Tab to show how many events we have there
-Show badge on Facebook Feed Tab to show how many posts we have there
+#TODO: Show badge on Schedule Tab to show how many events we have there
+#TODO: Show badge on Facebook Feed Tab to show how many posts we have there
 
 Introduce empty line between Saturday and Sunday on the calendar to deliniate begining of the week
 
@@ -18,3 +17,55 @@ Make the Start Time flow as Next and Prev buttons are clicked
 Make 404.html page and 500 Error page look pretty in production
 
 Test how the page schedule looks with IE 9 (make sure Top Nav menu is not wierd)
+
+Figure out why this URL is not working: http://127.0.0.1:8000/new-york/studios/bikram-yoga-grand-central/2013-10-08.html/
+
+Install Google Analytics and Bing Analytics tags.
+
+Include Facebook code (javascripts) only on FacebookFeed pages, not on every page
+
+--- thai music:
+http://www.youtube.com/watch?v=yiHukM7rQk8&list=PLCB56AF96663F11DA
+
+
+--- Deployment notes
+modify lilne in /opt/bitnami/apps/django/scripts/django.wsgi as follows
+os.environ['DJANGO_SETTINGS_MODULE'] = 'maxtest3.settings.prod'
+
+
+review settings in /opt/bitnami/apps/django/conf/django.conf, especially path to /static alias (it should be the same
+as value in settings file in for STATIC_ROOT variable):
+Alias /static/ /path/to/mysite.com/static/
+
+execute following command to move all static files to a location where apache can serve them:
+sudo python manage.py collectstatic
+
+
+
+sudo pip install facebook-sdk
+
+copy manually-downloaded-libs/django-facebook to /opt/bitnami/apps/django/lib/usr-lib
+
+-- upgrade Django to version 1.5.4. Specify custom directory where bitnami installed Django
+sudo pip install --upgrade --target /opt/bitnami/apps/django/lib/python2.7/site-packages Django==1.5.4
+
+pip install -r requirements.txt
+
+mysql -u root -p
+-- default password is bitnami
+
+create database schyoga;
+use schyoga;
+\. schyoga_103.sql
+
+drop table schyoga_event;
+drop table schyoga_instructor;
+drop table schyoga_studio;
+
+alter table events rename to schyoga_event;
+alter table instructors rename to schyoga_instructor;
+alter table studios rename to schyoga_studio;
+alter table schyoga_instructor add column fb_userid varchar(256) after aliases;
+exit
+
+cd /apps/django/django_projects/maxtest3/python manage.py syncdb --settings='maxtest3.settings_prod'

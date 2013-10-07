@@ -1,7 +1,7 @@
 from operator import attrgetter
 
 from django.template import loader, Context, RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from schyoga.bizobj.page import Page
 
@@ -60,15 +60,19 @@ def profile(request, state_url_name, teacher_url_name):
 
 def schedule(request, state_url_name, teacher_url_name):
 
+    startDate = datetime.datetime.now()
+    startDateStr = startDate.strftime('%Y-%m-%d')
+
     state = State.createFromUrlName(state_url_name)
 
     instructors = Instructor.objects.filter(name_url=teacher_url_name)
     instructor = instructors[0]
-    events = instructor.event_set.all().order_by('start_time')
+    events = instructor.event_set.all().order_by('start_time').filter(start_time__gt=startDateStr)
 
     #TODO: filter events from DB by date, so that dates on the calendar correspond with what was pulled from DB
 
-    sched = Schedule(events, datetime.datetime(2013, 8, 5), 14)
+    #sched = Schedule(events, datetime.datetime(2013, 8, 5), 14)
+    sched = Schedule(events, startDate)
 
     curPage = Page(Page.ENUM_TEACHER_SCHEDULE)
 
