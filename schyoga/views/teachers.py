@@ -95,7 +95,7 @@ def facebookFeed(request, state_url_name, teacher_url_name):
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBACiZARJONieRJo4EJbiR9kZAeP299ZBzybETe02ANnfELjyCWuLJwsz2Go2aZCKmdwWah8xnVB0lH2voBIwZANTRGTKmeBU26cRtPpjHUsYDV9ZBU0sPvZCX8xmKv8kuarMZBuU73M3qPnbfUfRkDdYVZALNeFlcGr37beZCRUGsUub4DWfls3aVL9GSNRvpZBdHPnjqni0aklAaH2KltQkV0GL88Dxa15iMQZDZD'
+    token = 'CAACEdEose0cBAPGWn1ZCytm4rDdguOGnZC6pevc3pdx1FCdQbyA6r7XPkmBwaoNkUxwSiW3a8olbs5De7c3Obd8RmXw5WwPTOgO6af0j2SJITRqx9cAPaTQlVJ9JmpbGAns8Spp8FqtyT61xtRzp1t0JaG8L7BWvGZCho5wAZAf6k4a2Lioi1rFKAfgy0uCtyXtXYCZAOqiGJfDYnym6nctZAl38tOKUglwdRZBTpRB7wZDZD'
     graph = facebook.GraphAPI(token)
     instructors = Instructor.objects.filter(name_url=teacher_url_name)
     instructor = instructors[0]

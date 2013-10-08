@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Py and HTML Files " pattern="file:*.py||file:*.html||file:schyoga/templates/teacher/facebook-feed.html" />
+</component>

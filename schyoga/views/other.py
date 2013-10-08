@@ -41,19 +41,9 @@ def siteMap(request):
 def shoutOuts(request):
     return render_to_response('shout-outs.html', {}, RequestContext(request))
 
+#TODO: Create separate page for each event, which would have microtags embeded
 
-def events(request):
-    #today = datetime.date.today()
-    #cutoff = (today - datetime.timedelta(days=30))
-    #events = Event.objects.filter(timestamp__lt=cutoff)
-    events = Event.objects.filter(instructor_name = 'Abby')
-
-    t = loader.get_template("events.html")
-    c = Context({ 'events': events})
-    return HttpResponse(t.render(c))
-
-
-
+#TODO: remove/disable FlatPage plugin
 
 
  #def friends(request):

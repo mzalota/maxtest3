@@ -3,8 +3,7 @@ import unittest
 import pytz
 
 #import schyoga.templatetags
-
-from schyoga.templatetags.maxcustomfilter1 import FBUtils
+from schyoga.bizobj.fbutils import FBUtils
 
 import datetime
 

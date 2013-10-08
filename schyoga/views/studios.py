@@ -113,6 +113,8 @@ def schedule(request, state_url_name, studio_url_name):
 
     #TODO: check validity of studio_url_name
 
+    #TODO: check if we need to pass State variable to every view. Extract it into a custom superclass based on View
+
     startDate = datetime.datetime.now()
     startDateStr = startDate.strftime('%Y-%m-%d')
 
@@ -120,10 +122,10 @@ def schedule(request, state_url_name, studio_url_name):
 
     studios = Studio.objects.filter(nameForURL=studio_url_name)
     studio = studios[0]
-    eventsTmp = studio.event_set.all().order_by('start_time').filter(start_time__gt=startDateStr)
+    eventsTmp = studio.event_set.all().order_by('start_time')#.filter(start_time__gt=startDateStr)
 
-    sched = Schedule(eventsTmp)
-    #sched = Schedule(eventsTmp, datetime.datetime(2013, 8, 6), 14)
+    #sched = Schedule(eventsTmp)
+    sched = Schedule(eventsTmp, datetime.datetime(2013, 8, 6), 14)
 
     curPage = Page(Page.ENUM_STUDIO_SCHEDULE)
 
@@ -131,7 +133,7 @@ def schedule(request, state_url_name, studio_url_name):
                               {'studio': studio,
                                'state': state,
                                'curPage': curPage,
-                               'calendar': sched, },
+                               'calendar': sched,},
                               RequestContext(request))
 
 

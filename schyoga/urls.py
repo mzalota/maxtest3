@@ -18,8 +18,6 @@ urlpatterns = patterns('schyoga.views',
     url(r'^error404.html$', TemplateView.as_view(template_name="404.html"), name='error404'),
     url(r'^error500.html$', TemplateView.as_view(template_name="500.html"), name='error500'),
 
-    url(r'^events/', 'other.events'),
-
     #url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/$', 'studios.profile', name='studio-profile'),
     url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/schedule.html$', 'studios.schedule', name='studio-schedule'),
     url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/facebook-feed.html$', 'studios.facebookFeed', name='studio-facebook-feed'),

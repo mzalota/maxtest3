@@ -2,7 +2,7 @@
 {% block studio-main-conent %}
 
     {% if feeds %}
-        {% load maxcustomfilter1 %}
+        {% load schyoga_custom_tags %}
         {% load humanize %}
 
         <div id="page">
@@ -33,7 +33,7 @@
                             </div>
                         </div>
 
-                        <p class="meta">{{ feed.created_time|convertfbdate|naturaltime}} ·      {{ feed.comments.data|length }} Comments   ·      {{ feed.likes.count }} Likes    </p>
+                        <p class="meta">{{ feed.created_time|convert_fb_date|naturaltime}} ·      {{ feed.comments.data|length }} Comments   ·      {{ feed.likes.count }} Likes    </p>
                     </li>
                 {% endfor %}
                 </ul>

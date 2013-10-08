@@ -12,7 +12,7 @@
     {% endif %}
 </p>
 
-{% load maxcustomfilter1 %}
+{% load schyoga_custom_tags %}
 
 <button id="prevBtn" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-left"></span> Prev</button>
 <button id="nextBtn" type="button" class="btn btn-primary pull-right">Next <span class="glyphicon glyphicon-chevron-right"></span></button>
@@ -48,7 +48,7 @@ $(function() {  // DOM READY shorthand
                 <div class="text-left" style="white-space: nowrap;"> {{ calendarTime }} </div>
             </td>
             {% for calDate in calendar.calendarDates %}
-                {% getEventsFromCalendar calendar calDate calendarTime as events%}
+                {% events_from_calendar calendar calDate calendarTime as events%}
                 {%  if not events %}
                     <td class="cal_info_cell summary"> </td>
                 {%  else %}

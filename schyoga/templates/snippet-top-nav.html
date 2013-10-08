@@ -5,8 +5,8 @@
         <a class="pull-left" style="margin-right: 15px;" href="/"><img src='{% static "img/schedule-yoga-logo.png" %}' height="40px"/></a>
 
         <div class="navbar-inner">
-            {% sitetree_menu from "main_tree" include "trunk" template "top-menu.html" %}
+            {% sitetree_menu from "main_tree" include "trunk" template "snippet-top-menu.html" %}
         </div>
     </div>
 
-    {% sitetree_breadcrumbs from "main_tree" template "breadcrumbs.html" %}
+    {% sitetree_breadcrumbs from "main_tree" template "snippet-breadcrumbs.html" %}
