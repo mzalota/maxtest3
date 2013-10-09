@@ -1,6 +1,10 @@
 # Django settings for maxtest3 project.
 from django.conf import global_settings
 
+#TODO: try to get rid of the maxtest3 application. Make sure there is only SchYoga project.
+
+#TODO: upgrade PyCharm to version 3.0
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

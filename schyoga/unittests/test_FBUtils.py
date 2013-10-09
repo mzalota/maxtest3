@@ -7,6 +7,9 @@ from schyoga.bizobj.fbutils import FBUtils
 
 import datetime
 
+#TODO: verify that the tests in these file are working and make them run automatically
+
+#TODO: create a few high-level unit tests to check the functionality of the site as a whole: schedule pages, lists, etc.
 
 class TestFBUtils(unittest.TestCase):
     def test_convertString2Date_happyPath1(self):

@@ -24,6 +24,8 @@ def page404(request):
 
 
 def index(request):
+    #TODO: give proper <title> to each page
+    #TODO: make sure favicon is visible on each page on the AWS server
     return render_to_response('index.html', {}, RequestContext(request))
 
 

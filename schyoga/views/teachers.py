@@ -87,6 +87,8 @@ def schedule(request, state_url_name, teacher_url_name):
 
 def facebookFeed(request, state_url_name, teacher_url_name):
 
+    #TODO: make page look prettier before rolling it out
+
     state = State.createFromUrlName(state_url_name)
 
     #https://www.facebook.com/JeanneEllenHeaton
@@ -95,7 +97,7 @@ def facebookFeed(request, state_url_name, teacher_url_name):
 
     #Get token from here: https://developers.facebook.com/tools/explorer
 
-    token = 'CAACEdEose0cBAPGWn1ZCytm4rDdguOGnZC6pevc3pdx1FCdQbyA6r7XPkmBwaoNkUxwSiW3a8olbs5De7c3Obd8RmXw5WwPTOgO6af0j2SJITRqx9cAPaTQlVJ9JmpbGAns8Spp8FqtyT61xtRzp1t0JaG8L7BWvGZCho5wAZAf6k4a2Lioi1rFKAfgy0uCtyXtXYCZAOqiGJfDYnym6nctZAl38tOKUglwdRZBTpRB7wZDZD'
+    token = 'CAACEdEose0cBAMuCitukuwEJ9ymzsww0R4FmudJifbWIf4EnjGFmwm2HVUZBTCv3a4Da2id8dFC4WHLvgRWzDEwadZBTYWNUqW5QANGwdPYpClR6kcmrXZAqB2toBjf927HxWphZAR1rBgLziZBagTkEn7barRIZBufvSG3HgIM5FaqHZCsas5KAFEamZCx5ZCZBY5vHdUSBTQfRhJ9s3CbwPNkHMtOal43801QOKTru2ZC1wZDZD'
     graph = facebook.GraphAPI(token)
     instructors = Instructor.objects.filter(name_url=teacher_url_name)
     instructor = instructors[0]

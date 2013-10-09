@@ -3,7 +3,8 @@ from django.conf.urls import *
 
 #from schyoga.views import list
 from django.views.generic import TemplateView
-from schyoga.views.studios import Profile
+from schyoga.bizobj.page import Page
+from schyoga.views.studios import StudioViews
 
 urlpatterns = patterns('schyoga.views',
 
@@ -19,10 +20,10 @@ urlpatterns = patterns('schyoga.views',
     url(r'^error500.html$', TemplateView.as_view(template_name="500.html"), name='error500'),
 
     #url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/$', 'studios.profile', name='studio-profile'),
-    url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/schedule.html$', 'studios.schedule', name='studio-schedule'),
-    url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/facebook-feed.html$', 'studios.facebookFeed', name='studio-facebook-feed'),
+    url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/schedule.html$', StudioViews.as_view(pagename=Page.ENUM_STUDIO_SCHEDULE), name='studio-schedule'), #'studios.schedule'
+    url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/facebook-feed.html$', StudioViews.as_view(pagename=Page.ENUM_STUDIO_FACEBOOKFEED), name='studio-facebook-feed'),
     url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/(?P<year>\S+)-(?P<month>\S+)-(?P<day>\S+).html$', 'studios.schedule_one_day', name='studio-one-day-schedule'),
-    url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/$', Profile.as_view(), name='studio-profile'),
+    url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/$', StudioViews.as_view(pagename=Page.ENUM_STUDIO_PROFILE), name='studio-profile'),
     url(r'^(?P<state_url_name>\S+)/studios/', 'studios.list', name='studios'),
 
     url(r'^(?P<state_url_name>\S+)/teachers/(?P<teacher_url_name>\S+)/facebook-feed.html$', 'teachers.facebookFeed', name='teacher-facebook-feed'),

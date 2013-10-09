@@ -69,3 +69,17 @@ alter table schyoga_instructor add column fb_userid varchar(256) after aliases;
 exit
 
 cd /apps/django/django_projects/maxtest3/python manage.py syncdb --settings='maxtest3.settings_prod'
+
+
+
+----To enable facebook javascript:
+
+Place just above </head>
+    {% load facebook %}
+    {% facebook_init %}
+        {% block facebook_code %}{% endblock %}
+    {% endfacebook %}
+
+
+Place just above </body>
+{% facebook_load %}
