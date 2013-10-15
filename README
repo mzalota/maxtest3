@@ -24,9 +24,15 @@ Install Google Analytics and Bing Analytics tags.
 
 Include Facebook code (javascripts) only on FacebookFeed pages, not on every page
 
+Change website address for Elahi Yoga from http://www.elahiyoga.com/ to http://elahiyoga.com/. Remove Schedule page
+Delete yoga studio "Finding Sukha Yoga School", id=35 because it is out of business
+
+
 --- thai music:
 http://www.youtube.com/watch?v=yiHukM7rQk8&list=PLCB56AF96663F11DA
 
+Traditional Nicaraguan music:
+Carlos Mejía Godoy y grupe "Los De Palacaguina"
 
 --- Deployment notes
 modify lilne in /opt/bitnami/apps/django/scripts/django.wsgi as follows
@@ -83,3 +89,37 @@ Place just above </head>
 
 Place just above </body>
 {% facebook_load %}
+
+
+
+https://wiki.python.org/moin/WebBrowserProgramming
+install BeautifulSoup
+
+
+---- Selenium
+
+******
+http://grid.selenium.googlecode.com/git-history/2f21739655f70fccd747ad4b1b0f2de7ef5dedd2/src/main/webapp/get_started.html
+http://grid.selenium.googlecode.com/git-history/2f21739655f70fccd747ad4b1b0f2de7ef5dedd2/src/main/webapp/run_the_demo.html
+
+
+sudo yum install ant
+
+sudo yum install python-pip
+
+sudo pip install selenium
+
+**** compile firefox
+http://joekiller.com/2012/06/03/install-firefox-on-amazon-linux-x86_64-compiling-gtk/
+
+create virtual display (as descirbed here: http://itsallabtamil.blogspot.com/2013/02/setting-up-chrome-firefox-ec2-selenium-java.html)
+
+sudo yum install Xvfb
+Xvfb :1 -screen 0 1280x768x24 &
+export DISPLAY=:1
+
+
+---------- creating initial data to load
+
+mysqldump --user=root --password=mzalota --no-create-db --no-create-info schyoga3 schyoga_parsing_history > C:\Workspace\python\maxtest3\schyoga\sql\parsing_history.sql
+

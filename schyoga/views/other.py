@@ -15,6 +15,7 @@ import datetime
 
 import facebook
 
+#TODO: load jquery from a well known CDN
 
 def page404(request):
     response = render(request, "404.html")

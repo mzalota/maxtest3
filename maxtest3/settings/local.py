@@ -15,6 +15,7 @@ DATABASES = {
         'PASSWORD': 'mzalota',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
+        'TEST_NAME': 'schyoga3_test_db',
     }
 }
 
@@ -50,18 +51,39 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            #'formatter': 'simple'
+            'formatter': 'verbose',
+            #'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
+        },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+        '': {
+            'handlers': ['console'],
             'propagate': True,
+            'level': 'DEBUG',
         },
-    }
+        'selenium.webdriver.remote': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO', #In DEBUG mode all calls (e.g. AJAX) that browser makes are logged
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO', #in DEBUG mode executed SQL statements are printed out
+        },
+    },
 }

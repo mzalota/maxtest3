@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'django_facebook',
     'django.contrib.humanize',
     'sitetree', #https://django-sitetree.readthedocs.org/en/latest/quickstart.html
+    'django_extensions',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -156,6 +157,8 @@ LOGGING = {
         },
     }
 }
+
+#PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 FACEBOOK_APP_ID = '168665979983590'
 FACEBOOK_SECRET_KEY = '3902fc0c920f171bfd34bdde65415459'

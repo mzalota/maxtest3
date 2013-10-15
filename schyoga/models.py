@@ -121,6 +121,28 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 
+class Parsing_History(models.Model):
+    #studio = models.ForeignKey("Studio")
+    studio_id = models.IntegerField()
+    last_crawling = models.DateTimeField(auto_now=True)
+    calendar_html = models.TextField()
+
+
+
+#alter table parsing_history rename to schyoga_parsing_history;
+#alter table schyoga_parsing_history MODIFY COLUMN last_crawling datetime;
+
+
+
+#+---------------+------------+------+-----+-------------------+----------------+
+#| Field         | Type       | Null | Key | Default           | Extra          |
+#+---------------+------------+------+-----+-------------------+----------------+
+#| id            | int(11)    | NO   | PRI | NULL              | auto_increment |
+#| studio_id     | int(11)    | YES  |     | NULL              |                |
+#| last_crawling | timestamp  | NO   |     | CURRENT_TIMESTAMP |                |
+#| calendar_html | mediumtext | YES  |     | NULL              |                |
+#+---------------+------------+------+-----+-------------------+----------------+
+
 #| Field           | Type         | Null | Key | Default           | Extra          |
 #+-----------------+--------------+------+-----+-------------------+----------------+
 #| id              | int(11)      | NO   | PRI | NULL              | auto_increment |
