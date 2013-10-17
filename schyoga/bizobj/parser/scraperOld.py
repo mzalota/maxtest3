@@ -9,12 +9,13 @@ from schyoga.models import Studio, Parsing_History
 
 logger = logging.getLogger(__name__)
 
-class Scraper:
+class ScraperOld:
 
     START_TIME = 'start-time'
     CLASS_NAME = 'class-name'
     TEACHER_NAME = 'teacher-name'
     DURATION = 'duration'
+    EVENT_DATE = 'date'
 
     def removeNonVisualTags(self, soup):
         for maxVar in soup.find_all(["script", "style"], recursive=True): #"style"
@@ -38,6 +39,14 @@ class Scraper:
 
 
     def parseRow(self, headers, schedRow):
+        """
+
+        @type headers: list of str
+        @type schedRow: SoupTag
+
+        @return:
+        @rtype: dict
+        """
         eventData = dict()
         cols = schedRow.select("td")
 
@@ -95,10 +104,10 @@ class Scraper:
         pageText = browser.loadPage(url)
 
         expected_headers = dict()
-        expected_headers[Scraper.START_TIME] = 'Start time'
-        expected_headers[Scraper.CLASS_NAME] = 'Classes'
-        expected_headers[Scraper.TEACHER_NAME] = 'Teacher'
-        expected_headers[Scraper.DURATION] = 'Duration'
+        expected_headers[ScraperOld.START_TIME] = 'Start time'
+        expected_headers[ScraperOld.CLASS_NAME] = 'Classes'
+        expected_headers[ScraperOld.TEACHER_NAME] = 'Teacher'
+        expected_headers[ScraperOld.DURATION] = 'Duration'
 
         events = self.parse(pageText, expected_headers)
 

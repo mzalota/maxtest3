@@ -29,6 +29,9 @@ class Browser:
         if schedule_tab_text:
             logger.info('Clicking on Tab button: '+scheduleTabText)
             self.driver.find_element_by_link_text(scheduleTabText).click()
+            #self.driver.find_element_by_partial_link_text()
+
+            #self.driver.switch_to_active_element()
 
             try:
                 WebDriverWait(self.driver, timeout=15).until(self.frame_available_cb("mainFrame"))

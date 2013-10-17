@@ -71,7 +71,7 @@ class Studio(models.Model):
     url_home = models.URLField()
     url_schedule = models.URLField()
     xpath = models.CharField(max_length=1024)
-    mindbodyonline_id = models.CharField(max_length=10)
+    mindbodyonline_id = models.CharField(max_length=10, blank=True, null=True)
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
     fbPageID = 'balancedyoga'   #'balancedyoga'
@@ -101,13 +101,13 @@ admin.site.register(Studio, StudioAdmin)
 
 
 class Event(models.Model):
-    instructor_name = models.CharField(max_length=100)
+    instructor_name = models.CharField(max_length=100, blank=True)
     comments = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
     #modified_on = UnixTimestampField(auto_created=True)
-    instructor = models.ForeignKey("Instructor")
+    instructor = models.ForeignKey("Instructor", blank=True)
     studio = models.ForeignKey("Studio")
     #studio_id
     class Meta:

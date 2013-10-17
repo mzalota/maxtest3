@@ -1,6 +1,6 @@
 import logging
 
-from schyoga.bizobj.parser.scraper import Scraper
+from schyoga.bizobj.parser.scraperOld import ScraperOld
 from schyoga.models import Studio
 
 logger = logging.getLogger(__name__)
@@ -36,6 +36,8 @@ def run():
     #Yoga sutra is gone yoga sutra nyc
     #!!!! Yoga Sole opens not on "Classes" tab
     #!!!Sivananda Yoga center opens in the Wrong tab
+    #OmYoga is no longer there. Replaced by single teacher website - http://cyndilee.com/
+    #http://balancedyoga.us/schedule/ instead of http://balancedyoga.us/Schedule.html
 
     #!!!! check keisha-bolden - its broken
     # Yoga to People does not have teacher name!
@@ -60,7 +62,7 @@ def run():
 
         logger.debug('Processing Studio: '+studio.name)
 
-        scraper = Scraper()
+        scraper = ScraperOld()
 
         #file_name = "bend-and-bloom-yoga.html"
         #url = "https://clients.mindbodyonline.com/ASP/home.asp?studioid=4186"
@@ -75,3 +77,22 @@ def run():
         #scraper.writeToFile(html, file_path)
 
     logger.debug('At the End of script: savehtml')
+
+    #Load Site into browser
+    #Wait for a certain element to load
+    #Validate certain elements are present
+    #Click on a tab button
+    #Wait for a certain element to load
+    #Validate that the tab was switched
+    #Option 1: Parse MindBodyOnline from site's schedule:
+    #
+    #
+    #
+    #Option 2: Parse MindBodyOnline from MindBodyOnline site
+    #  need mapping of columns to values.
+
+    # Parse Events:
+    #   define unique key: date+time, parsing source, scan number, studio, instructor,
+    #
+    # model:
+    #   sources

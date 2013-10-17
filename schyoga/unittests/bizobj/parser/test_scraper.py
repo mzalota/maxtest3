@@ -1,7 +1,7 @@
 #from unittest import TestCase
 from django.test import TestCase
 from maxtest3.settings import local
-from schyoga.bizobj.parser.scraper import Scraper
+from schyoga.bizobj.parser.scraperOld import ScraperOld
 from schyoga.models import Parsing_History
 
 
