@@ -6,6 +6,7 @@ from schyoga.scraper.steps.clickelement import ClickElement
 from schyoga.scraper.steps.clicklink import ClickLink
 from schyoga.scraper.steps.extracteventsfrommbo import ExtractEventsFromMBO
 from schyoga.scraper.steps.extracthtmlsnippet import ExtractHtmlSnippet
+from schyoga.scraper.steps.linktoknowninstructors import LinkToKnownInstructors
 from schyoga.scraper.steps.loadurl import LoadUrl
 from schyoga.scraper.steps.prepareeventsfordb import PrepareEventsForDB
 from schyoga.scraper.steps.readpagecontent import ReadPageContent
