@@ -14,7 +14,7 @@ class LinkToKnownInstructors:
 
         logger.debug("Linking parsed instructors to known instructors")
 
-        parsed_instructors = dict((db_event.instructor_name,) for db_event in db_events)
+        #parsed_instructors = dict((db_event.instructor_name,) for db_event in db_events)
 
         studio_instructor_names = dict((instructor.name_url, instructor) for instructor in studio_instructors)
         #logger.debug(" studio_instructor_names var is: "+repr(studio_instructor_names))

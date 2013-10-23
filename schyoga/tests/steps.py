@@ -150,7 +150,7 @@ class PrepareEventsForDBTestCase(TestCase):
 
     def setUp(self):
         #Load data into schyoga_studio table for testing
-        f = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "sql", "studio.sql"), "r")
+        f = open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "../sql", "studio.sql"), "r")
         sql = f.read()
         cursor = connection.cursor()
         cursor.execute(sql)

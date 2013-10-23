@@ -9,66 +9,77 @@ from time import strftime
 #
 # Custom field types in here.
 #
+from picklefield import PickledObjectField
 from schyoga.bizobj.state import State
-
-
-class UnixTimestampField(models.DateTimeField):
-    """UnixTimestampField: creates a DateTimeField that is represented on the
-    database as a TIMESTAMP field rather than the usual DATETIME field.
-    """
-    def __init__(self, null=False, blank=False, **kwargs):
-        super(UnixTimestampField, self).__init__(**kwargs)
-        # default for TIMESTAMP is NOT NULL unlike most fields, so we have to
-        # cheat a little:
-        self.blank, self.isnull = blank, null
-        self.null = True # To prevent the framework from shoving in "not null".
-
-    def db_type(self):
-        typ=['TIMESTAMP']
-        # See above!
-        if self.isnull:
-            typ += ['NULL']
-        if self.auto_created:
-            typ += ['default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP']
-        return ' '.join(typ)
-
-    def to_python(self, value):
-        return value
-        #return datetime.fromtimestamp(value, None)
-        # datetime.from_timestamp(value)
-
-    def get_db_prep_value(self, value, connection, prepared=False):
-        if value==None:
-            return None
-        return strftime('%Y%m%d%H%M%S',value.timetuple())
 
 
 class Instructor(models.Model):
     instructor_name = models.CharField(max_length=150)
     name_url = models.CharField(max_length=150)
     aliases = models.CharField(max_length=1000,blank=True)
+    #aliases = PickledObjectField(compress=False, max_length=1000, protocol=0)
     fb_userid = 'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
     #body = models.TextField()
-    created_on = models.DateTimeField(blank=True)
-    modified_on = models.DateTimeField()
+    created_on = models.DateTimeField(auto_now_add=True, editable=False)
+    modified_on = models.DateTimeField(auto_now=True)
     state = 'new-york'
     studios = models.ManyToManyField("Studio",blank=True, null=True)
-    #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
         ordering = ('-modified_on',)
 
+    @property
+    def aliases_list(self):
+        """
+        :return:
+        """
+        return self.aliases.split(";")
+
+    @aliases_list.setter
+    def aliases_list(self, value):
+        self.aliases = ";".join(value)
+
+
     @staticmethod
-    def convert_to_url_name(self, raw_name):
+    def convert_to_url_name(raw_name):
         url_name = raw_name
+        url_name = Instructor.clean_up_name(url_name)
         url_name = url_name.replace('-',' ')
         url_name = " ".join(url_name.split())
-        url_name = re.sub('(\((.*)\))',"",url_name)
-        url_name = " ".join(url_name.split())
         url_name = url_name.lower()
-        url_name = url_name.replace(' ','-')
+        url_name = url_name.replace(' ', '-')
 
         return url_name
+
+
+    @staticmethod
+    def clean_up_name(raw_name):
         #remove any apostrophies
+        clean_name = raw_name
+        clean_name = " ".join(clean_name.split())
+        clean_name = re.sub('(\((.*)\))',"",clean_name)
+        clean_name = " ".join(clean_name.split())
+        clean_name = Instructor.__capitalize(clean_name)
+        return clean_name
+
+
+    @staticmethod
+    def __capitalize(line):
+        return ' '.join([s[0].upper() + s[1:] for s in line.split(' ')])
+
+    @staticmethod
+    def find_by_alias(studio, name):
+        instructors_by_alias = dict()
+        for instructor in studio.instructors:
+            for alias in instructor.aliases_list:
+                if not instructors_by_alias.has_key(alias):
+                    instructors_by_alias[alias] = list()
+                instructors_by_alias[alias].append(instructor)
+
+        #print repr(instructors_by_alias)
+
+        ret = instructors_by_alias[name]
+
+        return ret
 
 
 #TODO: introduce State attribute (One-to-Many) to Instructor objects
