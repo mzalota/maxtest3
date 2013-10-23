@@ -2,7 +2,7 @@
 from django.db import connection
 from django.test import TestCase
 from schyoga.bizobj.parser.scraperOld import ScraperOld
-from schyoga.models import Parsing_History, Event, Studio
+from schyoga.models import Parsing_History, Event, Studio, Instructor
 import os.path
 from dateutil import parser
 
@@ -10,7 +10,9 @@ import schyoga
 
 #PROJECT_ROOT = os.path.abspath(schyoga.__path__)
 from schyoga.scraper.scraper import Scraper
+from schyoga.scraper.steps.linktoknowninstructors import LinkToKnownInstructors
 from schyoga.scraper.steps.prepareeventsfordb import PrepareEventsForDB
+from schyoga.scraper.steps.standardizeinstructornames import StandardizeInstructorNames
 
 
 class ScraperTestCase(TestCase):
@@ -27,7 +29,7 @@ class ScraperTestCase(TestCase):
     def test_run(self):
 
         #ARRANGE
-        htmlText = self.load_html_from_file("atmananda-yoga-sequence.html")
+        htmlText = self.load_html_from_file("13_atmananda-yoga-sequence.html")
 
         expected_headers = dict()
         expected_headers[ScraperOld.START_TIME] = 'Start time'
@@ -50,7 +52,7 @@ class ScraperTestCase(TestCase):
     def test_run_bikram_yoga_grand_central(self):
 
         #ARRANGE
-        htmlText = self.load_html_from_file("bikram-yoga-grand-central.html")
+        htmlText = self.load_html_from_file("17_bikram-yoga-grand-central.html")
 
         expected_headers = dict()
         expected_headers[ScraperOld.START_TIME] = 'Start time'
@@ -74,7 +76,7 @@ class ScraperTestCase(TestCase):
     def test_run_ashtanga_yoga_upper_west_side(self):
 
         #ARRANGE
-        htmlText = self.load_html_from_file("ashtanga-yoga-upper-west-side.html")
+        htmlText = self.load_html_from_file("12_ashtanga-yoga-upper-west-side.html")
 
         expected_headers = dict()
         expected_headers[ScraperOld.START_TIME] = 'Start time'
@@ -98,7 +100,7 @@ class ScraperTestCase(TestCase):
     def test_run_abhayayoga(self):
 
         #ARRANGE
-        htmlText = self.load_html_from_file("abhayayoga.html")
+        htmlText = self.load_html_from_file("7_abhayayoga.html")
 
         expected_headers = dict()
         expected_headers[ScraperOld.START_TIME] = 'Start time'
@@ -122,7 +124,7 @@ class ScraperTestCase(TestCase):
     def test_run_bend_and_bloom_yoga(self):
 
         #ARRANGE
-        htmlText = self.load_html_from_file("bend-and-bloom-yoga.html")
+        htmlText = self.load_html_from_file("15_bend-and-bloom-yoga.html")
 
         expected_headers = dict()
         expected_headers[ScraperOld.START_TIME] = 'Start time'
@@ -183,3 +185,89 @@ class PrepareEventsForDBTestCase(TestCase):
         self.assertEqual(db_events[1].start_time, expected_datetime2 )
         self.assertEqual(db_events[1].comments, 'Intro to Yoga')
         self.assertEqual(db_events[1].instructor_name, 'Zoe Benjamin')
+
+
+class StandardizeInstructorNamesTestCase(TestCase):
+
+    def test_run(self):
+
+        #ARRANGE
+        scraper = Scraper()
+        step = StandardizeInstructorNames(scraper)
+
+        instructors_raw = set([u'Leslie Lewis (3)',
+                               u'Lulu Ekiert',
+                               u' lulu   ekiert ',
+                               u'Ria Cooper',
+                               u'Karrie Adamany',
+                               u'Marisa Sullivan',
+                               u'Katie Fraumann (4)',
+                               u'Leslie Lewis',
+                               u'Roaine Fine',
+                               u'Erin Lewis',
+                               u'Kate Filina',
+                               u'Katie Fraumann',
+                               u'Alana Kessler',
+                               u'Katie Fraumann (1)',
+                               u'Ashley Smith',
+                               u'Ashley Smith (2)',
+                               u'Aimee McCabe - Karr',
+                               u'Jacob Hoffman'])
+
+        #ACT
+        instructors = step.run(instructors_raw)
+
+        ##ASSERT
+        self.assertIsNotNone(instructors)
+        self.assertEqual(len(instructors), 18)
+        self.assertEqual(len(set(instructors.values())),13)
+        self.assertEqual(instructors[u' lulu   ekiert '], u'lulu-ekiert')
+        self.assertIn(u'karrie-adamany', instructors.values())
+
+
+    def test_run_remove_dashes(self):
+
+        #ARRANGE
+        scraper = Scraper()
+        step = StandardizeInstructorNames(scraper)
+
+        instructors_raw = set([u'Aimee McCabe - Karr'])
+
+        #ACT
+        instructors = step.run(instructors_raw)
+
+        ##ASSERT
+        self.assertIsNotNone(instructors)
+        self.assertEqual(len(instructors), 1)
+        self.assertEqual(len(set(instructors.values())),1)
+        self.assertIn(u'aimee-mccabe-karr', instructors.values())
+
+
+class LinkToKnownInstructorsTestCase(TestCase):
+
+    def test_run(self):
+
+        #ARRANGE
+        scraper = Scraper()
+        step = LinkToKnownInstructors(scraper)
+        fakeObj = Instructor()
+        fakeObj.name_url = 'aimee-mccabe-karr'
+        studio_instructors = list([fakeObj])
+        instructors = dict({u'Aimee McCabe - Karr':u'aimee-mccabe-karr',
+                            u'Aimee McCabe - Karr (1)':u'aimee-mccabe-karr',
+                            u'Kate Filina': u'kate-filina'})
+
+        #ACT
+        matched = step.run(studio_instructors, instructors)
+
+        ##ASSERT
+        self.assertIsNotNone(matched)
+        self.assertEqual(len(matched), 2)
+        self.assertEqual(matched[u'Aimee McCabe - Karr'],fakeObj)
+        self.assertEqual(matched[u'Aimee McCabe - Karr (1)'],fakeObj)
+
+
+class InstructorTestCase(TestCase):
+
+    def test_find_by_alias(self):
+        pass

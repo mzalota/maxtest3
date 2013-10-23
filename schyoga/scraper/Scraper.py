@@ -2,6 +2,7 @@ from selenium import webdriver
 
 class Scraper:
     __driver= None
+    vars = dict()
 
     def run(self):
         pass

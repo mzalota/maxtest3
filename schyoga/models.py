@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.contrib import admin
 # Create your models here.
@@ -51,9 +52,25 @@ class Instructor(models.Model):
     created_on = models.DateTimeField(blank=True)
     modified_on = models.DateTimeField()
     state = 'new-york'
+    studios = models.ManyToManyField("Studio",blank=True, null=True)
     #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
         ordering = ('-modified_on',)
+
+    @staticmethod
+    def convert_to_url_name(self, raw_name):
+        url_name = raw_name
+        url_name = url_name.replace('-',' ')
+        url_name = " ".join(url_name.split())
+        url_name = re.sub('(\((.*)\))',"",url_name)
+        url_name = " ".join(url_name.split())
+        url_name = url_name.lower()
+        url_name = url_name.replace(' ','-')
+
+        return url_name
+        #remove any apostrophies
+
+
 #TODO: introduce State attribute (One-to-Many) to Instructor objects
 
 
@@ -75,6 +92,7 @@ class Studio(models.Model):
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
     fbPageID = 'balancedyoga'   #'balancedyoga'
+    instructors = models.ManyToManyField("Instructor",blank=True, null=True)
     #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
         ordering = ('-modified_on',)
