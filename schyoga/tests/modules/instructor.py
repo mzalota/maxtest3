@@ -42,17 +42,27 @@ class TestInstructor(TestCase):
         name_4_raw = u'Aimee McCabe - Karr'
         name_4_expected = u'Aimee McCabe - Karr'
 
+        name_5_raw = u"Carrie Gaynor @ 520 Packett's Landing"
+        name_5_expected = u'Carrie Gaynor'
+
+        name_6_raw = u"  "
+        name_6_expected = u''
+
         #ACT
         name_1_clean = Instructor.clean_up_name(name_1_raw)
         name_2_clean = Instructor.clean_up_name(name_2_raw)
         name_3_clean = Instructor.clean_up_name(name_3_raw)
         name_4_clean = Instructor.clean_up_name(name_4_raw)
+        name_5_clean = Instructor.clean_up_name(name_5_raw)
+        name_6_clean = Instructor.clean_up_name(name_6_raw)
 
         #ASSERT
         self.assertEqual(name_1_clean, name_1_expected)
         self.assertEqual(name_2_clean, name_2_expected)
         self.assertEqual(name_3_clean, name_3_expected)
         self.assertEqual(name_4_clean, name_4_expected)
+        self.assertEqual(name_5_clean, name_5_expected)
+        self.assertEqual(name_6_clean, name_6_expected)
 
     def test_convert_to_url_name(self):
         #ARRANGE
@@ -85,14 +95,13 @@ class TestInstructor(TestCase):
 
 
     @patch('schyoga.models.Instructor')
-    @patch('schyoga.models.Studio')
-    def test_find_by_alias_one_instructor(self, studio, instructor_1):
+    def test_find_by_alias_one_instructor(self, instructor_1):
         #ARRANGE
         instructor_1.aliases_list = list(['Aimee McCabe - Karr'])
-        studio.instructors = list([instructor_1])
+        studio_instructors = list([instructor_1])
 
         #ACT
-        instructors = Instructor.find_by_alias(studio, 'Aimee McCabe - Karr')
+        instructors = Instructor.find_by_alias(studio_instructors, 'Aimee McCabe - Karr')
 
         #ASSERT
         self.assertIsNotNone(instructors)
@@ -101,17 +110,29 @@ class TestInstructor(TestCase):
 
 
     @patch('schyoga.models.Instructor')
+    def test_find_by_alias_found_no_instructor(self, instructor_1):
+        #ARRANGE
+        instructor_1.aliases_list = list(['Aimee McCabe - Karr'])
+        studio_instructors = list([instructor_1])
+
+        #ACT
+        instructors = Instructor.find_by_alias(studio_instructors, 'Idont exist')
+
+        #ASSERT
+        self.assertIsNone(instructors)
+
+
     @patch('schyoga.models.Instructor')
-    @patch('schyoga.models.Studio')
-    def test_find_by_alias_two_instructors(self, studio, instructor_1, instructor_2):
+    @patch('schyoga.models.Instructor')
+    def test_find_by_alias_two_instructors(self, instructor_1, instructor_2):
         #ARRANGE
         instructor_1.aliases_list = list(['Aimee McCabe - Karr'])
         instructor_2.aliases_list = list(['Nadya Zalota'])
 
-        studio.instructors = list([instructor_1, instructor_2])
+        studio_instructors = list([instructor_1, instructor_2])
 
         #ACT
-        instructors = Instructor.find_by_alias(studio, 'Nadya Zalota')
+        instructors = Instructor.find_by_alias(studio_instructors, 'Nadya Zalota')
 
         #ASSERT
         self.assertIsNotNone(instructors)
@@ -121,16 +142,15 @@ class TestInstructor(TestCase):
 
     @patch('schyoga.models.Instructor')
     @patch('schyoga.models.Instructor')
-    @patch('schyoga.models.Studio')
-    def test_find_by_alias_two_instructors_same_alias(self, studio, instructor_1, instructor_2):
+    def test_find_by_alias_two_instructors_same_alias(self, instructor_1, instructor_2):
         #ARRANGE
         instructor_1.aliases_list = ['Aimee McCabe - Karr', 'Teacher_1']
         instructor_2.aliases_list = ['Nadya Zalota', 'Instructor_1', 'Teacher_1', 'Yogi_1' ]
 
-        studio.instructors = list([instructor_1, instructor_2])
+        studio_instructors = list([instructor_1, instructor_2])
 
         #ACT
-        instructors = Instructor.find_by_alias(studio, 'Teacher_1')
+        instructors = Instructor.find_by_alias(studio_instructors, 'Teacher_1')
 
         #ASSERT
         self.assertIsNotNone(instructors)

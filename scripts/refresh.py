@@ -4,17 +4,21 @@ from schyoga.models import Event, Instructor
 from schyoga.scraper.scraper import Scraper
 from schyoga.scraper.steps.clickelement import ClickElement
 from schyoga.scraper.steps.clicklink import ClickLink
+from schyoga.scraper.steps.dealwithnewinstructors import DealWithNewInstructors
 from schyoga.scraper.steps.extracteventsfrommbo import ExtractEventsFromMBO
 from schyoga.scraper.steps.extracthtmlsnippet import ExtractHtmlSnippet
 from schyoga.scraper.steps.linktoknowninstructors import LinkToKnownInstructors
 from schyoga.scraper.steps.loadurl import LoadUrl
 from schyoga.scraper.steps.prepareeventsfordb import PrepareEventsForDB
 from schyoga.scraper.steps.readpagecontent import ReadPageContent
+from schyoga.scraper.steps.savehtmltodb import SaveHtmlToDB
 from schyoga.scraper.steps.standardizeinstructornames import StandardizeInstructorNames
 from schyoga.scraper.steps.waitforelement import WaitForElement
 from schyoga.scraper.steps.waitforframe import WaitForFrame
 
 from schyoga.models import Studio
+import io, json
+import codecs
 
 logger = logging.getLogger(__name__)
 
@@ -25,29 +29,37 @@ class SiteConfig:
                   'headers': list([ScraperOld.START_TIME, 'sign-up', ScraperOld.CLASS_NAME, ScraperOld.TEACHER_NAME,ScraperOld.DURATION]),
                   'studio_id': '12'})
 
-    steps2 = list([dict({'step_name':'LoadUrl',
-                         'url':"https://clients.mindbodyonline.com/ASP/ws.asp?studioid=5782"}),
+    steps2 = list([dict({'step_name': 'LoadUrl',
+                         'url': "https://clients.mindbodyonline.com/ASP/ws.asp?studioid=5782"}),
                     dict({'step_name': 'WaitForFrame',
-                         'frame_name':"mainFrame"}),
-                    dict({'step_name':'ReadPageContent',
+                         'frame_name': "mainFrame"}),
+                    dict({'step_name': 'ReadPageContent',
                          'return_var_name': 'html1'}),
-                    dict({'step_name':'ExtractHtmlSnippet',
+                    dict({'step_name': 'ExtractHtmlSnippet',
                          'html_var_name': 'html1',
                          'element_id': '#classSchedule-mainTable',
                          'return_var_name': 'schedule_html'}),
-                    dict({'step_name':'ExtractEventsFromMBO',
+                    dict({'step_name': 'ExtractEventsFromMBO',
                          'html_var_name': 'schedule_html',
                          'headers': list([ScraperOld.START_TIME, 'sign-up', ScraperOld.CLASS_NAME, ScraperOld.TEACHER_NAME,'assistant',ScraperOld.DURATION]),
                          'return_var_name': 'parsed_events'}),
-                    dict({'step_name':'PrepareEventsForDB',
+                    dict({'step_name': 'PrepareEventsForDB',
                           'parsed_events_var_name': 'parsed_events',
                           'return_var_name': 'db_events'}),
-                    dict({'step_name':'StandardizeInstructorNames',
+                    dict({'step_name': 'LinkToKnownInstructors',
                           'db_events_var_name': 'db_events',
-                          'return_var_name': 'instructors_standard'}),
-                    dict({'step_name':'LinkToKnownInstructors',
-                          'instructors_standard_var_name': 'instructors_standard',
-                          'return_var_name': 'instructors_matched'}),
+                          'return_var_name': 'instructors_unmatched'}),
+                    dict({'step_name': 'DealWithNewInstructors',
+                          'instructors_unmatched_var_name': 'instructors_unmatched',
+                          'file_path': "C:/tmp/unknown_instructors.cvs"}),
+
+
+                    #dict({'step_name':'StandardizeInstructorNames',
+                    #      'db_events_var_name': 'db_events',
+                    #      'return_var_name': 'instructors_standard'}),
+                    #dict({'step_name':'LinkToKnownInstructors',
+                    #      'instructors_standard_var_name': 'instructors_standard',
+                    #      'return_var_name': 'instructors_matched'}),
 
 
                    # dict({'step_name':'ClickElement',
@@ -148,18 +160,47 @@ class SiteConfig:
                    ])
 
 
+
+    #with io.open('c:/tmp/json_data.txt', 'w', encoding='utf-8') as f:
+    #    f.write(unicode(json.dumps(site_config.steps2, ensure_ascii=False, indent=2)))
+    #
+    #logger.debug("loading data from json file: ")
+    #with open('c:/tmp/json_data.txt') as data_file:
+    #    data = json.load(data_file)
+    #print repr(data)
+
 def run():
 
     logger.debug("starting script: refresh")
 
-    site_config = SiteConfig()
-
     scraper = Scraper()
+    studios = Studio.objects.all().filter(id__lte=17).filter(id__gte=17)
+    for studio in studios:
+        process_studio(scraper, studio)
 
-    studio_id = 12
-    studio = Studio.objects.get(pk=studio_id)
+    logger.debug('At the end of script: refresh')
 
-    for step in site_config.steps2:
+def process_studio(scraper, studio):
+
+    logger.debug("processing studio: "+str(studio.id)+", "+studio.name)
+
+    if studio.id == 12:
+        return
+
+    studio_site_set = studio.studio_site_set.all()
+    if not studio_site_set:
+        logger.error("Config data is not specified for studio: "+str(studio.id)+", "+studio.name)
+        return
+
+    if len(studio_site_set)>1:
+        logger.error("More then one Studio_Site object exists for  studio: "+str(studio.id)+", "+studio.name)
+        return
+
+    config_raw = studio_site_set[0].config
+    config = json.loads(config_raw)
+
+    for step in config:
+
         if step['step_name'] == 'LoadUrl':
             LoadUrl(scraper).run(url=step['url'])
         if step['step_name'] == 'WaitForFrame':
@@ -184,26 +225,43 @@ def run():
         if step['step_name'] == 'ClickElement':
             ClickElement(scraper).run(step['element_id'])
 
-        if step['step_name'] == 'StandardizeInstructorNames':
-            db_events = scraper.vars[step['db_events_var_name']]
-            instructors_raw = set(db_event.instructor_name for db_event in db_events)
-            result = StandardizeInstructorNames(scraper).run(instructors_raw)
-            scraper.vars[step['return_var_name']] = result
+        if step['step_name'] == 'SaveHtmlToDB':
+            html_text = scraper.vars[step['html_var_name']]
+            SaveHtmlToDB(scraper).run(studio, step['comment'], html_text)
+
+
+        #if step['step_name'] == 'StandardizeInstructorNames':
+        #    db_events = scraper.vars[step['db_events_var_name']]
+        #    instructors_raw = set(db_event.instructor_name for db_event in db_events)
+        #    result = StandardizeInstructorNames(scraper).run(instructors_raw)
+        #    scraper.vars[step['return_var_name']] = result
+
+        #if step['step_name'] == 'LinkToKnownInstructors':
+        #    #db_events = scraper.vars[step['db_events_var_name']]
+        #    instructors_standard = scraper.vars[step['instructors_standard_var_name']]
+        #    result = LinkToKnownInstructors(scraper).run(studio.instructors, instructors_standard)
+        #    scraper.vars[step['return_var_name']] = result
 
         if step['step_name'] == 'LinkToKnownInstructors':
-            #db_events = scraper.vars[step['db_events_var_name']]
-            instructors_standard = scraper.vars[step['instructors_standard_var_name']]
-            result = LinkToKnownInstructors(scraper).run(studio.instructors, instructors_standard)
+            db_events = scraper.vars[step['db_events_var_name']]
+            studio_instructors = studio.instructors.all()
+            result = LinkToKnownInstructors(scraper).run2(studio_instructors, db_events)
             scraper.vars[step['return_var_name']] = result
+            #print repr(result)
 
-        if step['step_name'] == 'SaveUnmatchedInstructorsToDB':
-            instructors_matched = scraper.vars[step['instructors_matched_var_name']]
-            instructors_unmatched = set(instructors_standard.keys()) - set(instructors_matched.keys())
-            instructors_added = dict()
-            for instructor_name in instructors_unmatched:
-                new_instructor = Instructor()
-                new_instructor.instructor_name = instructor_name
-                instructors_added[instructor_name] = new_instructor
+        if step['step_name'] == 'DealWithNewInstructors':
+            instructors_unmatched = scraper.vars[step['instructors_unmatched_var_name']]
+            DealWithNewInstructors(scraper).run(studio, instructors_unmatched, step['file_path'])
+
+
+        #if step['step_name'] == 'SaveUnmatchedInstructorsToDB':
+        #    instructors_matched = scraper.vars[step['instructors_matched_var_name']]
+        #    instructors_unmatched = set(instructors_standard.keys()) - set(instructors_matched.keys())
+        #    instructors_added = dict()
+        #    for instructor_name in instructors_unmatched:
+        #        new_instructor = Instructor()
+        #        new_instructor.instructor_name = instructor_name
+        #        instructors_added[instructor_name] = new_instructor
 
 
     logger.debug("Parsed Out DB Events 1111 are :")
@@ -212,14 +270,13 @@ def run():
         logger.debug( str(idx)+": "+db_event.comments + ", "+repr(db_event.start_time)+", "+db_event.instructor_name)
 
 
-    logger.debug("Parsed Out DB Events 2222 are :")
-    db_events2 = scraper.vars['db_events2']
-    for idx, db_event in enumerate(db_events2):
-        logger.debug( str(idx)+": "+db_event.comments + ", "+repr(db_event.start_time)+", "+db_event.instructor_name)
+    #logger.debug("Parsed Out DB Events 2222 are :")
+    #db_events2 = scraper.vars['db_events2']
+    #for idx, db_event in enumerate(db_events2):
+    #    logger.debug( str(idx)+": "+db_event.comments + ", "+repr(db_event.start_time)+", "+db_event.instructor_name)
 
     logger.debug("done with the switch statement")
 
-    return
 
 
     #TODO: validate that headers on the page match configured ones
@@ -229,8 +286,6 @@ def run():
 
 
 
-    #map to known instructors.
-    LinkToKnownInstructors(scraper).run(db_events)
 
     #validate that all prepared events will be accepted by DB (call db_event[i].full_clean() to verify)
 
@@ -247,4 +302,3 @@ def run():
     #   sources
 
 
-    logger.debug('At the end of script: refresh')
