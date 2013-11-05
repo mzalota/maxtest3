@@ -1,6 +1,7 @@
- {% for event in events %}
 
-    <td style="min-width: 65px;">
+<td style="min-width: 65px;">
+{% for event in events %}
+
     <!-- <h4> event start time is {{ event.start_time }}</h4> -->
         <div class="text-center text-info"><small><strong> {{ event.comments }} </strong></small></div>
 
@@ -11,13 +12,21 @@
             {% url 'teacher-profile' event.instructor.state  event.instructor.name_url as url_to_instructor_page %}
 
             <a href="{{ url_to_instructor_page }}"
-               title="Schedule for Yoga Teaccher: {{ event.instructor.instructor_name }}">
+               title="Schedule for Yoga Teacher: {{ event.instructor.instructor_name }}">
                  <abbr title="Yoga Teacher:{{ event.instructor.instructor_name }}">
                     <span class="glyphicon glyphicon-user"></span>
                     <small>{{ event.instructor.instructor_name }}</small>
                  </abbr>
             </a>
         </div>
+        {% elif event.instructor_name %}
+        <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
+             <abbr title="Yoga Teacher:{{ event.instructor_name }}">
+                <span class="glyphicon glyphicon-user"></span>
+                <small>{{ event.instructor_name }}</small>
+             </abbr>
+        </div>
         {% endif %}
-    </td>
+
 {% endfor %}
+</td>

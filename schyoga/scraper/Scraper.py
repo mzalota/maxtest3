@@ -1,8 +1,12 @@
+import uuid
 from selenium import webdriver
 
 class Scraper:
     __driver= None
     vars = dict()
+
+    def __init__(self):
+        self.uuid = uuid.uuid1()
 
     def run(self):
         pass

@@ -1,6 +1,7 @@
 #from unittest import TestCase
 from django.db import connection
 from django.test import TestCase
+from mock import patch, Mock
 from schyoga.bizobj.parser.scraperOld import ScraperOld
 from schyoga.models import Parsing_History, Event, Studio, Instructor
 import os.path
@@ -267,7 +268,40 @@ class LinkToKnownInstructorsTestCase(TestCase):
         self.assertEqual(matched[u'Aimee McCabe - Karr (1)'],fakeObj)
 
 
-class InstructorTestCase(TestCase):
+    def test_run2(self):
 
-    def test_find_by_alias(self):
-        pass
+        #ARRANGE
+        scraper = Scraper()
+        step = LinkToKnownInstructors(scraper)
+
+        instructor_1 = Instructor()
+        instructor_1.aliases_list = list(['Aimee McCabe - Karr', 'Aimee McCabe Karr'])
+        instructor_2 = Instructor()
+        instructor_2.aliases_list = list(['Kate Filina', 'Kate D Filina'])
+
+        studio_instructors = list([instructor_1, instructor_2])
+
+        event_1 = Event()
+        event_1.instructor_name = 'Aimee McCabe - Karr'
+        event_2 = Event()
+        event_2.instructor_name = 'Nadya Zalota'
+        event_3 = Event()
+        event_3.instructor_name = 'Aimee McCabe Karr'
+        event_4 = Event()
+        event_4.instructor_name = 'Kate D Filina'
+
+        db_events = list([event_1,event_2,event_3,event_4])
+
+        #ACT
+        unmatched = step.run2(studio_instructors, db_events)
+
+        ##ASSERT
+        self.assertIsNotNone(db_events)
+        self.assertEqual(len(db_events), 4)
+        self.assertIsNotNone(event_1.instructor)
+        self.assertIsNone(event_2.instructor)
+        self.assertIsNotNone(event_3.instructor)
+        self.assertIsNotNone(event_4.instructor)
+
+        self.assertIsNotNone(unmatched)
+        self.assertEqual(len(unmatched), 1)

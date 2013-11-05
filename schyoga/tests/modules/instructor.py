@@ -48,6 +48,28 @@ class TestInstructor(TestCase):
         name_6_raw = u"  "
         name_6_expected = u''
 
+        name_7_raw = u" TEACHER "
+        name_7_expected = u''
+
+        name_8_raw = u" Teacher   TEACHER  "# bikram yoga harlem
+        name_8_expected = u''
+
+        name_9_raw = u"  Staff  "
+        name_9_expected = u''
+
+        name_10_raw = u"  Staff   staff  "
+        name_10_expected = u''
+
+        name_11_raw = u"  STAFF   MEMBER  " # Atmananda Yoga Sequence
+        name_11_expected = u''
+
+        name_12_raw = u"    GOLDEN  BRIDGE   STAFF "
+        #name_12_raw = u" Lotus STAFF "
+        name_12_expected = u''
+
+        name_13_raw = u"  STAFF  "
+        name_13_expected = u''
+
         #ACT
         name_1_clean = Instructor.clean_up_name(name_1_raw)
         name_2_clean = Instructor.clean_up_name(name_2_raw)
@@ -55,6 +77,13 @@ class TestInstructor(TestCase):
         name_4_clean = Instructor.clean_up_name(name_4_raw)
         name_5_clean = Instructor.clean_up_name(name_5_raw)
         name_6_clean = Instructor.clean_up_name(name_6_raw)
+        name_7_clean = Instructor.clean_up_name(name_7_raw)
+        name_8_clean = Instructor.clean_up_name(name_8_raw)
+        name_9_clean = Instructor.clean_up_name(name_9_raw)
+        name_10_clean = Instructor.clean_up_name(name_10_raw)
+        name_11_clean = Instructor.clean_up_name(name_11_raw)
+        name_12_clean = Instructor.clean_up_name(name_12_raw)
+        name_13_clean = Instructor.clean_up_name(name_13_raw)
 
         #ASSERT
         self.assertEqual(name_1_clean, name_1_expected)
@@ -63,6 +92,70 @@ class TestInstructor(TestCase):
         self.assertEqual(name_4_clean, name_4_expected)
         self.assertEqual(name_5_clean, name_5_expected)
         self.assertEqual(name_6_clean, name_6_expected)
+        self.assertEqual(name_7_clean, name_7_expected)
+        self.assertEqual(name_8_clean, name_8_expected)
+        self.assertEqual(name_9_clean, name_9_expected)
+        self.assertEqual(name_10_clean, name_10_expected)
+        self.assertEqual(name_11_clean, name_11_expected)
+        self.assertEqual(name_12_clean, name_12_expected)
+        self.assertEqual(name_13_clean, name_13_expected)
+
+    def test_clean_up_name2(self):
+        #ARRANGE
+        name_1_raw = u"  Karina   Hluhovs'ka  "# teacher from Go Yoga studio
+        name_1_expected = u'Karina Hluhovska'
+
+        name_2_raw = '  Jennifer A. '
+        name_2_expected = 'Jennifer A'
+
+        name_3_raw = u'Grace (Sangeet Kaur) Kim (12)'
+        name_3_expected = u'Grace (Sangeet Kaur) Kim'
+
+        name_4_raw = u" Ambyr D'Amato " # Loom Studios
+        name_4_expected = u'Ambyr DAmato'
+
+        name_5_raw = u"  TBA . "
+        name_5_expected = u''
+
+        name_6_raw = u"  Blossoming Teachers "
+        name_6_expected = u''
+
+        name_7_raw = u" * * "
+        name_7_expected = u''
+
+        name_8_raw = u" YTTP "
+        name_8_expected = u''
+
+        name_9_raw = u"    "
+        name_9_expected = u''
+
+        name_10_raw = u" "
+        name_10_expected = u''
+
+        #ACT
+        name_1_clean = Instructor.clean_up_name(name_1_raw)
+        name_2_clean = Instructor.clean_up_name(name_2_raw)
+        name_3_clean = Instructor.clean_up_name(name_3_raw)
+        name_4_clean = Instructor.clean_up_name(name_4_raw)
+        name_5_clean = Instructor.clean_up_name(name_5_raw)
+        name_6_clean = Instructor.clean_up_name(name_6_raw)
+        name_7_clean = Instructor.clean_up_name(name_7_raw)
+        name_8_clean = Instructor.clean_up_name(name_8_raw)
+        name_9_clean = Instructor.clean_up_name(name_9_raw)
+        name_10_clean = Instructor.clean_up_name(name_10_raw)
+
+        #ASSERT
+        self.assertEqual(name_1_clean, name_1_expected)
+        self.assertEqual(name_2_clean, name_2_expected)
+        self.assertEqual(name_3_clean, name_3_expected)
+        self.assertEqual(name_4_clean, name_4_expected)
+        self.assertEqual(name_5_clean, name_5_expected)
+        self.assertEqual(name_6_clean, name_6_expected)
+        self.assertEqual(name_7_clean, name_7_expected)
+        self.assertEqual(name_8_clean, name_8_expected)
+        self.assertEqual(name_9_clean, name_9_expected)
+        self.assertEqual(name_10_clean, name_10_expected)
+
 
     def test_convert_to_url_name(self):
         #ARRANGE

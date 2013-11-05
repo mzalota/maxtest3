@@ -75,7 +75,8 @@ class Schedule():
     def getDistinctInstructors(self):
         instructors = set()
         for event in self.events:
-            instructors.add(event.instructor)
+            if event.instructor:
+                instructors.add(event.instructor)
 
         sortedInstructors = sorted(instructors, key=attrgetter('instructor_name'))
         return sortedInstructors

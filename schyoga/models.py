@@ -11,6 +11,7 @@ from time import strftime
 #
 import django.forms
 from django.forms import ModelChoiceField, ModelForm
+from django.utils.html import format_html
 from picklefield import PickledObjectField
 from schyoga.bizobj.state import State
 
@@ -25,7 +26,7 @@ class Instructor(models.Model):
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(auto_now=True)
     state = 'new-york'
-    studios = models.ManyToManyField("Studio", blank=True, null=True)
+    #studios = models.ManyToManyField("Studio", blank=True, null=True, db_table="schyoga_instructor_studios")
 
     class Meta:
         ordering = ('-modified_on',)
@@ -58,11 +59,40 @@ class Instructor(models.Model):
     def clean_up_name(raw_name):
         #remove any apostrophies
         clean_name = raw_name
+        clean_name = clean_name.replace("'", '')
+        clean_name = clean_name.replace("*", '')  # Sivananda Yoga Centers NY (NYC) has instrucor with name '* *'
+        clean_name = clean_name.replace(".", '')
         clean_name = " ".join(clean_name.split())
-        clean_name = re.sub('(\((.*)\))', "", clean_name) # remove anything that appears in brackets ()
+        #clean_name = re.sub('(\((.*)\))', "", clean_name) # remove anything that appears in brackets ()
+        clean_name = re.sub('(\((\d+)\))', "", clean_name) # if number appear inside brackts, remove number and brackets
         clean_name = clean_name.split("@")[0] # remove anything that appears after @ sign
         clean_name = " ".join(clean_name.split())
         clean_name = Instructor.__capitalize(clean_name)
+
+        if clean_name.lower() == 'teacher':
+            return ''
+
+        if clean_name.lower() == 'tba':
+            return ''
+
+        if clean_name.lower() == 'teacher teacher':
+            return ''
+
+        if clean_name.lower().find(' teacher') >= 0: # " Shambhala Yoga & Dance Center
+            return ''
+
+        if clean_name.lower() == 'staff' or clean_name.lower() == 'staff staff':
+            return ''
+
+        if clean_name.lower().find('staff ') >= 0: #eg "Staff Member"
+            return ''
+
+        if clean_name.lower().find(' staff') >= 0: # " GOLDEN BRIDGE STAFF"
+            return ''
+
+        if clean_name.lower() == 'yttp': # Yoga to the People-Brooklyn studio has this instructor name
+            return ''
+
         return clean_name
 
 
@@ -97,6 +127,11 @@ class InstructorAdmin(admin.ModelAdmin):
 
 admin.site.register(Instructor, InstructorAdmin)
 
+#class ManyToManyField_NoSyncdb(models.ManyToManyField):
+#    def __init__(self, *args, **kwargs):
+#        super(ManyToManyField_NoSyncdb, self).__init__(*args, **kwargs)
+#        self.creates_table = False
+
 
 class Studio(models.Model):
     name = models.CharField(max_length=100)
@@ -109,7 +144,7 @@ class Studio(models.Model):
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
     fbPageID = 'balancedyoga'   #'balancedyoga'
-    instructors = models.ManyToManyField("Instructor", blank=True, null=True)
+    instructors = models.ManyToManyField("Instructor", blank=True, null=True, db_table="schyoga_instructor_studios")
     #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
         ordering = ('-modified_on',)
@@ -129,8 +164,17 @@ class Studio(models.Model):
 
 
 class StudioAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'state_name_url', 'name', 'nameForURL', 'url_home', 'url_schedule', 'modified_on', 'created_on')
+    list_display = ('id', 'state_name_url', 'name',  'display_url_home', 'display_url_schedule', 'nameForURL')
+    list_display_links = ('id', 'state_name_url', 'name', 'nameForURL')
+
+    def display_url_home(self, obj):
+        return format_html('<a href="{0}" target="_blank" title="{0}"><abbr>{1}</abbr></a>', obj.url_home, obj.url_home[:30])
+
+    def display_url_schedule(self, obj):
+        return format_html('<a href="{0}" target="_blank" title="{0}"><abbr>{1}</abbr></a>', obj.url_schedule, obj.url_schedule[:20])
+
+    display_url_home.allow_tags = True
+    display_url_schedule.allow_tags = True
 
 
 admin.site.register(Studio, StudioAdmin)
@@ -138,7 +182,7 @@ admin.site.register(Studio, StudioAdmin)
 
 class Event(models.Model):
     instructor_name = models.CharField(max_length=100, blank=True)
-    comments = models.CharField(max_length=100)
+    comments = models.CharField(max_length=100,  blank=True, null=True)
     start_time = models.DateTimeField()
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
@@ -155,7 +199,8 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Event, EventAdmin)
-
+#alter table schyoga_event MODIFY COLUMN instructor_id int(11) default NULL;
+#alter table schyoga_event MODIFY COLUMN comments varchar(100) default NULL;
 
 class Parsing_History(models.Model):
     studio = models.ForeignKey("Studio")
@@ -167,7 +212,23 @@ class Parsing_History(models.Model):
 
 
 class Parsing_HistoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'studio', 'comment', 'scrape_uuid', 'last_crawling')
+    list_display = ('id', 'studio_description', 'comment', 'scrape_uuid', 'html_len', 'last_crawling')
+    list_editable = list(['comment'])
+    list_display_links = ('id', 'studio_description', 'scrape_uuid')
+    readonly_fields = ('scrape_uuid', 'last_crawling')
+
+    def studio_description(self, obj):
+        return ("%s %s" % (obj.studio.id, obj.studio.name))
+
+    studio_description.short_description = "Studio"
+
+    def html_len(self, obj):
+        if obj.calendar_html:
+            return ("%s" % len(obj.calendar_html))
+        else:
+            return "EMPTY"
+
+    html_len.short_description = "HTML Size (bytes)"
 
 
 admin.site.register(Parsing_History, Parsing_HistoryAdmin)
@@ -175,9 +236,14 @@ admin.site.register(Parsing_History, Parsing_HistoryAdmin)
 
 #alter table schyoga_parsing_history add column scrape_uuid char(36) after studio_id;
 
+# how to render custom form out of json http://stackoverflow.com/questions/9541924/pseudo-form-in-django-admin-that-generates-a-json-object-on-save
+
+
 class Studio_Site(models.Model):
     studio = models.ForeignKey("Studio")
     config = models.TextField()
+    config_crawl = models.TextField()
+    config_parse = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(auto_now=True)
 
@@ -195,9 +261,33 @@ class MyStudioSiteAdminForm(ModelForm):
 
 
 class Studio_SiteAdmin(admin.ModelAdmin):
-    list_display = ('id', 'studio', 'config')
+    list_display = ('id', 'studio_description', 'crawl_len', 'parse_len')
+    list_display_links = ('id', 'studio_description')
+    save_as = True
+    save_on_top = True
 
     form = MyStudioSiteAdminForm
+
+    def studio_description(self, obj):
+        return ("%s %s" % (obj.studio.id, obj.studio.name))
+
+    studio_description.short_description = "Studio"
+
+    def crawl_len(self, obj):
+        if obj.config_crawl:
+            return ("%s" % (len(obj.config_crawl)))
+        else:
+            return "EMPTY"
+
+    def parse_len(self, obj):
+        if obj.config_parse:
+            return ("%s" % (len(obj.config_parse)))
+        else:
+            return "EMPTY"
+
+    crawl_len.short_description = "Config Crawl Size (bytes)"
+    parse_len.short_description = "Config Parse Size (bytes)"
+
 
     #def formfield_for_foreignkey(self, db_field, request, **kwargs):
     #    if db_field.name == "studio":
@@ -212,11 +302,15 @@ class Studio_SiteAdmin(admin.ModelAdmin):
 
 admin.site.register(Studio_Site, Studio_SiteAdmin)
 
+#alter table schyoga_studio_site ADD COLUMN config_crawl longtext default NULL after config;
+#alter table schyoga_studio_site ADD COLUMN config_parse longtext default NULL after config_crawl;
+
+
 
 #alter table parsing_history rename to schyoga_parsing_history;
 #alter table schyoga_parsing_history MODIFY COLUMN last_crawling datetime;
 
-
+#alter table schyoga_event MODIFY COLUMN instructor_id int(11) default NULL;
 
 #+---------------+------------+------+-----+-------------------+----------------+
 #| Field         | Type       | Null | Key | Default           | Extra          |

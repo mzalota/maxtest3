@@ -13,6 +13,10 @@ class ExtractEventsFromMBO:
     def run(self, html_table, headers):
         logger.debug("extracting events from MindBodyOnline page")
 
+        if not html_table:
+            logger.error("page is empty")
+            return None
+
         soup = BeautifulSoup(html_table)
         rows = soup.select("tr")
 
@@ -55,13 +59,13 @@ class ExtractEventsFromMBO:
                     teacher = eventData.get(ScraperOld.TEACHER_NAME)
                     duration = eventData.get(ScraperOld.DURATION)
 
-
-                    control_msg = "maximka - "+str(rowNum)+ ": StartTime: "+startTime+", class: "+className+", teacher: "+teacher+", duration: "+duration
                     #controlTag.string = control_msg
 
                     if teacher == "Cancelled Today":
                         continue
 
+                    control_msg = "maximka - "+str(rowNum)+ ": StartTime: "+repr(startTime)+", class: "+repr(className)+", teacher: "+repr(teacher)+", duration: "+repr(duration)
+                    logger.debug("control_msg: "+control_msg)
 
                     eventData[ScraperOld.EVENT_DATE] = curDate
                     events.append(eventData)
@@ -87,7 +91,9 @@ class ExtractEventsFromMBO:
         cols = schedRow.select("td")
 
         if len(cols)<=1:
-            logTxt = str(len(cols))+": Something is up with this row! Text is: "+schedRow.get_text()
+            txt = schedRow.get_text().strip()
+            txt = " ".join(txt.split())
+            logTxt = str(len(cols))+": Something is up with this row! Text is: "+txt
             logger.error(logTxt)
             return eventData
 

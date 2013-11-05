@@ -6,6 +6,7 @@ from base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -84,6 +85,11 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': True,
             'level': 'INFO', #in DEBUG mode executed SQL statements are printed out
+        },
+        'schyoga.scraper.steps.extracteventsfrommbo': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO', # DEBUG mode is too verbose
         },
     },
 }

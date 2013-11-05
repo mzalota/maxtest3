@@ -24,6 +24,10 @@ class PrepareEventsForDB:
 
         db_events = list()
 
+        if not parsed_events:
+            logger.warn("No Parsed Events found")
+            return
+
         for idx, parsed_event in enumerate(parsed_events):
             db_event = Event()
             start_time = parsed_event[ScraperOld.START_TIME]

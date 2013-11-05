@@ -15,7 +15,7 @@ class ExtractHtmlSnippet:
 
         tags = soup.select(element_id)
         if not tags:
-            logger.warn("Did not find element "+element_id+" in html of length: "+str(len(html_str)))
+            logger.error("Did not find element "+element_id+" in html of length: "+str(len(html_str)))
             return None
 
         if len(tags) > 1:

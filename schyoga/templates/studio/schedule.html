@@ -47,7 +47,7 @@ $(function() {  // DOM READY shorthand
             {% for calDate in calendar.calendarDates %}
                 {% events_from_calendar calendar calDate calendarTime as events%}
                 {%  if not events %}
-                    <td class="cal_info_cell summary"> </td>
+                    <td class="cal_info_cell summary"> <!-- calDate is: {{  calDate }}--></td>
                 {%  else %}
                     {% include "studio/snippet-calendar-event.html" with events=events only %}
                 {%  endif %}

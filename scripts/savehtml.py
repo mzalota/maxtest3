@@ -42,6 +42,8 @@ def run():
     #!!!! check keisha-bolden - its broken
     # Yoga to People does not have teacher name!
 
+    #bikram yoga union square is no longger working, but is replaced by bikram yoga herald square: https://clients.mindbodyonline.com/ASP/home.asp?studioid=31021 http://www.bikramyogaheraldsquare.com/
+
     logger.debug("starting script: savehtml")
 
     studios = Studio.objects.all().filter(id=96).order_by('id')

@@ -1,5 +1,6 @@
 # Django settings for maxtest3 project.
 from django.conf import global_settings
+import warnings
 
 #TODO: try to get rid of the maxtest3 application. Make sure there is only SchYoga project.
 
@@ -13,6 +14,11 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+
+#Ignore numerous warnings about converting from native to timezone-aware DateTime object...
+#http://stackoverflow.com/questions/18622007/runtimewarning-datetimefield-received-a-naive-datetime
+#https://docs.djangoproject.com/en/dev/topics/i18n/timezones/#code
+#warnings.filterwarnings('ignore', r"DateTimeField received a naive datetime .*", RuntimeWarning, r'django\.db\.models\.fields')
 
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -40,7 +46,7 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
