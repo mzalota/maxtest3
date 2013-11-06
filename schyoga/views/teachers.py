@@ -87,7 +87,7 @@ def schedule(request, state_url_name, teacher_url_name):
 
 def facebookFeed(request, state_url_name, teacher_url_name):
 
-    #TODO: make page look prettier before rolling it out
+    #TODO: make Facebook Page look prettier before rolling it out
 
     state = State.createFromUrlName(state_url_name)
 

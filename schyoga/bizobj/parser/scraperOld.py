@@ -9,6 +9,8 @@ from schyoga.models import Studio, Parsing_History
 
 logger = logging.getLogger(__name__)
 
+#TODO: get rid of this class
+
 class ScraperOld:
 
     START_TIME = 'start-time'
@@ -130,7 +132,7 @@ class ScraperOld:
             return
 
         if len(mainTable) > 1:
-            #TODO: deal with this exceptional scenario
+
             logger.error("WOW. Why is there more then one table with ID=classSchedule in HTML DOM??. Using the first one.")
 
         mainTable = mainTable[0]

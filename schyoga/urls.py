@@ -6,9 +6,17 @@ from django.views.generic import TemplateView, RedirectView
 from schyoga.bizobj.page import Page
 from schyoga.views.studios import StudioViews
 
+#TODO: Test how the page schedule looks with IE 9 (make sure Top Nav menu is not wierd)
+#TODO: delete flatpages plugin
+#TODO: Figure out why this URL is not working: http://127.0.0.1:8000/new-york/studios/bikram-yoga-grand-central/2013-10-08.html/
+#TODO: make sure every page sets <title> and <description>
+#TODO: Install  Bing Analytics tags.
+
 urlpatterns = patterns('schyoga.views',
 
     #url(r'^favicon.ico$', TemplateView.as_view(template_name="favicon.ico"), name='favicon'),
+
+    url(r'^robots.txt$', TemplateView.as_view(template_name="robots.txt", content_type='text/plain'), name='robots'),
 
     url(r'^about-us.html$', TemplateView.as_view(template_name="about-us.html"), name='about-us'),
     url(r'^privacy-policy.html$', TemplateView.as_view(template_name="privacy-policy.html"), name='privacy-policy'),
