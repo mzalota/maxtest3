@@ -1,6 +1,11 @@
 {% extends "base.html" %}
-{% block content %}
 
+{% block header %}
+    <title>Schedule for Yoga Studios in {{ state.name }} state</title>
+    <meta name="description" content="Comprehensive list of Yoga Studios in {{ state.name }} state. Select a yoga studio in {{ state.name }} and view this studio's schedule">
+{% endblock %}
+
+{% block content %}
 <h1>View Schedule for Yoga Studios in {{ state.name }}:</h1>
 
 <div class="row">

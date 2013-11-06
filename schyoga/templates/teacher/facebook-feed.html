@@ -1,4 +1,9 @@
 {% extends "teacher/teacher-base.html" %}
+{% block header %}
+    <title>Facebook feed and Schedule for Yoga Teacher: {{ instructor.instructor_name }}, {{ state.name }}</title>
+    <meta name="description" content="View Facebook feed and schedule for yoga teacher: {{ instructor.instructor_name }}, {{ state.name }}">
+{% endblock %}
+
 {% block teacher-main-conent %}
 
     {% if feeds %}

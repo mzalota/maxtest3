@@ -1,5 +1,10 @@
 {% extends "teacher/teacher-base.html" %}
 
+{% block header %}
+    <title>Profile and Schedule for Yoga Teacher: {{ instructor.instructor_name }}, {{ state.name }}</title>
+    <meta name="description" content="View profile and schedule for yoga teacher: {{ instructor.instructor_name }}, {{ state.name }}">
+{% endblock %}
+
 {% block teacher-main-conent %}
 
 <div class="row">

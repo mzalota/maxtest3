@@ -1,6 +1,11 @@
 {% extends "teacher/teacher-base.html" %}
-{% block teacher-main-conent %}
 
+{% block header %}
+    <title>Schedule for Yoga Teacher: {{ instructor.instructor_name }}, {{ state.name }}</title>
+    <meta name="description" content="View detailed schedule for yoga teacher: {{ instructor.instructor_name }}, {{ state.name }}">
+{% endblock %}
+
+{% block teacher-main-conent %}
 <p>
     Yoga Teacher {{ instructor.instructor_name }}'s schedule over two weeks
     {% if calendar.getNumOfEvents == 0  %}

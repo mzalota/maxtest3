@@ -1,4 +1,10 @@
 {% extends "studio/studio-base.html" %}
+
+{% block header %}
+    <title>Schedule for Yoga Studio: {{ studio.name }}, {{ state.name }}</title>
+    <meta name="description" content="View detailed schedule for yoga studio: {{ studio.name }}, {{ state.name }}">
+{% endblock %}
+
 {% block studio-main-conent %}
 
 {% load schyoga_custom_tags %}

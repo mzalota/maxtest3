@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% block header %}
-    {% endblock %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {% load staticfiles %}
     <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- START BLOCK: Header-->
+    {% block header %}{% endblock %}
+    <!-- END BLOCK: Header-->
 
     <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.css">
@@ -61,8 +63,10 @@
             {% load schyoga_custom_tags %}
             {% show_top_nav %}
 
+            <!-- START BLOCK: Content -->
             {% block content %}
             {% endblock %}
+            <!-- END BLOCK: Content -->
 
             <div class="clearfix" style="margin-top:40px;"></div>
 

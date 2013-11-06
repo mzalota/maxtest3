@@ -1,7 +1,11 @@
 {% extends "base.html" %}
+
+{% block header %}
+    <title>{{ state.name }}: Schedule for Yoga Studios and Yoga Teachers</title>
+    <meta name="description" content="{{ state.name }}: Schedule for Yoga Studios and Yoga Teachers">
+{% endblock %}
+
 {% block content %}
-
-
     <h1>Schedule for Yoga Studios and Teachers in {{ state.name }}</h1>
 
     <div class="row">

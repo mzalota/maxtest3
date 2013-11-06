@@ -25,8 +25,6 @@ def page404(request):
 
 
 def index(request):
-    #TODO: give proper <title> to each page
-    #TODO: make sure favicon is visible on each page on the AWS server
     return render_to_response('index.html', {}, RequestContext(request))
 
 
@@ -46,7 +44,6 @@ def shoutOuts(request):
 
 #TODO: Create separate page for each event, which would have microtags embeded
 
-#TODO: remove/disable FlatPage plugin
 
 
  #def friends(request):
