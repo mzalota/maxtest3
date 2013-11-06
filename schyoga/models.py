@@ -21,7 +21,7 @@ class Instructor(models.Model):
     name_url = models.CharField(max_length=150)
     aliases = models.CharField(max_length=1000, blank=True)
     #aliases = PickledObjectField(compress=False, max_length=1000, protocol=0)
-    fb_userid = 'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
+    fb_userid = '' #'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
     #body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(auto_now=True)
@@ -143,7 +143,7 @@ class Studio(models.Model):
     mindbodyonline_id = models.CharField(max_length=10, blank=True, null=True)
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
-    fbPageID = 'balancedyoga'   #'balancedyoga'
+    fbPageID = None #'balancedyoga'   #'balancedyoga'
     instructors = models.ManyToManyField("Instructor", blank=True, null=True, db_table="schyoga_instructor_studios")
     #modified_on = UnixTimestampField(auto_created=True)
     class Meta:
