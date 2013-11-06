@@ -1,5 +1,4 @@
 
-
 #DEPLOYMENT STEPS
 modify lilne in /opt/bitnami/apps/django/scripts/django.wsgi as follows
 os.environ['DJANGO_SETTINGS_MODULE'] = 'maxtest3.settings.prod'

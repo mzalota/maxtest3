@@ -1,5 +1,10 @@
 #from django.conf.urls.defaults import *
-from django.conf.urls import *
+#from django.conf.urls import *
+
+from django.conf.urls import patterns, include, url
+
+from django.contrib import admin
+admin.autodiscover()
 
 #from schyoga.views import list
 from django.views.generic import TemplateView, RedirectView
@@ -13,6 +18,12 @@ from schyoga.views.studios import StudioViews
 #TODO: Install  Bing Analytics tags.
 
 urlpatterns = patterns('schyoga.views',
+
+    # Uncomment the admin/doc line below to enable admin documentation:
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+    # Uncomment the next line to enable the admin:
+    url(r'^admin/', include(admin.site.urls)),
 
     #url(r'^favicon.ico$', TemplateView.as_view(template_name="favicon.ico"), name='favicon'),
 
