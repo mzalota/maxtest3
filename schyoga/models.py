@@ -15,6 +15,12 @@ from django.utils.html import format_html
 from picklefield import PickledObjectField
 from schyoga.bizobj.state import State
 
+#alter table schyoga_instructor add column state_name_url varchar(100) not null after aliases
+#update schyoga_instructor set state_name_url = 'new-york';
+#update schyoga_instructor set state_name_url = 'connecticut' where id >= 654 and id <=665;
+
+#select * from schyoga_instructor i join schyoga_instructor_studios ist on i.id=ist.instructor_id where ist.studio_id in (1,2,103,104,105,106);
+
 
 class Instructor(models.Model):
     instructor_name = models.CharField(max_length=150)
@@ -22,11 +28,11 @@ class Instructor(models.Model):
     aliases = models.CharField(max_length=1000, blank=True)
     #aliases = PickledObjectField(compress=False, max_length=1000, protocol=0)
     fb_userid = '' #'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
-    #body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(auto_now=True)
-    state = 'new-york'
+    state_name_url = models.CharField(max_length=100) #'new-york'
     #studios = models.ManyToManyField("Studio", blank=True, null=True, db_table="schyoga_instructor_studios")
+    #state = 'connecticut' #'new-york'
 
     class Meta:
         ordering = ('-modified_on',)
@@ -116,9 +122,6 @@ class Instructor(models.Model):
             return instructors_by_alias[name]
         else:
             return None
-
-
-#TODO: introduce State attribute (One-to-Many) to Instructor objects
 
 
 class InstructorAdmin(admin.ModelAdmin):

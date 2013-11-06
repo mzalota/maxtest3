@@ -47,7 +47,7 @@ class Browser:
         return pageText
 
     def getScreenshot(self):
-        #TODO: figure out how to take a screenshot of the website.
+        #TODO: V.2. figure out how to take a screenshot of the website.
         #driver.get_screenshot_as_png()
         #driver.save_screenshot
 

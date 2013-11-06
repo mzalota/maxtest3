@@ -13,9 +13,9 @@ from django.template.defaultfilters import stringfilter
 
 
 
-#TODO: Introduce empty line between Saturday and Sunday on the calendar to deliniate begining of the week
-#TODO: Make the Start Time flow as Next and Prev buttons are clicked
-#TODO: Make Prev and Next buttons as overlays over the sides of the schedule
+#TODO: V.2. Introduce empty line between Saturday and Sunday on the calendar to deliniate begining of the week
+#TODO: V.2. Make the Start Time flow as Next and Prev buttons are clicked
+#TODO: V.2. Make Prev and Next buttons as overlays over the sides of the schedule
 
 @register.inclusion_tag('snippet-top-nav.html', takes_context=True)
 def show_top_nav(context):

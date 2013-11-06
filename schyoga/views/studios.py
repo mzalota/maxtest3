@@ -21,9 +21,9 @@ logger = logging.getLogger(__name__)
 #     logger.error('Found '+studios.count()+' instances of Studio objects for studio_url: '+studio_url_name)
 
 
-#TODO: Show badge on Schedule Tab to show how many events we have there
-#TODO: Show badge on Facebook Feed Tab to show how many posts we have there
-#TODO: Get schyoga.com email address and post it on the 500 error page in prod
+#TODO: V.2. Show badge on Schedule Tab to show how many events we have there
+#TODO: V.2. Show badge on Facebook Feed Tab to show how many posts we have there
+#TODO: V.2. Get schyoga.com email address and post it on the 500 error page in prod
 
 def list(request, state_url_name):
     state = State.createFromUrlName(state_url_name)

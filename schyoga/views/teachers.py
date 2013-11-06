@@ -25,10 +25,9 @@ def list(request, state_url_name):
         raise Http404
 
     #list = Instructor.objects.filter(instructor_name="Jeanne Heaton")
-    instructors = Instructor.objects.all().order_by('instructor_name')
+    instructors = Instructor.objects.all().filter(state_name_url=state_url_name).order_by('instructor_name')
 
     #instructors = sorted(instructors, key=attrgetter('instructor_name'))
-
 
 
     return render_to_response('teacher/list.html',
@@ -87,7 +86,7 @@ def schedule(request, state_url_name, teacher_url_name):
 
 def facebookFeed(request, state_url_name, teacher_url_name):
 
-    #TODO: make Facebook Page look prettier before rolling it out
+    #TODO: V.2. make Facebook Page look prettier before rolling it out
 
     state = State.createFromUrlName(state_url_name)
 

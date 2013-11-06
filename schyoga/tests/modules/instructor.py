@@ -26,7 +26,7 @@ class TestInstructor(TestCase):
         self.assertListEqual(fetchObj.aliases_list, list_of_aliases)
         sleep(20)
 
-    #TODO: read Django Best Practices http://blog.apps.chicagotribune.com/2010/02/26/best-practices/
+    #TODO: V.2. read Django Best Practices http://blog.apps.chicagotribune.com/2010/02/26/best-practices/
 
     def test_clean_up_name(self):
         #ARRANGE
@@ -183,8 +183,8 @@ class TestInstructor(TestCase):
         self.assertEqual(name_3_clean, name_3_expected)
         self.assertEqual(name_4_clean, name_4_expected)
 
-    #TODO: post on StackOvefflow how to set up Django tests to auto-discover all its tests in project/application
-    #TODO: Understand difference between Mock Patterns: 'action -> assertion' vs 'record -> replay' (http://docs.python.org/dev/library/unittest.mock)
+    #TODO: V.2. post on StackOvefflow how to set up Django tests to auto-discover all its tests in project/application
+    #TODO: V.2. Understand difference between Mock Patterns: 'action -> assertion' vs 'record -> replay' (http://docs.python.org/dev/library/unittest.mock)
 
 
     @patch('schyoga.models.Instructor')

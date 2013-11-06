@@ -15,8 +15,6 @@ import datetime
 
 import facebook
 
-#TODO: load jquery from a well known CDN
-
 def page404(request):
     response = render(request, "404.html")
     response.status_code = 404
@@ -42,7 +40,7 @@ def siteMap(request):
 def shoutOuts(request):
     return render_to_response('shout-outs.html', {}, RequestContext(request))
 
-#TODO: Create separate page for each event, which would have microtags embeded
+#TODO: V.2. Create separate page for each event, which would have microtags embeded
 
 
 
