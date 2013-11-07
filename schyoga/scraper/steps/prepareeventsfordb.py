@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 from django.core.exceptions import ValidationError
 from schyoga.bizobj.parser.scraperOld import ScraperOld
-from schyoga.models import Event
+from schyoga.models import Event, Instructor
 from dateutil import parser
 
 logger = logging.getLogger(__name__)
@@ -29,19 +29,19 @@ class PrepareEventsForDB:
             return
 
         for idx, parsed_event in enumerate(parsed_events):
-            db_event = Event()
+
             start_time = parsed_event[ScraperOld.START_TIME]
             event_date = parsed_event[ScraperOld.EVENT_DATE]
-
-            #start_time2 = datetime.datetime.strptime(start_datetime+'+0000EST', "%Y-%m-%d %H:%M %p+0000%Z")
-
-            #dt = parser.parse("2013-10-17 "+parsed_event[ScraperOld.START_TIME])
             dt = parser.parse(event_date + " " + start_time)
 
+            instructor_name_clean = Instructor.clean_up_name(parsed_event[ScraperOld.TEACHER_NAME])
+
+            db_event = Event()
             db_event.start_time = dt
             db_event.comments = parsed_event[ScraperOld.CLASS_NAME]
-            db_event.instructor_name = parsed_event[ScraperOld.TEACHER_NAME]
             db_event.studio = studio
+            db_event.instructor_name = instructor_name_clean
+            db_event.scrape_uuid = self.scraper.uuid
             db_event.modified_on = datetime.now()
             db_event.created_on = datetime.now()
 
