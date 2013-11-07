@@ -234,12 +234,9 @@ def process_studio(scraper, studio):
     logger.debug("done with the switch statement")
 
 
-
+    #TODO: Keep track of Assistants. They soon will become teachers (or may be teachig elsewhere). co-Teacher. Assistant2, Acompanist, etc.
     #TODO: validate that headers on the page match configured ones
-
-
     #TODO: check that we successfully parsed the page
-
 
 
 

@@ -23,7 +23,6 @@ logger = logging.getLogger(__name__)
 
 #TODO: V.2. Show badge on Schedule Tab to show how many events we have there
 #TODO: V.2. Show badge on Facebook Feed Tab to show how many posts we have there
-#TODO: V.2. Get schyoga.com email address and post it on the 500 error page in prod
 
 def list(request, state_url_name):
     state = State.createFromUrlName(state_url_name)
@@ -57,6 +56,7 @@ class StudioViews(View):
     pagename = ''
 
     #template_name='studio/profile.html'
+
     def get(self, request, state_url_name, studio_url_name):
 
         curPage = Page.createFromEnum(self.pagename)
@@ -72,13 +72,12 @@ class StudioViews(View):
             response["Location"] = newURL
             return response
 
-
         if self.pagename == Page.ENUM_STUDIO_PROFILE:
             return self.profile(request, studio, state, curPage)
         if self.pagename == Page.ENUM_STUDIO_SCHEDULE:
             return self.schedule(request, studio, state, curPage)
         if self.pagename == Page.ENUM_STUDIO_FACEBOOKFEED:
-            return self.facebookFeed(request, studio, state, curPage)
+            return self.facebook_feed(request, studio, state, curPage)
 
 
     def profile(self, request, studio, state, curPage):
@@ -90,10 +89,7 @@ class StudioViews(View):
 
 
     def schedule(self, request, studio, state, curPage):
-        #TODO: filter events from DB by date, so that dates on the calendar correspond with what was pulled from DB
-
-        #TODO: check if we need to pass State variable to every view. Extract it into a custom superclass based on View
-
+        #TODO: V.2. filter events from DB by date, so that dates on the calendar correspond with what was pulled from DB
 
         startDateStr = datetime.datetime.now().strftime('%Y-%m-%d')
         events = studio.event_set.all().order_by('start_time').filter(start_time__gt=startDateStr)
@@ -110,13 +106,8 @@ class StudioViews(View):
 
 
 
-    def facebookFeed(self, request, studio, state, curPage):
-        #https://www.facebook.com/JeanneEllenHeaton
-        #https://graph.facebook.com/JeanneEllenHeaton/feed?access_token=CAAAAAITEghMBAIeRlyE803IvUcjjQ43WPkM44b36XLAnCVZBFjJEF76ZBBXaiDS7kBfSY4fqrEphDiXVZBl9ot9WFGZBCKpP7U9CcMMZCMIhmZBb0BBF5D7NLWY3a9XAj02EZCaOeksYFpm2bP4rWWthGN2X6MhWuCmokuZAnZAHSa8LYx21FmomqrvoJgtUmO0HhOkTGpqFU0DZA8wy9eKpGwDpxIvim1DhSGbYpK0LSABwZDZD
-        #https://graph.facebook.com/me/feed?access_token=CAACZAZApvSluYBAPdgdAF0A2ZCPCnZBOYHHcPmte2ZCuzqkrDZAGLCM1xRQ9eanr8IQBJP09eGFQBHLFN641g1BeJZCj4HZA9xnq3D5i4d0q9OPNXbSjZAiZAaoGVnE54zGAIROMuTSOotXuaFPjK4uZBMXBCZCqy954MGZB7mX91i6bzolsIQG2wzTMdpJeSSKfODwUBTsSJYUV6aypVDyGVLEOedNAYNVUzTHQMCCQLqZCu7QQZDZD
-
+    def facebook_feed(self, request, studio, state, curPage):
         #Get token from here: https://developers.facebook.com/tools/explorer
-
         token = 'CAACEdEose0cBAMuCitukuwEJ9ymzsww0R4FmudJifbWIf4EnjGFmwm2HVUZBTCv3a4Da2id8dFC4WHLvgRWzDEwadZBTYWNUqW5QANGwdPYpClR6kcmrXZAqB2toBjf927HxWphZAR1rBgLziZBagTkEn7barRIZBufvSG3HgIM5FaqHZCsas5KAFEamZCx5ZCZBY5vHdUSBTQfRhJ9s3CbwPNkHMtOal43801QOKTru2ZC1wZDZD'
         graph = facebook.GraphAPI(token)
 

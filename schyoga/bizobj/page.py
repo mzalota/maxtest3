@@ -35,8 +35,16 @@ class Page:
 
 
     def urlForStudioPage(self, studio):
-        urlName = self.allPages()[self.id]
-        stateUrlName =  studio.state_name_url
-        studioUrlName =  studio.nameForURL
+        urlName=self.allPages()[self.id]
+        stateUrlName=studio.state_name_url
+        studioUrlName=studio.nameForURL
 
         return reverse(urlName, kwargs={'state_url_name': stateUrlName, 'studio_url_name': studioUrlName})
+
+
+    def urlForTeacherPage(self, teacher):
+        urlName=self.allPages()[self.id]
+        stateUrlName=teacher.state_name_url
+        teacherUrlName=teacher.name_url
+
+        return reverse(urlName, kwargs={'state_url_name': stateUrlName, 'teacher_url_name': teacherUrlName})

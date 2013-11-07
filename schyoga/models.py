@@ -21,13 +21,14 @@ from schyoga.bizobj.state import State
 
 #select * from schyoga_instructor i join schyoga_instructor_studios ist on i.id=ist.instructor_id where ist.studio_id in (1,2,103,104,105,106);
 
+#select name_url, count(*) as cnt from schyoga_instructor group by name_url having cnt > 1
 
 class Instructor(models.Model):
     instructor_name = models.CharField(max_length=150)
     name_url = models.CharField(max_length=150)
     aliases = models.CharField(max_length=1000, blank=True)
     #aliases = PickledObjectField(compress=False, max_length=1000, protocol=0)
-    fb_userid = '' #'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
+    fb_userid = 'JeanneEllenHeaton' #'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(auto_now=True)
     state_name_url = models.CharField(max_length=100) #'new-york'

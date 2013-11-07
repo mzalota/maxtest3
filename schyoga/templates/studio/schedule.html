@@ -73,7 +73,7 @@ $(function() {  // DOM READY shorthand
     <ul>
     {% for instructor in calendar.getDistinctInstructors %}
     <li>
-        {% url 'teacher-schedule' instructor.state  instructor.name_url as url_to_instructor_page %}
+        {% url 'teacher-schedule' instructor.state_name_url  instructor.name_url as url_to_instructor_page %}
         <a href="{{ url_to_instructor_page }}" title="Schedule for Yoga Teacher {{ instructor.instructor_name }}"> {{ instructor.instructor_name }} </a>
     </li>
     {% endfor %}

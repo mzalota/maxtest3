@@ -57,7 +57,7 @@ def convert_fb_date(dt_string):
     :return:
     """
 
-    #TODO: validate that the passed sting is in GMT timezone. Deal with cases where the string is in different format
+    #TODO: V.2. validate that the passed sting is in GMT timezone. Deal with cases where the string is in different format
     dt = datetime.datetime.strptime(dt_string + 'GMT', "%Y-%m-%dT%H:%M:%S+0000%Z")
     #the string passed is in GMT. Convert it to the local time
     dt_localtime = pytz.utc.localize(dt)

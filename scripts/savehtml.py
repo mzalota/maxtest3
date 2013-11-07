@@ -19,7 +19,7 @@ def run():
     #Different headers "Adult Classes" and has tab for "Kid Classes": Bread and Yoga https://clients.mindbodyonline.com/ASP/home.asp?studioid=7450
     #Default tab is not "Classes": Dharma Yoga Center: https://clients.mindbodyonline.com/ASP/home.asp?studioid=3914
     #Kundalini Yoga East has column "	Open Classes" instead of classes. It has other tabs.
-    #TODO: Keep track of Assistants. They soon will become teachers (or may be teachig elsewhere). co-Teacher. Assistant2, Acompanist, etc.
+
     #Check Yoga Collective online - no classes at all
     #!!!! Yoga Sole opens not on "Classes" tab
     #!!!Sivananda Yoga center opens in the Wrong tab
