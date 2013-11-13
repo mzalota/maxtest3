@@ -43,10 +43,12 @@ urlpatterns = patterns('schyoga.views',
     url(r'^studios/new-york(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/new-york/studios%(the_rest_of_url)s')),
     url(r'^studios/connecticut(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/connecticut/studios%(the_rest_of_url)s')),
     url(r'^studios/massachusetts(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/massachusetts/studios%(the_rest_of_url)s')),
+    url(r'^studios/...(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/new-york/studios%(the_rest_of_url)s')),
 
     url(r'^teachers/new-york(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/new-york/teachers%(the_rest_of_url)s')),
     url(r'^teachers/connecticut(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/connecticut/teachers%(the_rest_of_url)s')),
     url(r'^teachers/massachusetts(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/massachusetts/teachers%(the_rest_of_url)s')),
+    url(r'^teachers/...(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/new-york/teachers%(the_rest_of_url)s')),
 
     url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/schedule.html$', StudioViews.as_view(pagename=Page.ENUM_STUDIO_SCHEDULE), name='studio-schedule'), #'studios.schedule'
     url(r'^(?P<state_url_name>\S+)/studios/(?P<studio_url_name>\S+)/facebook-feed.html$', StudioViews.as_view(pagename=Page.ENUM_STUDIO_FACEBOOKFEED), name='studio-facebook-feed'),

@@ -1,7 +1,7 @@
 # Create your views here.
 
 from django.template import loader, Context, RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, render
 from schyoga.bizobj.state import State
 
@@ -29,6 +29,8 @@ def index(request):
 def states(request, state_url_name):
 
     state = State.createFromUrlName(state_url_name)
+    if state is None:
+        raise Http404
 
     return render_to_response('state.html', {'state': state}, RequestContext(request))
 

@@ -182,7 +182,7 @@ def run():
     logger.debug("starting script: refresh")
 
     scraper = Scraper()
-    studios = Studio.objects.all().filter(id__gte=81).filter(id__lte=200).order_by('id')
+    studios = Studio.objects.all().filter(id__gte=70).filter(id__lte=70).order_by('id')
     for studio in studios:
         process_studio(scraper, studio)
 
@@ -209,16 +209,13 @@ def process_studio(scraper, studio):
         process_step(step, scraper, studio)
 
     config_parse_json = studio_site_set[0].config_parse
-
     if not config_parse_json or (len(config_parse_json)) <=0:
         logger.error("No Parse Config found! Skipping studio: "+str(studio.id)+", "+studio.name)
         return
 
     config_parse = json.loads(config_parse_json)
-
     for step in config_parse:
         process_step(step, scraper, studio)
-
 
     #logger.debug("Parsed Out DB Events 1111 are :")
     #db_events = scraper.vars['db_events']

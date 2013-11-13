@@ -1,30 +1,38 @@
-
 #DEPLOYMENT STEPS
-modify lilne in /opt/bitnami/apps/django/scripts/django.wsgi as follows
-os.environ['DJANGO_SETTINGS_MODULE'] = 'maxtest3.settings.prod'
+Deploy ESB instance 64bit for the latest stable (not dev) version of Django
+http://bitnami.com/stack/django/cloud/amazon
+
+sudo mkdir /opt/bitnami/apps/django/django_projects/schyoga
+sudo chown -R bitnami:daemon /opt/bitnami/apps/django/django_projects/schyoga
+
+Modify two lines in file /opt/bitnami/apps/django/scripts/django.wsgi to be as follows:
+sys.path.append('/opt/bitnami/apps/django/django_projects/schyoga')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'schyoga.settings.prod'
+
 
 review settings in /opt/bitnami/apps/django/conf/django.conf, especially path to /static alias (it should be the same
 as value in settings file in for STATIC_ROOT variable):
-Alias /static/ /path/to/mysite.com/static/
+Alias /static "/opt/bitnami/apps/django/django_projects/schyoga/staticfiles"
+WSGIScriptAlias / "/opt/bitnami/apps/django/scripts/django.wsgi"
 
-execute following command to move all static files to a location where apache can serve them:
-sudo python manage.py collectstatic
 
-sudo pip install facebook-sdk
+Copy contents of maxtest3/schyoga dir from workstation to /opt/bitnami/apps/django/django_projects/schyoga/schyoga
+copy maxtest3/manage.py to /opt/bitnami/apps/django/django_projects/schyoga
+copy maxtest3/requirements_pip.txt to /opt/bitnami/apps/django/django_projects/schyoga
 
-copy manually-downloaded-libs/django-facebook to /opt/bitnami/apps/django/lib/usr-lib
+???? maybe it is first necessaray to remove django package: "sudo rm -rf /opt/bitnami/apps/django/lib/python2.7/site-packages/django"
+sudo pip install --target /opt/bitnami/apps/django/lib/python2.7/site-packages -r requirements_pip.txt
 
--- upgrade Django to version 1.5.4. Specify custom directory where bitnami installed Django
-sudo pip install --upgrade --target /opt/bitnami/apps/django/lib/python2.7/site-packages Django==1.5.4
+copy from workstation manually-downloaded-libs/django-facebook to /opt/bitnami/apps/django/lib/usr-lib
 
-pip install -r requirements_pip.txt
 
 mysql -u root -p
 -- default password is bitnami
 
-create database schyoga;
-use schyoga;
-\. schyoga_103.sql
+create database schyoga4;
+use schyoga4;
+\. sy_03.sql
+\. sy_04.sql
 
 drop table schyoga_event;
 drop table schyoga_instructor;
@@ -36,5 +44,73 @@ alter table studios rename to schyoga_studio;
 alter table schyoga_instructor add column fb_userid varchar(256) after aliases;
 exit
 
-cd /apps/django/django_projects/maxtest3/python manage.py syncdb --settings='maxtest3.settings_prod'
+mysqladmin -u root -p'bitnami' password 4floacient
 
+Modify /home/bitnami/apps/django/django_projects/schyoga/schyoga/settings/__init__.py so that the first line is
+from schyoga.settings.prod import *
+
+cd /home/bitnami/apps/django/django_projects/schyoga
+sudo python manage.py syncdb --settings='schyoga.settings.prod'
+
+
+execute following command to move all static files to a location where apache can serve them:
+cd /home/bitnami/apps/django/django_projects/schyoga
+sudo python manage.py collectstatic --settings='schyoga.settings.prod'
+sudo chown bitnami:daemon -R /home/bitnami/apps/django/django_projects/schyoga/staticfiles
+
+
+#to perform manage tasks on Prod server use following pattern (e.g. to change password for user root)
+cd /home/bitnami/apps/django/django_projects/schyoga
+python manage.py changepassword --settings=schyoga.settings.prod_manage root
+
+
+In /opt/bitnami/apache2/conf/httpd.conf uncomment and commend lines as follows:
+#CustomLog "logs/access_log" common
+CustomLog "logs/access_log" combined
+
+In /opt/bitnami/apps/django/conf/django.conf
+Add following 4 linse so that domain "scheduleyoga.com" will be redirected to "www.scheduleyoga.com"
+<VirtualHost *:80>
+  ServerName scheduleyoga.com
+  Redirect permanent / http://www.scheduleyoga.com/
+</VirtualHost>
+
+
+Install Webalizer product (ftp://ftp.mrunix.net/pub/webalizer/INSTALL, http://www.webalizer.org/)
+sudo apt-get install webalizer
+
+add following lines to the bottom of /opt/bitnami/apps/django/conf/django.conf file:
+Alias /statistics "/var/www/webalazer"
+<Directory '/var/www/webalizer'>
+<IfVersion < 2.3 >
+Order allow,deny
+Allow from all
+</IfVersion>
+<IfVersion >= 2.3>
+Require all granted
+</IfVersion>
+</Directory>
+
+To run webalizer execute followingg commands:
+webalizer /opt/bitnami/apache2/logs/access_log
+sudo chown bitnami:daemon -R /var/www/webalizer
+sudo chown daemon -R /var/www/webalizer/
+
+view results in
+
+If you get error about .wsgi file, then you probably need to reboot the whole server, not just apache.
+
+-----------backup/old
+
+
+#dump DB on workstation to transfer to Prod.
+mysqldump --user=root --password=mzalota schyoga4 schyoga_event schyoga_studio schyoga_instructor schyoga_instructor_studios > C:\Workspace\python\maxtest3\db_backup\sy_04.sql
+
+
+sudo pip install facebook-sdk
+
+-- upgrade Django to version 1.5.4. Specify custom directory where bitnami installed Django
+sudo pip install --upgrade --target /opt/bitnami/apps/django/lib/python2.7/site-packages Django==1.5.4
+
+set up AWStats on the server (https://wiki.archlinux.org/index.php/awstats#Configure_Apache_to_log_for_AWStats):
+apt-get install libapache2-mod-perl2
