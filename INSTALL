@@ -100,11 +100,24 @@ view results in
 
 If you get error about .wsgi file, then you probably need to reboot the whole server, not just apache.
 
+
+Change collation of the DB:
+
+select * from information_schema.schemata where schema_name = 'schyoga4';
+select * from information_schema.tables where table_schema = 'schyoga4' and table_name in ('schyoga_parsing_history', 'schyoga_event');
+
+ALTER DATABASE schyoga4 CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci'
+ALTER TABLE schyoga_parsing_history convert to character set DEFAULT COLLATE DEFAULT;
+ALTER TABLE schyoga_event convert to character set DEFAULT COLLATE DEFAULT;
+
 -----------backup/old
 
 
 #dump DB on workstation to transfer to Prod.
-mysqldump --user=root --password=mzalota schyoga4 schyoga_event schyoga_studio schyoga_instructor schyoga_instructor_studios > C:\Workspace\python\maxtest3\db_backup\sy_04.sql
+mysqldump --user=root --password=mzalota schyoga4 schyoga_event schyoga_studio schyoga_instructor schyoga_instructor_studios > C:\Workspace\python\maxtest3\db_backup\sy_06.sql
+
+
+mysqldump --user=root --password=mzalota schyoga4  > C:\Workspace\python\maxtest3\db_backup\sy_07_bck.sql
 
 
 sudo pip install facebook-sdk

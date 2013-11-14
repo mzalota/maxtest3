@@ -21,7 +21,7 @@ class ScraperTestCase(TestCase):
         pass
 
     def load_html_from_file(self, file_name):
-        resources_dir = schyoga.__path__[0] + "\\resources"
+        resources_dir = schyoga.__path__[0] + "\\..\\resources"
         path = resources_dir + "\\"+file_name
         with open(path) as myfile:
             htmlText = myfile.read()
@@ -180,7 +180,7 @@ class PrepareEventsForDBTestCase(TestCase):
         self.assertIsInstance(db_events[0], Event)
         self.assertEqual(db_events[0].start_time, expected_datetime1 )
         self.assertEqual(db_events[0].comments, 'Mysore')
-        self.assertEqual(db_events[0].instructor_name, 'Zoe and Ben')
+        self.assertEqual(db_events[0].instructor_name, 'Zoe And Ben')
 
         self.assertIsInstance(db_events[1], Event)
         self.assertEqual(db_events[1].start_time, expected_datetime2 )

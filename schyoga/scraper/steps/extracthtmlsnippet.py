@@ -15,13 +15,14 @@ class ExtractHtmlSnippet:
 
         tags = soup.select(element_id)
         if not tags:
+            #TODO: when this error happens, try reloading the page from scratch
             logger.error("Did not find element "+element_id+" in html of length: "+str(len(html_str)))
             return None
 
         if len(tags) > 1:
             logger.warn("Found more then one element "+element_id+" in html of length: "+str(len(html_str)))
 
-        return tags[0].prettify(formatter="html")
+        return tags[0].prettify(formatter="html") #.encode('UTF-8')
 
     def removeNonVisualTags(self, soup):
         for maxVar in soup.find_all(["script", "style"], recursive=True): #"style"

@@ -1,4 +1,5 @@
 import logging
+import datetime
 from django.core import serializers
 from schyoga.bizobj.parser.scraperOld import ScraperOld
 from schyoga.models import Event, Instructor
@@ -35,7 +36,6 @@ class SiteConfig:
                          'click_tab_name': 'CLASSES',
                          'num_of_weeks': '2', })
                    ])
-
 
     steps2 = list([dict({'step_name': 'LoadUrl',
                          'url': "https://clients.mindbodyonline.com/ASP/ws.asp?studioid=5782"}),
@@ -177,12 +177,18 @@ class SiteConfig:
     #    data = json.load(data_file)
     #print repr(data)
 
+
+#TODO: V.2. deal with YogaNesh schedule - it has extra rows with "Yoga" or "Dance" heading in the first column
+#TODO V.2. deal with case when  there is "no scheduled classes or training sessions" messaage in calendar e.g. for "Yoga Union Center For Backcare & Scoliosis"
+
 def run():
 
     logger.debug("starting script: refresh")
 
+    #7, 53
+
     scraper = Scraper()
-    studios = Studio.objects.all().filter(id__gte=70).filter(id__lte=70).order_by('id')
+    studios = Studio.objects.all().filter(id__gte=1).filter(id__lte=200).order_by('id')
     for studio in studios:
         process_studio(scraper, studio)
 
@@ -203,10 +209,10 @@ def process_studio(scraper, studio):
         return
 
 
-    config_crawl_json = studio_site_set[0].config_crawl
-    config_crawl = json.loads(config_crawl_json)
-    for step in config_crawl:
-        process_step(step, scraper, studio)
+    #config_crawl_json = studio_site_set[0].config_crawl
+    #config_crawl = json.loads(config_crawl_json)
+    #for step in config_crawl:
+    #    process_step(step, scraper, studio)
 
     config_parse_json = studio_site_set[0].config_parse
     if not config_parse_json or (len(config_parse_json)) <=0:
@@ -234,14 +240,6 @@ def process_studio(scraper, studio):
     #TODO: Keep track of Assistants. They soon will become teachers (or may be teachig elsewhere). co-Teacher. Assistant2, Acompanist, etc.
     #TODO: validate that headers on the page match configured ones
     #TODO: check that we successfully parsed the page
-
-
-
-    #validate that all prepared events will be accepted by DB (call db_event[i].full_clean() to verify)
-
-    #delete events from DB
-
-    #add new events to DB
 
 
 
@@ -341,11 +339,15 @@ def process_step(step, scraper, studio):
             WaitForFrame(scraper).run(frame_name='mainFrame')
             html1 = ReadPageContent(scraper).run()
             schedule_html = ExtractHtmlSnippet(scraper).run(html1, '#classSchedule-mainTable')
+
+            current_week = datetime.datetime.now().isocalendar()[1]
+            comment = 'week_'+str(current_week+(processing_page-1))
+
             if not schedule_html or len(schedule_html)<=0:
                 logger.error("Could not locate #classSchedule-mainTable element on the page")
-                SaveHtmlToDB(scraper).run(studio, 'week_'+str(processing_page), html1)
+                SaveHtmlToDB(scraper).run(studio, comment, html1)
             else:
-                SaveHtmlToDB(scraper).run(studio, 'week_'+str(processing_page), schedule_html)
+                SaveHtmlToDB(scraper).run(studio, comment, schedule_html)
 
 
             processing_page = processing_page + 1
@@ -357,7 +359,12 @@ def process_step(step, scraper, studio):
         logger.debug("Parsing events out of MindBodyOnline HTML")
 
         #load from parsing_history
-        htmls = studio.parsing_history_set.filter(comment__in=['week_1', 'week_2'])
+        current_week_num = datetime.datetime.now().isocalendar()[1]
+        wk1 = 'week_'+str(current_week_num)
+        wk2 = 'week_'+str(current_week_num+1)
+
+        #htmls = studio.parsing_history_set.filter(comment__in=['week_1', 'week_2'])
+        htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2])
         if not htmls or len(htmls) <= 0:
             logger.error("No parsed_history objects found ")
             return
