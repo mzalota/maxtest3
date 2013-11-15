@@ -104,7 +104,7 @@ class TeacherViews(View):
         token = 'CAACEdEose0cBAJfVdqZCjPr0luXW6G6WCmRcL9zTaCMbwCYeQUIh4X480NWakFa4VyTdUNPauKyUOJcGbuHRTxbxYm7Ik3tOR6pZCsVipmy5K32ZBSBiCZByIOvNK2a4ZCzdh7hMNOE0fQvFmh7tY4swtbZCmHrg9yUDRZASOGDcd3CHORfkxEZBQrG2yZBc5VRJtE3Q8BUzO3Wj6hNRVT13N7v7bvNHeXMlgj3nZALDdn9wZDZD'
         graph = facebook.GraphAPI(token)
 
-        fbUserId = instructor.fb_userid
+        fbUserId = instructor.fb_id
 
         #profile = graph.get_object("me")
         #friends = graph.get_connections("me", "friends")

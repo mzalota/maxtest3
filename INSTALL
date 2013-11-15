@@ -32,17 +32,6 @@ mysql -u root -p
 create database schyoga4;
 use schyoga4;
 \. sy_03.sql
-\. sy_04.sql
-
-drop table schyoga_event;
-drop table schyoga_instructor;
-drop table schyoga_studio;
-
-alter table events rename to schyoga_event;
-alter table instructors rename to schyoga_instructor;
-alter table studios rename to schyoga_studio;
-alter table schyoga_instructor add column fb_userid varchar(256) after aliases;
-exit
 
 mysqladmin -u root -p'bitnami' password 4floacient
 
@@ -127,3 +116,4 @@ sudo pip install --upgrade --target /opt/bitnami/apps/django/lib/python2.7/site-
 
 set up AWStats on the server (https://wiki.archlinux.org/index.php/awstats#Configure_Apache_to_log_for_AWStats):
 apt-get install libapache2-mod-perl2
+

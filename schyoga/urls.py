@@ -40,6 +40,9 @@ urlpatterns = patterns('schyoga.views',
     url(r'^error404.html$', TemplateView.as_view(template_name="404.html"), name='error404'),
     url(r'^error500.html$', TemplateView.as_view(template_name="500.html"), name='error500'),
 
+    #fixing a spelling error that existed for 2.5 years. It should have been Baptiste instead of Babtiste
+    url(r'^massachusetts/studios/babtiste(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/massachusetts/studios/baptiste%(the_rest_of_url)s')),
+
     url(r'^studios/new-york(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/new-york/studios%(the_rest_of_url)s')),
     url(r'^studios/connecticut(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/connecticut/studios%(the_rest_of_url)s')),
     url(r'^studios/massachusetts(?P<the_rest_of_url>\S+)$', RedirectView.as_view(url='/massachusetts/studios%(the_rest_of_url)s')),

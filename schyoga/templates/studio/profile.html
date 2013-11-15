@@ -9,25 +9,50 @@
 
 {% if studio.address %}
 <div class="row">
-    <div class="col-md-9">
-    Address: {{ studio.address }}
+    <div class="col-md-10">
 
-    {% load easy_maps_tags %}
-    <!-- Default map with 300x400 dimensions -->
-    {% easy_map "Russia, Ekaterinburg, Mira 32" 300 400 %}
-    </div>
-    <div class="col-md-3">
-        <div class="panel panel-primary">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><h5>{{ studio.name }} Phone </h5></div>
+                    <div class="list-group">
+                        <address class="list-group-item"><a href="callto:{{ studio.phone }}">{{ studio.phone }}</a></address>
+                    </div>
+                </div>
 
-            <div class="panel-heading">Original Information sources about Yoga Studio "{{ studio.name }}" in {{ state.name }}:</div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><h5>{{ studio.name }} Website </h5></div>
+                    <div class="list-group">
+                        <a class="list-group-item" href="{{ studio.url_home }}" alt="{{ studio.name }} home page" title="{{ studio.name }} home page" target="_blank"> {{ studio.url_home }}</a>
+                    </div>
+                    <div class="list-group-item">
+                        {% load cloudinary %}
+                        <div class="img-thumbnail container">
+                            <a href="{{ studio.url_home }}" alt="{{ studio.name }} home page" title="{{ studio.name }} home page" target="_blank">
+                            {% cloudinary studio.site_image_cloudinary_id width=300 height=300 crop="fill" gravity="north_west" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><h5>{{ studio.name }} Address </h5></div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <address>{{ studio.address }}
+                            {% load easy_maps_tags %}
 
-
-            <div class="list-group">
-                <a href="{{ studio.url_home }}" class="list-group-item" alt="{{ studio.name }} home page" title="{{ studio.name }} home page" target="_blank"> Original Homepage </a>
-                <a href="{{ studio.url_schedule }}" class="list-group-item" alt="{{ studio.name }} page with schedule" title="{{ studio.name }} page with schedule" target="_blank"> Original Schedule page</a>
-
-              </div>
+                            <div class="img-thumbnail container">
+                            {% easy_map studio.address 300 300 15 %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+    <div class="col-md-2">
     </div>
 </div>
 {% else %}

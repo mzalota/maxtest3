@@ -3,3 +3,6 @@ django-sitetree==0.9.5
 facebook-sdk==0.4.0
 pytz==2013b
 django-extensions==1.2.2
+geopy==0.95.1
+django-easy-maps==0.8.4
+cloudinary==1.0.12

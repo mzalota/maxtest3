@@ -1,4 +1,5 @@
 import logging
+import cloudinary
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.http import Http404, HttpResponse
@@ -81,6 +82,12 @@ class StudioViews(View):
 
 
     def profile(self, request, studio, state, curPage):
+        cloudinary.config(
+            cloud_name = "scheduleyoga",
+            api_key = "184789393887359",
+            api_secret = "5b_y47V0o2CSKgHWDLKyxf4Nmto"
+        )
+
         return render_to_response('studio/profile.html',
                                   {'studio': studio,
                                    'state': state,
@@ -111,7 +118,7 @@ class StudioViews(View):
         token = 'CAACEdEose0cBAMuCitukuwEJ9ymzsww0R4FmudJifbWIf4EnjGFmwm2HVUZBTCv3a4Da2id8dFC4WHLvgRWzDEwadZBTYWNUqW5QANGwdPYpClR6kcmrXZAqB2toBjf927HxWphZAR1rBgLziZBagTkEn7barRIZBufvSG3HgIM5FaqHZCsas5KAFEamZCx5ZCZBY5vHdUSBTQfRhJ9s3CbwPNkHMtOal43801QOKTru2ZC1wZDZD'
         graph = facebook.GraphAPI(token)
 
-        fbUserId = studio.fbPageID  #'balancedyoga' #instructor.fb_userid
+        fbUserId = studio.fb_id  #'balancedyoga'
 
         #profile = graph.get_object("me")
         #friends = graph.get_connections("me", "friends")
