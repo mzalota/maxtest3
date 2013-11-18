@@ -75,6 +75,7 @@ class TeacherViews(View):
                                    'calendar': calendar},
                                   RequestContext(request))
 
+
     def schedule(self, request, instructor, state, cur_page):
         #TODO: V.2. filter events from DB by date, so that dates on the calendar correspond with what was pulled from DB
 

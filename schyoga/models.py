@@ -1,3 +1,4 @@
+import logging
 import re
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -10,6 +11,8 @@ from django.forms import ModelChoiceField, ModelForm
 from django.utils.html import format_html
 from schyoga.bizobj.page import Page
 from schyoga.bizobj.state import State
+
+logger = logging.getLogger(__name__)
 
 #alter table schyoga_instructor add column state_name_url varchar(100) not null after aliases
 #update schyoga_instructor set state_name_url = 'new-york';
@@ -29,7 +32,8 @@ class Instructor(models.Model):
     aliases = models.CharField(max_length=1000, blank=True)
     #aliases = PickledObjectField(compress=False, max_length=1000, protocol=0)
     state_name_url = models.CharField(max_length=100) #'new-york'
-    fb_id = models.CharField(max_length=150, blank=True) #'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
+    fb_id = models.CharField(max_length=150,
+                             blank=True) #'JeanneEllenHeaton' #models.CharField(max_length=150, blank=True)
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(auto_now=True)
     studios = models.ManyToManyField("Studio", blank=True, null=True, db_table="schyoga_instructor_studios")
@@ -45,6 +49,18 @@ class Instructor(models.Model):
         :return:
         """
         return self.aliases.split(";")
+
+    @property
+    def content(self):
+        #content_count = self.instructor_content_set.count()
+        content_set = self.instructor_content_set.all()
+        result = []
+        for content_item in content_set:
+            if content_item.category == 'studio-site':
+                result.append(content_item)
+
+        return result
+
 
     @aliases_list.setter
     def aliases_list(self, value):
@@ -129,9 +145,23 @@ class Instructor(models.Model):
 class InstructorAdmin(admin.ModelAdmin):
     list_per_page = 250
 
-    list_display = ('id', 'state_name_url', 'instructor_name', 'link_to_schedyoga_site', 'studios_cnt', 'fb')
+    list_display = ('id', 'state_name_url', 'instructor_name', 'link_to_schedyoga_site', 'studios_cnt', 'fb', 'content')
     list_display_links = ('id', 'instructor_name')
     #list_select_related = ['studio']
+
+    def content(self, obj):
+        """
+        @type obj: Instructor
+        """
+        content_cnt = obj.instructor_content_set.count()
+
+        url = reverse('admin:%s_%s_changelist' % ("schyoga", "instructor_content"))
+        url = url + "?instructor=" + str(obj.id)
+
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-star"></span>{1}</a>', url,
+            content_cnt)
+
 
     def fb(self, obj):
         """
@@ -142,7 +172,9 @@ class InstructorAdmin(admin.ModelAdmin):
             return "none"
 
         #/picture?width=20&height=20
-        return format_html('<a href="http://facebook.com/{0}"></a><img src="http://graph.facebook.com/{0}/picture?width=20&height=20"/></a>',fb_id)
+        return format_html(
+            '<a href="http://facebook.com/{0}"></a><img src="http://graph.facebook.com/{0}/picture?width=20&height=20"/></a>',
+            fb_id)
         #return format_html('<a href="http://facebook.com/{0}"></a><img src="http://graph.facebook.com/{0}/picture?type=square"/></a>',fb_id)
 
     def studios_cnt(self, obj):
@@ -151,10 +183,12 @@ class InstructorAdmin(admin.ModelAdmin):
         """
         studio_count = obj.studio_set.count()
 
-        url = reverse('admin:%s_%s_changelist' %("schyoga",  "studio"))
-        url = url+"?instructor="+str(obj.id)
+        url = reverse('admin:%s_%s_changelist' % ("schyoga", "studio"))
+        url = url + "?instructor=" + str(obj.id)
 
-        return format_html('<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-star"></span>{1}</a>',url,studio_count)
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-star"></span>{1}</a>', url,
+            studio_count)
 
     def link_to_schedyoga_site(self, obj):
         """
@@ -164,15 +198,19 @@ class InstructorAdmin(admin.ModelAdmin):
 
         page = Page.createFromEnum(Page.ENUM_TEACHER_PROFILE)
         url = page.urlForTeacherPage(obj)
-        return format_html('<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-eye-open"></span> {1}</a>', url,evnt_cnt)
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-eye-open"></span> {1}</a>', url,
+            evnt_cnt)
 
 
     studios_cnt.allow_tags = True
     studios_cnt.short_description = 'Studios'
     link_to_schedyoga_site.allow_tags = True
     link_to_schedyoga_site.short_description = 'SchYoga'
-    fb.allow_tags=True
+    fb.allow_tags = True
     fb.short_description = "FB"
+    content.allow_tags = True
+    content.short_description = "Content"
 
 
 admin.site.register(Instructor, InstructorAdmin)
@@ -185,8 +223,43 @@ admin.site.register(Instructor, InstructorAdmin)
 #alter table schyoga_studio add column address varchar(250) after url_schedule;
 #alter table schyoga_studio add column phone varchar(15) after address;
 #alter table schyoga_studio add column fb_id varchar(100) after phone;
-#alter table schyoga_studio add column site_image_cloudinary_id varchar(150) after fb_id;
+#alter table schyoga_instructor_content add column source_name varchar(200) default null after content ;
 #
+
+
+class Instructor_Content(models.Model):
+    instructor = models.ForeignKey("Instructor")
+    category = models.CharField(max_length=100)
+    content = models.TextField()
+    source_name = models.CharField(max_length=200, blank=True, null=True)
+    source_url = models.URLField(blank=True, null=True)
+    scrape_uuid = models.CharField(max_length=36, blank=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True, editable=False)
+    modified_on = models.DateTimeField(auto_now=True)
+
+
+class InstructorModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return "%s %s" % (obj.id, obj.instructor_name)
+
+
+class Instructor_ContentAdminForm(ModelForm):
+    instructor = InstructorModelChoiceField(queryset=Instructor.objects.all().order_by('id', 'instructor_name'))
+
+    class Meta:
+        model = Instructor_Content
+
+
+class Instructor_ContentAdmin(admin.ModelAdmin):
+    list_per_page = 250
+    list_display = ('id', 'category')
+    list_display_links = ('id', 'category')
+
+    form = Instructor_ContentAdminForm
+
+
+admin.site.register(Instructor_Content, Instructor_ContentAdmin)
+
 
 class Studio(models.Model):
     name = models.CharField(max_length=100)
@@ -194,7 +267,7 @@ class Studio(models.Model):
     state_name_url = models.CharField(max_length=100, db_column='state')
     url_home = models.URLField()
     url_schedule = models.URLField()
-    address = models.CharField(max_length=250, blank=True, null=True,)
+    address = models.CharField(max_length=250, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     fb_id = models.CharField(max_length=100, blank=True, null=True)
     site_image_cloudinary_id = models.CharField(max_length=150, blank=True, null=True)
@@ -225,7 +298,8 @@ class Studio(models.Model):
 class StudioAdmin(admin.ModelAdmin):
     list_per_page = 250
 
-    list_display = ('id', 'state_name_url', 'name', 'instr', 'site_conf', 'home_url', 'sched_url', 'events', 'pars_hist')
+    list_display = (
+        'id', 'state_name_url', 'name', 'instr', 'site_conf', 'home_url', 'sched_url', 'events', 'pars_hist')
     list_display_links = ('id', 'state_name_url', 'name')
     list_filter = ['state_name_url']
 
@@ -237,9 +311,11 @@ class StudioAdmin(admin.ModelAdmin):
         """
         instr_count = obj.instructor_set.count()
 
-        url = reverse('admin:%s_%s_changelist' %("schyoga",  "instructor"))
-        url = url+"?studio="+str(obj.id)
-        return format_html('<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-user"></span>{1}</a>',url,instr_count)
+        url = reverse('admin:%s_%s_changelist' % ("schyoga", "instructor"))
+        url = url + "?studio=" + str(obj.id)
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-user"></span>{1}</a>', url,
+            instr_count)
 
     def pars_hist(self, obj):
         """
@@ -249,9 +325,11 @@ class StudioAdmin(admin.ModelAdmin):
         pars_hist_count = obj.parsing_history_set.count()
         #url = reverse('admin:schyoga_parsing_history_list') #,  args=[studio=studio_site_obj.id] )
 
-        url = reverse('admin:%s_%s_changelist' %("schyoga",  "parsing_history"))
-        url = url+"?studio="+str(obj.id)
-        return format_html('<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-flash"></span>{1}</a>',url,pars_hist_count)
+        url = reverse('admin:%s_%s_changelist' % ("schyoga", "parsing_history"))
+        url = url + "?studio=" + str(obj.id)
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-flash"></span>{1}</a>', url,
+            pars_hist_count)
 
 
     def site_conf(self, obj):
@@ -259,18 +337,22 @@ class StudioAdmin(admin.ModelAdmin):
         @type obj: Studio
         """
         studio_site_objs = obj.studio_site_set.all()
-        if not studio_site_objs or len(studio_site_objs)<1:
+        if not studio_site_objs or len(studio_site_objs) < 1:
             return ""
 
         studio_site_obj = studio_site_objs[0]
-        url = reverse('admin:%s_%s_change' %(studio_site_obj._meta.app_label,  studio_site_obj._meta.module_name),  args=[studio_site_obj.id] )
-        return format_html('<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-flash"></span> </a>',url)
+        url = reverse('admin:%s_%s_change' % (studio_site_obj._meta.app_label, studio_site_obj._meta.module_name),
+                      args=[studio_site_obj.id])
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-flash"></span> </a>', url)
 
     def home_url(self, obj):
         """
         @type obj: Studio
         """
-        return format_html('<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-home"></span> </a>', obj.url_home)
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-home"></span> </a>',
+            obj.url_home)
         #return format_html('<a href="{0}" target="_blank" title="{0}"><abbr>{1}</abbr></a>', obj.url_home, obj.url_home[:30])
 
     def sched_url(self, obj):
@@ -280,7 +362,9 @@ class StudioAdmin(admin.ModelAdmin):
         mb_flag = ''
         if "mindbodyonline" in obj.url_schedule:
             mb_flag = 'MBO'
-        return format_html('<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-calendar"></span> {1}</a>', obj.url_schedule, mb_flag)
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-calendar"></span> {1}</a>',
+            obj.url_schedule, mb_flag)
 
     def events(self, obj):
         """
@@ -290,7 +374,9 @@ class StudioAdmin(admin.ModelAdmin):
 
         page = Page.createFromEnum(Page.ENUM_STUDIO_PROFILE)
         url = page.urlForStudioPage(obj)
-        return format_html('<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-eye-open"></span> {1}</a>', url,instr_count)
+        return format_html(
+            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-eye-open"></span> {1}</a>', url,
+            instr_count)
 
 
     instr.allow_tags = True
@@ -306,7 +392,7 @@ admin.site.register(Studio, StudioAdmin)
 
 class Event(models.Model):
     instructor_name = models.CharField(max_length=100, blank=True)
-    comments = models.CharField(max_length=100,  blank=True, null=True)
+    comments = models.CharField(max_length=100, blank=True, null=True)
     start_time = models.DateTimeField()
     instructor = models.ForeignKey("Instructor", blank=True, null=True)
     studio = models.ForeignKey("Studio")
@@ -379,7 +465,7 @@ class CustomModelChoiceField(ModelChoiceField):
 
 
 class MyStudioSiteAdminForm(ModelForm):
-    studio = CustomModelChoiceField(queryset=Studio.objects.all().order_by('state_name_url','name'))
+    studio = CustomModelChoiceField(queryset=Studio.objects.all().order_by('state_name_url', 'name'))
 
     class Meta:
         model = Studio_Site
