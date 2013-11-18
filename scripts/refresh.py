@@ -212,7 +212,11 @@ def process_studio(scraper, studio):
     #config_crawl_json = studio_site_set[0].config_crawl
     #config_crawl = json.loads(config_crawl_json)
     #for step in config_crawl:
-    #    process_step(step, scraper, studio)
+    #    result = process_step(step, scraper, studio)
+    #    if not result:
+    #        logger.error("Rerunning Crawling step once again for studio: "+str(studio.id)+", "+studio.name)
+    #        process_step(step, scraper, studio)
+
 
     config_parse_json = studio_site_set[0].config_parse
     if not config_parse_json or (len(config_parse_json)) <=0:
@@ -222,6 +226,7 @@ def process_studio(scraper, studio):
     config_parse = json.loads(config_parse_json)
     for step in config_parse:
         process_step(step, scraper, studio)
+
 
     #logger.debug("Parsed Out DB Events 1111 are :")
     #db_events = scraper.vars['db_events']
@@ -345,10 +350,9 @@ def process_step(step, scraper, studio):
 
             if not schedule_html or len(schedule_html)<=0:
                 logger.error("Could not locate #classSchedule-mainTable element on the page")
-                SaveHtmlToDB(scraper).run(studio, comment, html1)
+                return False
             else:
                 SaveHtmlToDB(scraper).run(studio, comment, schedule_html)
-
 
             processing_page = processing_page + 1
 
@@ -363,8 +367,7 @@ def process_step(step, scraper, studio):
         wk1 = 'week_'+str(current_week_num)
         wk2 = 'week_'+str(current_week_num+1)
 
-        #htmls = studio.parsing_history_set.filter(comment__in=['week_1', 'week_2'])
-        htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2])
+        htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2]).filter(scrape_uuid="cc59e1b0-505d-11e3-af5d-00256444d517")
         if not htmls or len(htmls) <= 0:
             logger.error("No parsed_history objects found ")
             return
@@ -378,4 +381,6 @@ def process_step(step, scraper, studio):
             if db_events:
                 for db_event in db_events:
                     db_event.save()
+
+    return True
 

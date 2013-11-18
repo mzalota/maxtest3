@@ -103,10 +103,11 @@ ALTER TABLE schyoga_event convert to character set DEFAULT COLLATE DEFAULT;
 
 
 #dump DB on workstation to transfer to Prod.
-mysqldump --user=root --password=mzalota schyoga4 schyoga_event schyoga_studio schyoga_instructor schyoga_instructor_studios > C:\Workspace\python\maxtest3\db_backup\sy_06.sql
+mysqldump --user=root --password=mzalota schyoga4 schyoga_event schyoga_studio schyoga_instructor schyoga_instructor_studios schyoga_instructor_content > C:\Workspace\python\maxtest3\db_backup\sy_10.sql
 
+delete from schyoga_event where start_time>='2013-11-18 00:00:00';
 
-mysqldump --user=root --password=mzalota schyoga4  > C:\Workspace\python\maxtest3\db_backup\sy_07_bck.sql
+mysqldump --user=root --password=mzalota schyoga4  > C:\Workspace\python\maxtest3\db_backup\sy_08_bck.sql
 
 
 sudo pip install facebook-sdk
@@ -117,3 +118,4 @@ sudo pip install --upgrade --target /opt/bitnami/apps/django/lib/python2.7/site-
 set up AWStats on the server (https://wiki.archlinux.org/index.php/awstats#Configure_Apache_to_log_for_AWStats):
 apt-get install libapache2-mod-perl2
 
+sudo python manage.py clean_pyc --settings='schyoga.settings.prod_manage'
