@@ -1,4 +1,3 @@
-
 /*
 Colors
 Pink: ebacb9
@@ -25,57 +24,65 @@ color: #157e5e;
 }
 
 .navbar {
-    background-image: linear-gradient(to bottom, #ffffff 0%, #ef9e73 100%);
+    background-image: linear-gradient(to bottom, #cd0074 0%, #cd0074 100%);
+    padding-top: 50px;
+    color: white;
 }
 
 .navbar .navbar-nav > .active > a {
     background-image: linear-gradient(to top, #ffffff 0%, #ef9e73 100%);
     /*background-color: #ef9e73;*/
     /*#FBEFD5;*/
+    color: white;
 }
 
 .nav > li > a:hover, .nav > li > a:focus {
-    background-image: linear-gradient(to bottom, #eeeeee 0%, #ef9e73 100%);
+    background-image: linear-gradient(to bottom, #e6399b 0%, #e6399b 100%);
+    color: white;
+}
+
+.nav > li > a{
+    color: white;
 }
 
 .breadcrumb > li + li:before {
     color: #5b2204;
 }
 a, a:hover, a:focus {
-    color: #5b2204;
+    color: white;
 }
 
 a {
-    color: #5b2204;
+    color: white;
 }
 
 .panel-primary {
-border-color: #540415;
+border-color: #e6399b;
 }
 
 .panel-primary > .panel-heading {
 color: #ffffff;
-background-color: #540415;
-border-color: #540415;
+background-color: #e6399b;
+border-color: #e6399b;
 }
 
 .panel-primary > .panel-heading {
 background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffbfc6), to(#540415)); /* 428bca 357ebd  07 */
 background-image: -webkit-linear-gradient(top, #ffbfc6, 0%, #540415, 100%);
 background-image: -moz-linear-gradient(top, #ffbfc6 0%, #540415 100%);
-background-image: linear-gradient(to bottom, #ffbfc6 0%, #540415 100%);
+background-image: linear-gradient(to bottom, #cd0074 0%, #cd0074 100%);
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
 color: #ffffff;
 background-color: #540415;
-border-color: #540415;
+border-color: white;
 }
 
 .btn-primary {
 background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffbfc6), to(#540415));
 background-image: -webkit-linear-gradient(top, #ffbfc6, 0%, #540415, 100%);
 background-image: -moz-linear-gradient(top, #ffbfc6 0%, #540415 100%);
-background-image: linear-gradient(to bottom, #ffbfc6 0%, #540415 100%);
-border-color: #540415;
+background-image: linear-gradient(to bottom, #cd0074 0%, #cd0074 100%);
+border-color: #cd0074;
 }

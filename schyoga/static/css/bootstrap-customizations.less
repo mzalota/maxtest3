@@ -1,0 +1,126 @@
+/*
+Colors
+Pink: ebacb9
+slightly lighter pink: ffbfc6
+
+Green (opposite): 157e5e
+
+Breadcrumbs:  #efc5ae
+
+Navbar:  ef9e73
+*/
+
+
+@banner-bkgr-color: #cd0074; /* #cd0074    #540415*/
+@banner-txt-color: white;
+@button-bkgr-color: #85004B;
+
+/* panel #e6399b */
+
+/*
+a, a:hover, a:focus {
+    color: white;
+}
+
+a {
+    color: white;
+}
+*/
+
+
+.text-info {
+color: #157e5e;
+}
+
+.navbar {
+    background-image: linear-gradient(to bottom, @banner-bkgr-color 0%, @banner-bkgr-color 100%);
+    padding-top: 50px;
+}
+.navbar a {
+    color: @banner-txt-color;
+}
+.navbar a:hover {
+    text-decoration: none;
+}
+
+.navbar .btn {
+    color: @banner-txt-color;
+}
+
+.navbar .btn-primary{
+  margin-right: 30px;
+  font-size: large;
+  background-color: @banner-bkgr-color;
+  background-image: linear-gradient(to bottom, @banner-bkgr-color 0%, @banner-bkgr-color 100%);
+  border-color: @banner-bkgr-color;
+  margin-top: 20px;
+}
+/*
+.navbar .navbar-nav > a {
+    background-image: linear-gradient(to top, #ffffff 0%, #ef9e73 100%);
+    color: @banner-txt-color;
+}
+*/
+
+
+.nav-tabs a  {
+  color: black;
+}
+.nav-tabs a:hover, .nav-tabs a:focus {
+    background-image: linear-gradient(to bottom, @banner-bkgr-color 0%, @banner-bkgr-color 100%);
+    color: @banner-txt-color;
+}
+.nav-tabs li.active a:hover, .nav-tabs li.active a:focus {
+
+    color: @banner-txt-color;
+}
+
+.breadcrumb {
+    /*background-color: #FBEFD5;*/
+    background-color: #efc5ae;
+}
+
+.breadcrumb > .active {
+color: #157e5e;
+}
+
+.breadcrumb > li + li:before {
+    color: #5b2204;
+}
+
+
+.panel-primary {
+border-color: @banner-bkgr-color;
+}
+.panel-primary > .panel-heading {
+color: #ffffff;
+background-color: @banner-bkgr-color;
+border-color: @banner-bkgr-color;
+}
+.panel-primary > .panel-heading {
+background-image: -webkit-gradient(linear, left 0%, left 100%, from(@banner-bkgr-color), to(@banner-bkgr-color)); /* 428bca 357ebd  07 */
+background-image: -webkit-linear-gradient(top, @banner-bkgr-color, 0%, @banner-bkgr-color, 100%);
+background-image: -moz-linear-gradient(top, @banner-bkgr-color 0%, @banner-bkgr-color 100%);
+background-image: linear-gradient(to bottom, @banner-bkgr-color 0%, @banner-bkgr-color 100%);
+}
+
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+color: #ffffff;
+background-color: @button-bkgr-color;
+border-color: white;
+}
+
+.btn-primary {
+background-image: -webkit-gradient(linear, left 0%, left 100%, from(@button-bkgr-color), to(@button-bkgr-color));
+background-image: -webkit-linear-gradient(top, @button-bkgr-color, 0%, @button-bkgr-color, 100%);
+background-image: -moz-linear-gradient(top, @button-bkgr-color 0%, @button-bkgr-color 100%);
+background-image: linear-gradient(to bottom, @button-bkgr-color 0%, @button-bkgr-color 100%);
+border-color: @button-bkgr-color;
+}
+
+#logo {
+  margin-left: 20px;
+  margin-right: 140px;
+  font-size:3.5em
+}

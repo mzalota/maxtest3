@@ -1,8 +1,8 @@
     {% load sitetree %}
     {% load staticfiles %}
 
-    <div class="navbar">
-        <a class="pull-left" style="margin-right: 15px;" href="/"><img src='{% static "img/schedule-yoga-logo.png" %}' height="40px"/></a>
+    <div class="navbar" >
+        <a class="pull-left" id="logo" href="/">ScheduleYoga</a>
 
         <div class="navbar-inner">
             {% sitetree_menu from "main_tree" include "trunk" template "snippet-top-menu.html" %}
