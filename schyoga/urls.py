@@ -62,6 +62,7 @@ urlpatterns = patterns('schyoga.views',
     url(r'^(?P<state_url_name>\S+)/teachers/(?P<teacher_url_name>\S+)/next-week.html$', RedirectView.as_view(url='/%(state_url_name)s/teachers/%(teacher_url_name)s/schedule.html'), name='teacher-next-week'),
     url(r'^(?P<state_url_name>\S+)/teachers/(?P<teacher_url_name>\S+)/facebook-feed.html$', TeacherViews.as_view(pagename=Page.ENUM_TEACHER_FACEBOOKFEED), name='teacher-facebook-feed'),
     url(r'^(?P<state_url_name>\S+)/teachers/(?P<teacher_url_name>\S+)/schedule.html$', TeacherViews.as_view(pagename=Page.ENUM_TEACHER_SCHEDULE), name='teacher-schedule'),
+    url(r'^(?P<state_url_name>\S+)/teachers/(?P<teacher_url_name>\S+)/feedback-received.html$',TemplateView.as_view(template_name="teacher/feedback-received.html"), name='teacher-feedback-received'),
     url(r'^(?P<state_url_name>\S+)/teachers/(?P<teacher_url_name>\S+)/$', TeacherViews.as_view(pagename=Page.ENUM_TEACHER_PROFILE), name='teacher-profile'),
     url(r'^(?P<state_url_name>\S+)/teachers/$', 'teachers.list', name='teachers'),
 

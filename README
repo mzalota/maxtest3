@@ -70,3 +70,18 @@ export DISPLAY=:1
 
 mysqldump --user=root --password=mzalota --no-create-db --no-create-info schyoga3 schyoga_parsing_history > C:\Workspace\python\maxtest3\schyoga\sql\parsing_history.sql
 
+
+
+------------- Rotating text from https://github.com/peachananr/simple-text-rotator -----------
+        {% load staticfiles %}
+        <script type="text/javascript" src="{% static "js/jquery.simple-text-rotator.js" %}"></script>
+        <link rel="stylesheet" href="{% static "css/simpletextrotator.css" %}">
+        <script>
+        $(document).ready( function(){
+                $(".rotate").textrotator({
+                animation: "fade", // Options are dissolve (default), fade, spin, flip,  flipUp, flipCube and flipCubeUp.
+                speed: 1500
+                });
+        })
+        </script>
+        Send some of your <h4 class="rotate">positivity, prana, qi, love</h4> back to {{ instructor.instructor_name }}

@@ -1,0 +1,18 @@
+{% extends "teacher/teacher-base.html" %}
+
+{% block header %}
+    <title>Profile and Schedule for Yoga Teacher: {{ instructor.instructor_name }}, {{ state.name }}</title>
+    <meta name="description" content="View profile and schedule for yoga teacher: {{ instructor.instructor_name }}, {{ state.name }}">
+
+{% endblock %}
+
+{% block teacher-main-conent %}
+
+    <h2>Thank you for submitting your positive feedback</h2>
+
+    <h3>We will update the site shortly</h3>
+    <br>
+    <button type="button" class="btn btn-primary" onclick="history.back(); return false;">
+        <span class="glyphicon glyphicon-arrow-left"> Back</span>
+    </button>
+{% endblock %}

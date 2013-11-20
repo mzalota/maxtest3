@@ -1,0 +1,52 @@
+
+     {% load staticfiles %}
+        <script type="text/javascript" src="{% static "js/jquery.simple-text-rotator.js" %}"></script>
+        <link rel="stylesheet" href="{% static "css/simpletextrotator.css" %}">
+        <script>
+        $(document).ready( function(){
+                $(".rotate").textrotator({
+                animation: "spin", // Options are dissolve (default), fade, spin, flip,  flipUp, flipCube and flipCubeUp.
+                speed: 1500
+                });
+        })
+        </script>
+
+    <style>
+    .rate-class {padding: 4px 4px;}
+    </style>
+     <form role="form" action="feedback-received.html" method="get">
+        <div class="panel panel-primary">
+            <div class="panel-heading"> My class with {{ instructor.instructor_name }} was <span class="rotate">great, awesome, superb, lovely</span> because of: </div>
+            <div class="list-group" >
+                <div class="list-group-item rate-class"><label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Relaxing atmosphere
+                </label></div>
+                <div class="list-group-item rate-class"><label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Personal Attention
+                </label></div>
+                <div class="list-group-item rate-class"><label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Precision-Oriented style
+                </label></div>
+                <div class="list-group-item rate-class"><label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Smooth Flow between poses
+                </label></div>
+                <div class="list-group-item rate-class"><label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Positivity
+                </label></div>
+                <div class="list-group-item rate-class"><label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Cheerfulness
+                </label></div>
+                <div class="list-group-item rate-class"><label>
+                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    Great Workout
+                </label></div>
+                <div class="list-group-item text-center"><button type="submit" class="btn btn-primary">Send Your Thanks to <br> {{ instructor.instructor_name }}</button></div>
+            </div>
+        </div>
+     </form>

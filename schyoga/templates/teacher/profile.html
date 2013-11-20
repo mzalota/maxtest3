@@ -3,6 +3,7 @@
 {% block header %}
     <title>Profile and Schedule for Yoga Teacher: {{ instructor.instructor_name }}, {{ state.name }}</title>
     <meta name="description" content="View profile and schedule for yoga teacher: {{ instructor.instructor_name }}, {{ state.name }}">
+
 {% endblock %}
 
 {% block teacher-main-conent %}
@@ -11,7 +12,7 @@
 <div class="row">
 
 {% if instructor.content %}
-    <div class="col-md-9">
+    <div class="col-md-8">
     {% if not calendar.getDistinctStudios or calendar.getDistinctStudios.count == 0  %}
         <h4> At this time we do not have any information about {{ instructor.instructor_name }} </h4>
     {% endif %}
@@ -22,9 +23,8 @@
                 </cite></small>
             </blockquote>
         {% endfor %}
-    </div>
-    <div class="col-md-3">
-         <div class="panel panel-primary">
+
+             <div class="panel panel-primary">
             <div class="panel-heading"> Teaches at the following Yoga Studios:</div>
             <div class="list-group">
                 {% for studio in calendar.getDistinctStudios %}
@@ -36,10 +36,13 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        {% include "teacher/snippet-feedback.html" with instructor=instructor only %}
+    </div>
 
 {% else %}
 
-    <div class="col-md-9">
+    <div class="col-md-8">
         {% if not calendar.getDistinctStudios or calendar.getDistinctStudios.count == 0  %}
             <h4> At this time we do not have any information about {{ instructor.instructor_name }} </h4>
         {% else %}
@@ -57,8 +60,9 @@
                 </div>
             </div>
         {% endif %}
-        </div>
-    <div class="col-md-3">
+    </div>
+    <div class="col-md-4">
+        {% include "teacher/snippet-feedback.html" with instructor=instructor only %}
     </div>
 
 {% endif %}

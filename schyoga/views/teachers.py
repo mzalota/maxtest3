@@ -68,6 +68,8 @@ class TeacherViews(View):
         events = instructor.event_set.all().order_by('start_time').filter(start_time__gt=startDateStr)
         calendar = Schedule(events)
 
+        #TODO: get list of studios where instructor teaches from "Instructor-Studio" relationship, instead of from events
+
         return render_to_response('teacher/profile.html',
                                   {'instructor': instructor,
                                    'state': state,
