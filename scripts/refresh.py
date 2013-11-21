@@ -188,7 +188,7 @@ def run():
     #7, 53
 
     scraper = Scraper()
-    studios = Studio.objects.all().filter(id__gte=1).filter(id__lte=200).order_by('id')
+    studios = Studio.objects.all().filter(id__gte=2).filter(id__lte=2).order_by('id')
     for studio in studios:
         process_studio(scraper, studio)
 
@@ -367,7 +367,7 @@ def process_step(step, scraper, studio):
         wk1 = 'week_'+str(current_week_num)
         wk2 = 'week_'+str(current_week_num+1)
 
-        htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2]).filter(scrape_uuid="cc59e1b0-505d-11e3-af5d-00256444d517")
+        htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2]) #.filter(scrape_uuid="cc59e1b0-505d-11e3-af5d-00256444d517")
         if not htmls or len(htmls) <= 0:
             logger.error("No parsed_history objects found ")
             return

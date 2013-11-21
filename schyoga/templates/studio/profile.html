@@ -7,9 +7,9 @@
 
 {% block studio-main-conent %}
 
-{% if studio.address %}
 <div class="row">
-    <div class="col-md-10">
+{% if studio.address %}
+    <div class="col-md-9">
 
         <div class="row">
             <div class="col-md-6">
@@ -24,13 +24,14 @@
                     <div class="panel-heading"><h5>{{ studio.name }} Website </h5></div>
                     <div class="list-group">
                         <a class="list-group-item" href="{{ studio.url_home }}" alt="{{ studio.name }} home page" title="{{ studio.name }} home page" target="_blank"> {{ studio.url_home }}</a>
-                    </div>
-                    <div class="list-group-item">
-                        {% load cloudinary %}
-                        <div class="img-thumbnail container">
-                            <a href="{{ studio.url_home }}" alt="{{ studio.name }} home page" title="{{ studio.name }} home page" target="_blank">
-                            {% cloudinary studio.site_image_cloudinary_id width=300 height=300 crop="fill" gravity="north_west" %}
-                            </a>
+
+                        <div class="list-group-item">
+                            {% load cloudinary %}
+                            <div class="img-thumbnail container">
+                                <a href="{{ studio.url_home }}" alt="{{ studio.name }} home page" title="{{ studio.name }} home page" target="_blank">
+                                {% cloudinary studio.site_image_cloudinary_id width=250 height=350 crop="fill" gravity="north_west" %}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -39,12 +40,14 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading"><h5>{{ studio.name }} Address </h5></div>
                     <div class="list-group">
+
+                            <address class="list-group-item">{{ studio.address }}</address>
+
                         <div class="list-group-item">
-                            <address>{{ studio.address }}
                             {% load easy_maps_tags %}
 
                             <div class="img-thumbnail container">
-                            {% easy_map studio.address 300 300 15 %}
+                            {% easy_map studio.address 250 350 15 %}
                             </div>
                         </div>
                     </div>
@@ -52,11 +55,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2">
-    </div>
-</div>
 {% else %}
-<div class="row">
     <div class="col-md-9">
 
         <div class="panel panel-primary">
@@ -71,11 +70,21 @@
               </div>
         </div>
     </div>
+{% endif %}
     <div class="col-md-3">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h5>{{ studio.name }} Teachers <span class="badge pull-right">{{ studio.instructor_set.count}}</span></h5></div>
+            <div class="list-group">
+                {% for instructor in studio.instructor_set.all %}
+                    <li class="list-group-item narrow-list-item">
+                        {% url 'teacher-schedule' instructor.state_name_url  instructor.name_url as url_to_instructor_page %}
+                        <a href="{{ url_to_instructor_page }}" title="Schedule for Yoga Teacher {{ instructor.instructor_name }}"> {{ forloop.counter }}. {{ instructor.instructor_name }} </a>
+                    </li>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
-{% endif %}
-
 
     {% comment %}
     <blockquote>

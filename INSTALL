@@ -81,7 +81,15 @@ Require all granted
 </Directory>
 
 To run webalizer execute followingg commands:
-webalizer /opt/bitnami/apache2/logs/access_log
+sudo webalizer -p -o /home/bitnami/apps/django/django_projects/schyoga/staticfiles/webalizer4 /opt/bitnami/apache2/logs/access_log-20131117.gz -a 'Googlebot' -a 'bingbot' -a 'YandexBot' -a 'SISTRIX' -a 'UnisterBot' -a 'Baiduspider' -a 'Sogou web spider' -a 'mod_pagespeed'
+
+
+sudo webalizer -o /home/bitnami/apps/django/django_projects/schyoga/staticfiles/webalizer4 /opt/bitnami/apache2/logs/access_log-20131117.gz -a 'Googlebot' -a 'bingbot' -a 'YandexBot' -a 'SISTRIX' -a 'UnisterBot'
+
+Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+
+
+
 sudo chown bitnami:daemon -R /var/www/webalizer
 sudo chown daemon -R /var/www/webalizer/
 

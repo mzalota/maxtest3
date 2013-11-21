@@ -95,7 +95,7 @@ LOGGING = {
         'django.db.backends': {
             'handlers': ['console'],
             'propagate': True,
-            'level': 'DEBUG', #in DEBUG mode executed SQL statements are printed out
+            'level': 'INFO', #in DEBUG mode executed SQL statements are printed out
         },
         'schyoga.scraper.steps.extracteventsfrommbo': {
             'handlers': ['console'],

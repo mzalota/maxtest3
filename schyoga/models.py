@@ -1,5 +1,6 @@
 import logging
 import re
+import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib import admin
@@ -10,6 +11,7 @@ from django.contrib import admin
 from django.forms import ModelChoiceField, ModelForm
 from django.utils.html import format_html
 from schyoga.bizobj.page import Page
+import schyoga.bizobj.schedule
 from schyoga.bizobj.state import State
 
 logger = logging.getLogger(__name__)
@@ -41,7 +43,7 @@ class Instructor(models.Model):
     #state = 'connecticut' #'new-york'
 
     class Meta:
-        ordering = ('-modified_on',)
+        ordering = ('instructor_name',)
 
     @property
     def aliases_list(self):
@@ -281,6 +283,18 @@ class Studio(models.Model):
     class Meta:
         ordering = ('-modified_on',)
 
+    @property
+    def schedule_next_week(self):
+        start_date = datetime.datetime.now()
+        end_date = start_date + datetime.timedelta(days=7)
+        print "end_date is"
+        print repr(end_date)
+
+        startDateStr = datetime.datetime.now().strftime('%Y-%m-%d')
+        end_date_str = end_date.strftime('%Y-%m-%d')
+
+        events = self.event_set.all().order_by('start_time').filter(start_time__gte=startDateStr).filter(start_time__lte=end_date_str)
+        return schyoga.bizobj.schedule.Schedule(events)
 
     @property
     def state(self):

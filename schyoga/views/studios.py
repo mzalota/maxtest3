@@ -88,6 +88,7 @@ class StudioViews(View):
             api_secret = "5b_y47V0o2CSKgHWDLKyxf4Nmto"
         )
 
+
         return render_to_response('studio/profile.html',
                                   {'studio': studio,
                                    'state': state,

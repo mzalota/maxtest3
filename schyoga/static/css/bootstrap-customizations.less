@@ -8,12 +8,19 @@ Green (opposite): 157e5e
 Breadcrumbs:  #efc5ae
 
 Navbar:  ef9e73
+
+
+on  http://colorschemedesigner.com/
+RGB:CD0074
+
 */
 
 
 @banner-bkgr-color: #cd0074; /* #cd0074    #540415*/
 @banner-txt-color: white;
 @button-bkgr-color: #85004B;
+@opposite-dark-color: #679b00;
+@opposite-dark-color: #c9f76f;
 
 /* panel #e6399b */
 
@@ -46,7 +53,6 @@ color: #157e5e;
 .navbar .btn {
     color: @banner-txt-color;
 }
-
 .navbar .btn-primary{
   margin-right: 30px;
   font-size: large;
@@ -55,6 +61,11 @@ color: #157e5e;
   border-color: @banner-bkgr-color;
   margin-top: 20px;
 }
+
+.navbar li.active .btn-primary {
+  background-image: linear-gradient(to bottom, (@banner-bkgr-color + #111111) 0%, @banner-bkgr-color 100%);
+}
+
 /*
 .navbar .navbar-nav > a {
     background-image: linear-gradient(to top, #ffffff 0%, #ef9e73 100%);
@@ -71,23 +82,25 @@ color: #157e5e;
     color: @banner-txt-color;
 }
 .nav-tabs li.active a:hover, .nav-tabs li.active a:focus {
-
     color: @banner-txt-color;
 }
 
 .breadcrumb {
-    /*background-color: #FBEFD5;*/
-    background-color: #efc5ae;
+  background-color: @banner-bkgr-color;
+  color: @banner-txt-color;
 }
-
-.breadcrumb > .active {
-color: #157e5e;
+.breadcrumb .active {
+  font-weight: bold;
+  color: @opposite-dark-color;
 }
-
+/*
 .breadcrumb > li + li:before {
-    color: #5b2204;
+    color:  #eee;
 }
-
+*/
+.breadcrumb a {
+  color:  @banner-txt-color;
+}
 
 .panel-primary {
 border-color: @banner-bkgr-color;
@@ -123,4 +136,9 @@ border-color: @button-bkgr-color;
   margin-left: 20px;
   margin-right: 140px;
   font-size:3.5em
+}
+
+.narrow-list-item{
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

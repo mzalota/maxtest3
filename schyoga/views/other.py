@@ -44,7 +44,7 @@ def shoutOuts(request):
 
 #TODO: V.2. Create separate page for each event, which would have microtags embeded
 #TODO: V.2. Get schyoga.com email address and post it on the 500 error page in prod
-#TODO: Restore breadcrubs
+
 
  #def friends(request):
      #django_facebook.middleware.FacebookMiddleware.get_fb_user()
