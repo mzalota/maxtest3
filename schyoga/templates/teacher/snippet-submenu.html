@@ -5,7 +5,7 @@
     </li>
     <li class="{% ifequal curPage.id curPage.ENUM_TEACHER_SCHEDULE %}active{% endifequal %}">
         {% url 'teacher-schedule' stateNameForURL teacher.name_url as url_to_teacher_schedule %}
-        <a href="{{ url_to_teacher_schedule }}" title="Schedule for Yoga Teacher: {{ teacher.instructor_name }}"> Schedule </a>
+        <a href="{{ url_to_teacher_schedule }}" title="Schedule for Yoga Teacher: {{ teacher.instructor_name }}"> Schedule <span class="badge">{{ teacher.schedule_next_week.getNumOfEvents }}+</span></a>
     </li>
     {% if teacher.fb_userid %}
     <li class="{% ifequal curPage.id curPage.ENUM_TEACHER_FACEBOOKFEED %}active{% endifequal %}">

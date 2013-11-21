@@ -2,8 +2,9 @@ import logging
 from datetime import datetime
 from django.core.exceptions import ValidationError
 from schyoga.bizobj.parser.scraperOld import ScraperOld
-from schyoga.models import Event, Instructor
+from schyoga.models import Instructor
 from dateutil import parser
+from schyoga.models.event import Event
 
 logger = logging.getLogger(__name__)
 

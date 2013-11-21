@@ -11,8 +11,9 @@ from django.contrib import admin
 from django.forms import ModelChoiceField, ModelForm
 from django.utils.html import format_html
 from schyoga.bizobj.page import Page
-import schyoga.bizobj.schedule
+from schyoga.bizobj.schedule import Schedule
 from schyoga.bizobj.state import State
+from schyoga.models.event import Event, EventAdmin
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +45,22 @@ class Instructor(models.Model):
 
     class Meta:
         ordering = ('instructor_name',)
+        app_label="schyoga"
+
+
+    @property
+    def schedule_next_week(self):
+        start_date = datetime.datetime.now()
+        end_date = start_date + datetime.timedelta(days=7)
+        #print "end_date is"
+        #print repr(end_date)
+
+        startDateStr = start_date.strftime('%Y-%m-%d')
+        end_date_str = end_date.strftime('%Y-%m-%d')
+
+        events = self.event_set.all().order_by('start_time').filter(start_time__gte=startDateStr).filter(start_time__lt=end_date_str)
+
+        return Schedule(events,start_date,7)
 
     @property
     def aliases_list(self):
@@ -239,6 +256,8 @@ class Instructor_Content(models.Model):
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        app_label="schyoga"
 
 class InstructorModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
@@ -282,19 +301,21 @@ class Studio(models.Model):
 
     class Meta:
         ordering = ('-modified_on',)
+        app_label="schyoga"
 
     @property
     def schedule_next_week(self):
         start_date = datetime.datetime.now()
         end_date = start_date + datetime.timedelta(days=7)
-        print "end_date is"
-        print repr(end_date)
+        #print "end_date is"
+        #print repr(end_date)
 
-        startDateStr = datetime.datetime.now().strftime('%Y-%m-%d')
+        startDateStr = start_date.strftime('%Y-%m-%d')
         end_date_str = end_date.strftime('%Y-%m-%d')
 
-        events = self.event_set.all().order_by('start_time').filter(start_time__gte=startDateStr).filter(start_time__lte=end_date_str)
-        return schyoga.bizobj.schedule.Schedule(events)
+        events = self.event_set.all().order_by('start_time').filter(start_time__gte=startDateStr).filter(start_time__lt=end_date_str)
+
+        return Schedule(events,start_date,7)
 
     @property
     def state(self):
@@ -404,29 +425,6 @@ class StudioAdmin(admin.ModelAdmin):
 admin.site.register(Studio, StudioAdmin)
 
 
-class Event(models.Model):
-    instructor_name = models.CharField(max_length=100, blank=True)
-    comments = models.CharField(max_length=100, blank=True, null=True)
-    start_time = models.DateTimeField()
-    instructor = models.ForeignKey("Instructor", blank=True, null=True)
-    studio = models.ForeignKey("Studio")
-    scrape_uuid = models.CharField(max_length=36, blank=True, null=True)
-    created_on = models.DateTimeField(auto_now_add=True, editable=False)
-    modified_on = models.DateTimeField(auto_now_add=True)
-
-    #studio_id
-    class Meta:
-        ordering = ('-modified_on',)
-
-
-class EventAdmin(admin.ModelAdmin):
-    list_display = ('id', 'start_time', 'instructor_name', 'comments', 'modified_on', 'created_on')
-
-
-admin.site.register(Event, EventAdmin)
-#alter table schyoga_event MODIFY COLUMN instructor_id int(11) default NULL;
-#alter table schyoga_event MODIFY COLUMN comments varchar(100) default NULL;
-
 class Parsing_History(models.Model):
     studio = models.ForeignKey("Studio")
     #studio_id = models.IntegerField()
@@ -434,6 +432,9 @@ class Parsing_History(models.Model):
     comment = models.CharField(max_length=100, blank=True, null=True)
     last_crawling = models.DateTimeField(auto_now=True)
     calendar_html = models.TextField(blank=True, null=True)
+
+    class Meta:
+        app_label="schyoga"
 
 
 class Parsing_HistoryAdmin(admin.ModelAdmin):
@@ -472,6 +473,8 @@ class Studio_Site(models.Model):
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     modified_on = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        app_label="schyoga"
 
 class CustomModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):

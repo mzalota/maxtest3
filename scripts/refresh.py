@@ -2,7 +2,8 @@ import logging
 import datetime
 from django.core import serializers
 from schyoga.bizobj.parser.scraperOld import ScraperOld
-from schyoga.models import Event, Instructor
+from schyoga.models import Instructor
+from schyoga.models.event import Event
 from schyoga.scraper.scraper import Scraper
 from schyoga.scraper.steps.clickelement import ClickElement
 from schyoga.scraper.steps.clicklink import ClickLink

@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.response import TemplateResponse, SimpleTemplateResponse
 from schyoga.bizobj.page import Page
 from schyoga.bizobj.state import State
-from schyoga.models import Studio
+#from schyoga.models import Studio
 
 from schyoga.bizobj.schedule import Schedule
 
@@ -18,11 +18,12 @@ import datetime
 import facebook
 
 # Get an instance of a logger
+from schyoga.models.models import Studio
+
 logger = logging.getLogger(__name__)
 #     logger.error('Found '+studios.count()+' instances of Studio objects for studio_url: '+studio_url_name)
 
 
-#TODO: V.2. Show badge on Schedule Tab to show how many events we have there
 #TODO: V.2. Show badge on Facebook Feed Tab to show how many posts we have there
 
 def list(request, state_url_name):

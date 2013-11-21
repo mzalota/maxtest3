@@ -5,7 +5,7 @@
     </li>
     <li class="{% ifequal curPage.id curPage.ENUM_STUDIO_SCHEDULE %}active{% endifequal %}">
         {% url 'studio-schedule' stateNameForURL studio.nameForURL as url_to_studio_schedule %}
-        <a href="{{ url_to_studio_schedule }}" title="Schedule for Yoga Studio: {{ studio.name }}">Schedule <span class="badge pull-right">aa{{ studio.schedule_next_week.getNumOfEvents}}</span></a>
+        <a href="{{ url_to_studio_schedule }}" title="Schedule for Yoga Studio: {{ studio.name }}">Schedule <span class="badge">{{ studio.schedule_next_week.getNumOfEvents }}+</span></a>
     </li>
     {% if studio.fbPageID %}
     <li class="{% ifequal curPage.id curPage.ENUM_STUDIO_FACEBOOKFEED %}active{% endifequal %}">

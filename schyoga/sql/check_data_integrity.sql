@@ -37,20 +37,21 @@ select count(*) from schyoga_event;
 select distinct(studio_id) from schyoga_event;
 
 
+-- check which MindBodyOnline studios do not have any events
 select std.id, std.name, std.state, std.mindbodyonline_id, std_st.id, count(ev.id)
 FROM  schyoga_studio std
 JOIN schyoga_studio_site std_st on std_st.studio_id = std.id
-LEFT JOIN schyoga_event ev on ev.studio_id=std.id
+LEFT JOIN schyoga_event ev on ev.studio_id=std.id and ev.start_time > NOW()
 group by std.id
 having count(ev.id) <=0
 order by std.id;
 
-
+-- check which instructors do not have any future events on the schedule
 select inst.id, inst.instructor_name, inst.state_name_url, inst_std.studio_id, std.name, count(ev.id)
 FROM  schyoga_instructor inst
 LEFT JOIN schyoga_instructor_studios inst_std on inst_std.instructor_id = inst.id
 LEFT JOIN schyoga_studio std on std.id = inst_std.studio_id
-LEFT JOIN schyoga_event ev on ev.instructor_id=inst.id
+LEFT JOIN schyoga_event ev on ev.instructor_id=inst.id and ev.start_time > NOW()
 group by inst.id
 having count(ev.id) <=0
 order by inst.id;

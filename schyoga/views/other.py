@@ -7,13 +7,13 @@ from schyoga.bizobj.state import State
 
 from schyoga.models import Instructor
 from schyoga.models import Studio
-from schyoga.models import Event
-
 
 import collections
 import datetime
 
 import facebook
+from schyoga.models.event import Event
+
 
 def page404(request):
     response = render(request, "404.html")

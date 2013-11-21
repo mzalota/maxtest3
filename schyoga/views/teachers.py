@@ -10,12 +10,12 @@ from schyoga.bizobj.state import State
 
 from schyoga.models import Instructor
 from schyoga.models import Studio
-from schyoga.models import Event
 from django.views.generic.base import View
 
 #import collections
 import datetime
 import facebook
+from schyoga.models.event import Event
 
 
 def list(request, state_url_name):

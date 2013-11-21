@@ -1,9 +1,11 @@
-from schyoga.models import Event
+#from schyoga.models import Event
 
 import collections
 import datetime
 
 from operator import itemgetter, attrgetter
+#from schyoga.models import Event
+import schyoga.models.event
 
 class Schedule():
 
