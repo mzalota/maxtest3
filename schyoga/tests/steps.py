@@ -3,7 +3,7 @@ from django.db import connection
 from django.test import TestCase
 from mock import patch, Mock
 from schyoga.bizobj.parser.scraperOld import ScraperOld
-from schyoga.models import Parsing_History, Studio, Instructor
+from schyoga.models import Parsing_History, Instructor
 import os.path
 from dateutil import parser
 
@@ -11,6 +11,7 @@ import schyoga
 
 #PROJECT_ROOT = os.path.abspath(schyoga.__path__)
 from schyoga.models.event import Event
+from schyoga.models.studio import Studio
 from schyoga.scraper.scraper import Scraper
 from schyoga.scraper.steps.linktoknowninstructors import LinkToKnownInstructors
 from schyoga.scraper.steps.prepareeventsfordb import PrepareEventsForDB

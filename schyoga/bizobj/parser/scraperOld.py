@@ -4,7 +4,8 @@ import schyoga
 
 from bs4 import BeautifulSoup
 from schyoga.bizobj.parser.browser import Browser
-from schyoga.models import Studio, Parsing_History
+from schyoga.models import Parsing_History
+from schyoga.models.studio import Studio
 
 
 logger = logging.getLogger(__name__)

@@ -4,6 +4,7 @@ from django.core import serializers
 from schyoga.bizobj.parser.scraperOld import ScraperOld
 from schyoga.models import Instructor
 from schyoga.models.event import Event
+from schyoga.models.studio import Studio
 from schyoga.scraper.scraper import Scraper
 from schyoga.scraper.steps.clickelement import ClickElement
 from schyoga.scraper.steps.clicklink import ClickLink
@@ -19,7 +20,6 @@ from schyoga.scraper.steps.standardizeinstructornames import StandardizeInstruct
 from schyoga.scraper.steps.waitforelement import WaitForElement
 from schyoga.scraper.steps.waitforframe import WaitForFrame
 
-from schyoga.models import Studio
 import io, json
 import codecs
 

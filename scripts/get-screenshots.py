@@ -1,7 +1,7 @@
 import logging
 import json
 #from cloudinary import cloudinary
-from schyoga.models import Studio
+from schyoga.models.studio import Studio
 from schyoga.scraper.scraper import Scraper
 from schyoga.scraper.steps.loadurl import LoadUrl
 

@@ -1,7 +1,8 @@
 from time import sleep
 from unittest import TestCase
 from mock import patch
-from schyoga.models import Instructor, Studio
+from schyoga.models import Instructor
+from schyoga.models.studio import Studio
 
 
 class TestInstructor(TestCase):

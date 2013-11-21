@@ -6,13 +6,13 @@ from django.shortcuts import render_to_response, render
 from schyoga.bizobj.state import State
 
 from schyoga.models import Instructor
-from schyoga.models import Studio
 
 import collections
 import datetime
 
 import facebook
 from schyoga.models.event import Event
+from schyoga.models.studio import Studio
 
 
 def page404(request):

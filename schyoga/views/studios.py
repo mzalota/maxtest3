@@ -18,7 +18,7 @@ import datetime
 import facebook
 
 # Get an instance of a logger
-from schyoga.models.models import Studio
+from schyoga.models.studio import Studio
 
 logger = logging.getLogger(__name__)
 #     logger.error('Found '+studios.count()+' instances of Studio objects for studio_url: '+studio_url_name)
