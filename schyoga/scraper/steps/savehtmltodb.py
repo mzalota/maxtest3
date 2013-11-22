@@ -15,12 +15,11 @@ class SaveHtmlToDB:
 
         html_text = smart_text(html_text, encoding='utf-8', strings_only=False, errors='strict')
 
-        #logger.debug("html text is:")
-        #logger.debug(html_text)
-
         parHist = Parsing_History()
         parHist.studio = studio
         parHist.scrape_uuid = self.scraper.uuid
         parHist.comment = comment
         parHist.calendar_html = html_text #.decode('utf-8')
-        parHist.save()
+
+        return parHist
+        #parHist.save()

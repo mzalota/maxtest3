@@ -11,7 +11,7 @@ class DealWithNewInstructors:
 
 
     def run(self, studio, unmatched_instructors, file_path):
-        logger.debug("Logging new instructors to file C:/tmp/unknown_instructors.cvs")
+        logger.debug("Logging new instructors to file C:/tmp/unknown_instructors.csv")
         formated_list = "" #"studio_id,studio_name,state,instructor_name,instructor_name_for_url"
         for instructor in unmatched_instructors:
             formated_list += "\r\n"
@@ -29,7 +29,7 @@ class DealWithNewInstructors:
 
 
     def writeToFile(self, text, file_path):
-        """Write a Tage to a file, even if text has unicode characters
+        """Write a Tag to a file, even if text has unicode characters
 
         """
         with codecs.open(file_path, "a", encoding="utf-8") as f:

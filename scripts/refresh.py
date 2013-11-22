@@ -189,7 +189,7 @@ def run():
     #7, 53
 
     scraper = Scraper()
-    studios = Studio.objects.all().filter(id__gte=2).filter(id__lte=2).order_by('id')
+    studios = Studio.objects.all().filter(id__gte=26).filter(id__lte=26).order_by('id')
     for studio in studios:
         process_studio(scraper, studio)
 
@@ -210,13 +210,13 @@ def process_studio(scraper, studio):
         return
 
 
-    #config_crawl_json = studio_site_set[0].config_crawl
-    #config_crawl = json.loads(config_crawl_json)
-    #for step in config_crawl:
-    #    result = process_step(step, scraper, studio)
-    #    if not result:
-    #        logger.error("Rerunning Crawling step once again for studio: "+str(studio.id)+", "+studio.name)
-    #        process_step(step, scraper, studio)
+    config_crawl_json = studio_site_set[0].config_crawl
+    config_crawl = json.loads(config_crawl_json)
+    for step in config_crawl:
+        result = process_step(step, scraper, studio)
+        if not result:
+            logger.error("Rerunning Crawling step once again for studio: "+str(studio.id)+", "+studio.name)
+            process_step(step, scraper, studio)
 
 
     config_parse_json = studio_site_set[0].config_parse

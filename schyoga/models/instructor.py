@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 class Instructor(models.Model):
     instructor_name = models.CharField(max_length=150)
-    name_url = models.CharField(max_length=150)
+    name_url = models.CharField(max_length=150, unique=True)
     aliases = models.CharField(max_length=1000, blank=True)
     #aliases = PickledObjectField(compress=False, max_length=1000, protocol=0)
     state_name_url = models.CharField(max_length=100) #'new-york'

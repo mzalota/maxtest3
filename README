@@ -16,10 +16,15 @@ Check out page where Skype is asking me to fill out my Profile
 https://secure.skype.com/portal/overview
 
 Check competitors:
+0.1) http://www.findyoga.com/about (http://www.yogatrail.com/teacher/andrew-jones-110628)
+0.2) http://www.yogatrail.com/about-us  (http://www.yogatrail.com/teacher/andrew-jones-110628)
+0.3) http://coursehorse.com/classes-nyc/teacher-andrew-jones
+
 1) http://yoganonymous.com/
 2) http://findsportsnow.com/about
 3) http://centzy.com/
 4) http://www.wellandgoodnyc.com/
+
 
 
 Explore installing better Admin UI:
@@ -74,6 +79,7 @@ mysqldump --user=root --password=mzalota --no-create-db --no-create-info schyoga
 ---------- when my laptop fails to resolve hosts, execute this command on command prompt:
 
 ipconfig /registerdns
+
 
 
 ------------- Rotating text from https://github.com/peachananr/simple-text-rotator -----------

@@ -5,7 +5,7 @@ import datetime
 
 from operator import itemgetter, attrgetter
 #from schyoga.models import Event
-import schyoga.models.event
+#import schyoga.models.event
 
 class Schedule():
 

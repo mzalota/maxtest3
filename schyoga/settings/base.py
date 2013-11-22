@@ -92,6 +92,7 @@ TEMPLATE_LOADERS = (
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -114,6 +115,7 @@ WSGI_APPLICATION = 'schyoga.wsgi.application'
 import os
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '../../../../..///', 'templates').replace('\\','/'),)
 
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,6 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     #'django.contrib.flatpages',
     'schyoga',
+    #'schyoga.admin',
     'django_facebook',
     'django.contrib.humanize',
     'sitetree', #https://django-sitetree.readthedocs.org/en/latest/quickstart.html

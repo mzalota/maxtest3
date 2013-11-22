@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.db import models
 
 
@@ -18,10 +17,8 @@ class Event(models.Model):
         app_label="schyoga"
 
 
-class EventAdmin(admin.ModelAdmin):
-    list_display = ('id', 'start_time', 'instructor_name', 'comments', 'modified_on', 'created_on')
 
 
-admin.site.register(Event, EventAdmin)
+
 #alter table schyoga_event MODIFY COLUMN instructor_id int(11) default NULL;
 #alter table schyoga_event MODIFY COLUMN comments varchar(100) default NULL;
