@@ -9,7 +9,6 @@ from django.contrib import admin
 from django.forms import ModelChoiceField, ModelForm
 #from django.utils.html import format_html
 #from schyoga.bizobj.page import Page
-from schyoga.models.instructor import Instructor
 from schyoga.models.studio import Studio
 
 logger = logging.getLogger(__name__)
@@ -24,44 +23,6 @@ logger = logging.getLogger(__name__)
 #alter table schyoga_studio add column fb_id varchar(100) after phone;
 #alter table schyoga_instructor_content add column source_name varchar(200) default null after content ;
 #
-
-
-class Instructor_Content(models.Model):
-    instructor = models.ForeignKey("Instructor")
-    category = models.CharField(max_length=100)
-    content = models.TextField()
-    source_name = models.CharField(max_length=200, blank=True, null=True)
-    source_url = models.URLField(blank=True, null=True)
-    scrape_uuid = models.CharField(max_length=36, blank=True, null=True)
-    created_on = models.DateTimeField(auto_now_add=True, editable=False)
-    modified_on = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        app_label="schyoga"
-
-class InstructorModelChoiceField(ModelChoiceField):
-    def label_from_instance(self, obj):
-        return "%s %s" % (obj.id, obj.instructor_name)
-
-
-class Instructor_ContentAdminForm(ModelForm):
-    instructor = InstructorModelChoiceField(queryset=Instructor.objects.all().order_by('id', 'instructor_name'))
-
-    class Meta:
-        model = Instructor_Content
-
-
-class Instructor_ContentAdmin(admin.ModelAdmin):
-    list_per_page = 250
-    list_display = ('id', 'category')
-    list_display_links = ('id', 'category')
-
-    form = Instructor_ContentAdminForm
-
-
-admin.site.register(Instructor_Content, Instructor_ContentAdmin)
-
-
 
 class Parsing_History(models.Model):
     studio = models.ForeignKey("Studio")

@@ -1,13 +1,12 @@
-from django.utils.html import format_html
-from django.core.urlresolvers import reverse
-from schyoga.bizobj.page import Page
+#from django.utils.html import format_html
+#from django.core.urlresolvers import reverse
+#from schyoga.bizobj.page import Page
 
 import datetime
 from django.db import models
 from schyoga.bizobj.schedule import Schedule
 from schyoga.bizobj.state import State
-
-from django.contrib import admin
+#from schyoga.models.instructor import Instructor
 
 
 class Studio(models.Model):
@@ -30,6 +29,15 @@ class Studio(models.Model):
     class Meta:
         ordering = ('-modified_on',)
         app_label="schyoga"
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("name__icontains",)
+
+
+    def related_label(self):
+        return u"%s (%s)" % (self.name, self.id)
+
 
     @property
     def schedule_next_week(self):

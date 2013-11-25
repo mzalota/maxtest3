@@ -1,12 +1,8 @@
 import logging
 import re
 import datetime
-from django.core.urlresolvers import reverse
 from django.db import models
-from django.contrib import admin
 
-from django.utils.html import format_html
-from schyoga.bizobj.page import Page
 from schyoga.bizobj.schedule import Schedule
 
 logger = logging.getLogger(__name__)
@@ -43,6 +39,15 @@ class Instructor(models.Model):
     class Meta:
         ordering = ('instructor_name',)
         app_label="schyoga"
+
+
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("instructor_name__icontains","aliases__icontains")
+
+
+    def related_label(self):
+        return u"%s (%s)" % (self.instructor_name, self.id)
 
 
     @property
@@ -156,79 +161,3 @@ class Instructor(models.Model):
             return instructors_by_alias[name]
         else:
             return None
-
-
-class InstructorAdmin(admin.ModelAdmin):
-    list_per_page = 250
-
-    list_display = ('id', 'state_name_url', 'instructor_name', 'link_to_schedyoga_site', 'studios_cnt', 'fb', 'content')
-    list_display_links = ('id', 'instructor_name')
-    #list_select_related = ['studio']
-
-    def content(self, obj):
-        """
-        @type obj: Instructor
-        """
-        content_cnt = obj.instructor_content_set.count()
-
-        url = reverse('admin:%s_%s_changelist' % ("schyoga", "instructor_content"))
-        url = url + "?instructor=" + str(obj.id)
-
-        return format_html(
-            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-star"></span>{1}</a>', url,
-            content_cnt)
-
-
-    def fb(self, obj):
-        """
-        @type obj: Instructor
-        """
-        fb_id = obj.fb_id
-        if not fb_id:
-            return "none"
-
-        #/picture?width=20&height=20
-        return format_html(
-            '<a href="http://facebook.com/{0}"></a><img src="http://graph.facebook.com/{0}/picture?width=20&height=20"/></a>',
-            fb_id)
-        #return format_html('<a href="http://facebook.com/{0}"></a><img src="http://graph.facebook.com/{0}/picture?type=square"/></a>',fb_id)
-
-    def studios_cnt(self, obj):
-        """
-        @type obj: Instructor
-        """
-        studio_count = obj.studio_set.count()
-
-        url = reverse('admin:%s_%s_changelist' % ("schyoga", "studio"))
-        url = url + "?instructor=" + str(obj.id)
-
-        return format_html(
-            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-star"></span>{1}</a>', url,
-            studio_count)
-
-    def link_to_schedyoga_site(self, obj):
-        """
-        @type obj: Instructor
-        """
-        evnt_cnt = obj.event_set.count()
-
-        page = Page.createFromEnum(Page.ENUM_TEACHER_PROFILE)
-        url = page.urlForTeacherPage(obj)
-        return format_html(
-            '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-eye-open"></span> {1}</a>', url,
-            evnt_cnt)
-
-
-    studios_cnt.allow_tags = True
-    studios_cnt.short_description = 'Studios'
-    link_to_schedyoga_site.allow_tags = True
-    link_to_schedyoga_site.short_description = 'SchYoga'
-    fb.allow_tags = True
-    fb.short_description = "FB"
-    content.allow_tags = True
-    content.short_description = "Content"
-
-
-
-
-admin.site.register(Instructor, InstructorAdmin)

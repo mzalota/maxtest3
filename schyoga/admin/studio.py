@@ -8,15 +8,44 @@ from schyoga.models import Studio
 class StudioAdmin(admin.ModelAdmin):
     list_per_page = 250
 
+    #fields = ('name', 'nameForURL', 'instructors')
+
+    fieldsets = (
+        ('', {
+            'fields': (('name', 'nameForURL'))
+        }),
+        ('Instructors', {
+            #'description': "bla-bla",
+            'classes': ('grp-collapse grp-closed',),
+            'fields': ('instructors',)
+        }),
+        ('Advanced', {
+            #'description': "bla-bla",
+            'classes': ('grp-collapse grp-open',),
+            'fields': ('url_home', ('address','phone'),'fb_id','site_image_cloudinary_id')
+        }),
+        ('Useless', {
+            #'description': "bla-bla",
+            'classes': ('grp-collapse grp-closed',),
+            'fields': (('mindbodyonline_id','url_schedule'),'xpath',('created_on','modified_on'))
+        }),
+    )
+
+
     list_display = (
         'id', 'state_name_url', 'name', 'instr', 'site_conf', 'home_url', 'sched_url', 'events', 'pars_hist','events_admin')
     list_display_links = ('id', 'state_name_url', 'name')
     list_filter = ['state_name_url']
+    search_fields = ['name']
 
     ordering = ('-state_name_url','name',)
 
-    #http://127.0.0.1:8000/admin/schyoga/studio/?state_name_url__in=connecticut%2Cmassachusetts
+    raw_id_fields = ['instructors']
+    autocomplete_lookup_fields = {
+        'm2m': ['instructors'],
+    }
 
+    #http://127.0.0.1:8000/admin/schyoga/studio/?state_name_url__in=connecticut%2Cmassachusetts
 
     def events_admin(self, obj):
         """
@@ -26,7 +55,6 @@ class StudioAdmin(admin.ModelAdmin):
 
         url = reverse('admin:%s_%s_changelist' % ("schyoga", "event"))
         url = url + "?&instructor__isnull=true&studio=" + str(obj.id)
-
         return format_html(
             '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-user"></span>{1}</a>', url,
             events_count)
@@ -79,7 +107,6 @@ class StudioAdmin(admin.ModelAdmin):
         return format_html(
             '<a href="{0}" target="_blank" title="{0}"><span class="glyphicon glyphicon-home"></span> </a>',
             obj.url_home)
-        #return format_html('<a href="{0}" target="_blank" title="{0}"><abbr>{1}</abbr></a>', obj.url_home, obj.url_home[:30])
 
     def sched_url(self, obj):
         """

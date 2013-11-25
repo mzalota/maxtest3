@@ -6,3 +6,4 @@ django-extensions==1.2.2
 geopy==0.95.1
 django-easy-maps==0.8.4
 cloudinary==1.0.12
+django-grappelli==2.4.8
