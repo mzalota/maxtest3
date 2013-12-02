@@ -111,7 +111,7 @@ ALTER TABLE schyoga_event convert to character set DEFAULT COLLATE DEFAULT;
 
 
 #dump DB on workstation to transfer to Prod.
-mysqldump --user=root --password=mzalota schyoga4 schyoga_event schyoga_studio schyoga_instructor schyoga_instructor_studios schyoga_instructor_content > C:\Workspace\python\maxtest3\db_backup\sy_11.sql
+mysqldump --user=root --password=mzalota schyoga4 schyoga_event schyoga_studio schyoga_instructor schyoga_instructor_studios schyoga_instructor_content > C:\Workspace\python\maxtest3\db_backup\sy_12.sql
 
 delete from schyoga_event where start_time>='2013-11-18 00:00:00';
 

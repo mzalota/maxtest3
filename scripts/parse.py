@@ -34,7 +34,7 @@ def run():
     logger.debug("starting script: parse")
 
     scraper = Scraper()
-    studios = Studio.objects.all().filter(id__gte=26).filter(id__lte=26).order_by('id')
+    studios = Studio.objects.all().filter(id__gte=1).filter(id__lte=200).order_by('id')
     for studio in studios:
         process_studio(scraper, studio)
 
@@ -91,7 +91,7 @@ def process_step(scraper, studio, headers):
     wk2 = 'week_'+str(current_week_num+1)
     wk3 = 'week_'+str(current_week_num+2)
 
-    htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2,wk3]) .filter(scrape_uuid="d17aa70f-538c-11e3-b010-00256444d517")
+    htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2,wk3]) .filter(scrape_uuid="00d09061-55ef-11e3-98ab-00256444d517")
     if not htmls or len(htmls) <= 0:
         logger.error("No parsed_history objects found ")
         return
@@ -105,12 +105,17 @@ def process_step(scraper, studio, headers):
         #scraper.vars['db_events'] = db_events
 
         print_db_events(db_events)
-        #if db_events:
-        #    for db_event in db_events:
-        #        db_event.save()
+        if db_events:
+            for db_event in db_events:
+                db_event.save()
 
 
 def print_db_events(db_events):
+
+    if not db_events:
+        logger.debug("No Events were Parsed out:")
+        return
+
     logger.debug("Parsed Out DB Events are :")
     for idx, db_event in enumerate(db_events):
         logger.debug( str(idx)+": "+db_event.comments + ", "+repr(db_event.start_time)+", "+db_event.instructor_name)

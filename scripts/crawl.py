@@ -30,7 +30,7 @@ def run():
     logger.debug("starting script: crawl")
 
     scraper = Scraper()
-    studios = Studio.objects.all().filter(id__gte=26).filter(id__lte=26).order_by('id')
+    studios = Studio.objects.all().filter(id__gte=1).filter(id__lte=200).order_by('id')
     for studio in studios:
         process_studio(scraper, studio)
 

@@ -12,13 +12,13 @@
 
 {% if instructor.content %}
     <div class="col-md-8">
-    {% if not calendar.getDistinctStudios or calendar.getDistinctStudios.count == 0  %}
+    {% if not instructor.studios or instructor.studios == 0 %}
         <h4> At this time we do not have any information about {{ instructor.instructor_name }} </h4>
     {% endif %}
         {% for content_time in instructor.content %}
             <blockquote>{{ content_time.content }}
                 <small>Source: <cite title="{{ content_time.source_name }}">
-                    <a href="{{ content_time.source_url }}" title="{{ content_time.source_name }}">{{ content_time.source_name }}</a>
+                    <a href="{{ content_time.source_url }}" target='_blank' title="{{ content_time.source_name }}">{{ content_time.source_name }}</a>
                 </cite></small>
             </blockquote>
         {% endfor %}
@@ -26,7 +26,7 @@
              <div class="panel panel-primary">
             <div class="panel-heading"> Teaches at the following Yoga Studios:</div>
             <div class="list-group">
-                {% for studio in calendar.getDistinctStudios %}
+                {% for studio in instructor.studios.all %}
                     {% url 'studio-profile' studio.state.nameForURL studio.nameForURL as url_to_studio_page %}
                     <a href="{{ url_to_studio_page }}" class="list-group-item" alt="Yoga Studio: {{ studio.name }}" title="Yoga Studio: {{ studio.name }}">
                         <span class="glyphicon glyphicon-home"></span> {{ studio.name }}
@@ -42,14 +42,14 @@
 {% else %}
 
     <div class="col-md-8">
-        {% if not calendar.getDistinctStudios or calendar.getDistinctStudios.count == 0  %}
+        {% if not instructor.studios or instructor.studios == 0   %}
             <h4> At this time we do not have any information about {{ instructor.instructor_name }} </h4>
         {% else %}
             <h4>According to our records yoga teacher {{ instructor.instructor_name }} is: </h4>
             <div class="panel panel-primary">
                 <div class="panel-heading"> Teaches at the following Yoga Studios:</div>
                 <div class="list-group">
-                {% for studio in calendar.getDistinctStudios %}
+                {% for studio in instructor.studios.all %}
                     {% url 'studio-profile' studio.state.nameForURL studio.nameForURL as url_to_studio_page %}
                     <a href="{{ url_to_studio_page }}" class="list-group-item" alt="Yoga Studio: {{ studio.name }}" title="Yoga Studio: {{ studio.name }}">
                         <span class="glyphicon glyphicon-home"></span> {{ studio.name }}

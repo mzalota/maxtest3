@@ -5,7 +5,7 @@ from schyoga.bizobj.page import Page
 from schyoga.models.instructor import Instructor
 from schyoga.models.instructor_content import Instructor_Content
 
-class Instructor_ConentInline(admin.TabularInline):
+class Instructor_ConentInline(admin.StackedInline):
     model = Instructor_Content
 
 
