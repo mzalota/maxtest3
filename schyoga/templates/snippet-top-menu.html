@@ -1,7 +1,10 @@
 {% load sitetree %}
 
 <ul class="nav navbar-nav">
+    <div class="row">
+
     {% for item in sitetree_items %}
+        <div class="col-xs-4">
         <li class="{% if item.has_children %}dropdown{% endif %} {% if item.is_current or item.in_current_branch %}active{% endif %}">
             <button type="button" class="btn btn-primary">
             <a href="{% if item.has_children %}#{% else %}{% sitetree_url for item %}{% endif %}" {% if item.has_children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
@@ -14,5 +17,7 @@
                 {% sitetree_children of item for menu template "sitetree/menu_bootstrap_dropdown.html" %}
             {% endif %}
         </li>
+        </div>
     {% endfor %}
+    </div>
 </ul>

@@ -81,7 +81,7 @@ def process_studio(scraper, studio):
 
 def process_step(scraper, studio, headers):
 
-    instructors_file_path = "C:/tmp/unknown_instructors.csv" #step['file_path']
+    instructors_file_path = "C:/tmp/unknown_instructors2.csv"
 
     logger.debug("Parsing events out of MindBodyOnline HTML")
 
@@ -91,7 +91,7 @@ def process_step(scraper, studio, headers):
     wk2 = 'week_'+str(current_week_num+1)
     wk3 = 'week_'+str(current_week_num+2)
 
-    htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2,wk3]) .filter(scrape_uuid="00d09061-55ef-11e3-98ab-00256444d517")
+    htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2,wk3]) .filter(scrape_uuid__in=["47325061-5b5e-11e3-a69d-00256444d517",'96d274cf-5b6b-11e3-aba8-00256444d517'])
     if not htmls or len(htmls) <= 0:
         logger.error("No parsed_history objects found ")
         return

@@ -2,10 +2,23 @@
     {% load staticfiles %}
 
     <div class="navbar" >
-        <a class="pull-left" id="logo" href="/">ScheduleYoga</a>
+        <div class="row">
+{#            For large screens show menu buttons to the right of the logo. For extra-small(xm), mobile screens show menu buttons below logo #}
+            <div class="col-sm-6 col-xs-12">
+{#                for extra-small screens adjust patting around logo so that it is not too tall, not too much red area#}
+                <div class="visible-xs" style="margin-top: -20px; margin-bottom: -40px;">
+                     <a class="" id="logo" href="/">ScheduleYoga</a>
+                </div>
+                <div class="hidden-xs">
+                    <a class="" id="logo" href="/">ScheduleYoga</a>
+                </div>
+            </div>
+            <div class="col-sm-6  col-xs-12">
+                <div class="navbar-inner">
+                    {% sitetree_menu from "main_tree" include "trunk" template "snippet-top-menu.html" %}
+                </div>
+            </div>
 
-        <div class="navbar-inner">
-            {% sitetree_menu from "main_tree" include "trunk" template "snippet-top-menu.html" %}
         </div>
     </div>
 
