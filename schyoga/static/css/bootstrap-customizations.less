@@ -135,6 +135,7 @@ background-image: linear-gradient(to bottom, @button-bkgr-color 0%, @button-bkgr
 border-color: @button-bkgr-color;
 }
 
+
 #logo {
   margin-left: 20px;
   padding-top: 20px;
@@ -148,3 +149,35 @@ border-color: @button-bkgr-color;
     padding-bottom: 5px;
 }
 
+
+//Start calendar at a left margin of 4em, so that we can fit the Header Column there
+#scrollableCalendar {
+    overflow-x: hidden;
+    margin-left:4em;
+}
+
+//Define header column so that it is at a fixed location and does not scroll when table scrolls as a whole
+.header-column-cell {
+  position:absolute;
+  width:4em;
+  left:1em;
+  white-space: nowrap;
+}
+
+//make all cells of the schedule table compact
+#scrollableCalendar td, #scrollableCalendar th{
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
+  line-height: 1;
+  padding-top: 4px !important;
+}
+
+.header-column-cell-content {
+  padding-top: 10px;
+}
+
+
+.header-column-cell-content, .table-cell-content {
+  min-height: 35px !important;
+
+}

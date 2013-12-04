@@ -1,10 +1,11 @@
-<td style="min-width: 65px;">
- {% for event in events %}
+<td class="table-cell">
+<div class="table-cell-content">
+{% for event in events %}
     <!-- <h4> event start time is {{ event.start_time }}</h4> -->
         <div class="text-center text-info"><small><strong> {{ event.comments }} </strong></small></div>
         <!-- <hr>  <span class="glyphicon glyphicon-time"></span> 1hr &amp; 30min -->
         <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
-            {% url 'studio-profile' event.studio.state.nameForURL event.studio.nameForURL as url_to_studio_page %}
+            {% url 'studio-schedule' event.studio.state.nameForURL event.studio.nameForURL as url_to_studio_page %}
             <a href="{{ url_to_studio_page }}"
                title="Schedule for Yoga Studio: {{ event.studio.name }}">
                  <abbr title="Studio:{{ event.studio.name }}">
@@ -14,4 +15,5 @@
             </a>
         </div>
 {% endfor %}
+</div>
 </td>

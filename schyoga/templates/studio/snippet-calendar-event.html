@@ -1,12 +1,10 @@
 
-<td style="min-width: 65px;">
+<td class="table-cell">
+<div class="table-cell-content">
 {% for event in events %}
-
     <!-- <h4> studio event start time is {{ event.start_time }}</h4> -->
         <div class="text-center text-info"><small><strong> {{ event.comments }} </strong></small></div>
-
         <!-- <hr> <span class="glyphicon glyphicon-time"></span> 1hr &amp; 30min -->
-
         {% if event.instructor %}
         <div class="location cal_studio_name" style="width: 8em; overflow: hidden; display: inline-block; text-overflow: ellipsis; white-space: nowrap;">
             {% url 'teacher-schedule' event.instructor.state_name_url  event.instructor.name_url as url_to_instructor_page %}
@@ -27,6 +25,6 @@
              </abbr>
         </div>
         {% endif %}
-
 {% endfor %}
+</div>
 </td>

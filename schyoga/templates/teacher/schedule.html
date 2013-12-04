@@ -34,28 +34,30 @@ $(function() {  // DOM READY shorthand
 </script>
 
 
-<div id="scrollableCalendar" style="overflow-x: hidden">
-    <table class="calendar table table-responsive table-striped table-bordered table-condensed table-hover" >
+<div id="scrollableCalendar">
+    <table class="calendar table  table-striped table-bordered table-hover" >
         <tbody>
         <tr>
-            <th>Start Time</th>
+            <th class="header-column-cell header-row-cell">
+                <div class="text-center">Start</div>
+                <div class="text-center">Time</div>
+            </th>
             {% for calDate in calendar.calendarDates %}
-                <th class="cal_info_cell">
-                <div class="text-center">{{ calDate|date:"D" }}</div>
-                <div class="text-center" style="white-space: nowrap;">{{ calDate|date:"M d" }}</div>
+                <th class="header-row-cell">
+                    <div class="text-center">{{ calDate|date:"D" }}</div>
+                    <div class="text-center" style="white-space: nowrap;">{{ calDate|date:"M d" }}</div>
                 </th>
             {% endfor %}
         </tr>
         {% for calendarTime in calendar.calendarTimesStr %}
         <tr>
-            <td class="cal_time_cell">
-                <span class="carrot_compact"> &nbsp;</span>
-                <div class="text-left" style="white-space: nowrap;"> {{ calendarTime }} </div>
+            <td class="header-column-cell">
+                <div class="text-left header-column-cell-content"> <strong>{{ calendarTime }}</strong> </div>
             </td>
             {% for calDate in calendar.calendarDates %}
                 {% events_from_calendar calendar calDate calendarTime as events%}
                 {%  if not events %}
-                    <td class="cal_info_cell summary"> </td>
+                    <td class="table-cell"><div class="table-cell-content"></div> <!-- calDate is: {{  calDate }}--></td>
                 {%  else %}
                     {% include "teacher/snippet-calendar-event.html" with events=events only %}
                 {%  endif %}
