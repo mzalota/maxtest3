@@ -1,8 +1,8 @@
 from time import sleep
 from unittest import TestCase
 from mock import patch
-from schyoga.models import Instructor
-from schyoga.models.studio import Studio
+from schyoga.models.instructor import Instructor
+#from schyoga.models.studio import Studio
 
 
 class TestInstructor(TestCase):
@@ -133,6 +133,9 @@ class TestInstructor(TestCase):
         name_10_raw = u" "
         name_10_expected = u''
 
+        name_11_raw = u" To Be Determined "
+        name_11_expected = u''
+
         #ACT
         name_1_clean = Instructor.clean_up_name(name_1_raw)
         name_2_clean = Instructor.clean_up_name(name_2_raw)
@@ -144,6 +147,7 @@ class TestInstructor(TestCase):
         name_8_clean = Instructor.clean_up_name(name_8_raw)
         name_9_clean = Instructor.clean_up_name(name_9_raw)
         name_10_clean = Instructor.clean_up_name(name_10_raw)
+        name_11_clean = Instructor.clean_up_name(name_11_raw)
 
         #ASSERT
         self.assertEqual(name_1_clean, name_1_expected)
@@ -156,6 +160,7 @@ class TestInstructor(TestCase):
         self.assertEqual(name_8_clean, name_8_expected)
         self.assertEqual(name_9_clean, name_9_expected)
         self.assertEqual(name_10_clean, name_10_expected)
+        self.assertEqual(name_11_clean, name_11_expected)
 
 
     def test_convert_to_url_name(self):

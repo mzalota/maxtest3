@@ -9,6 +9,7 @@ from django.db.models import Q
 class EventAdmin(admin.ModelAdmin):
     list_per_page = 100
     list_display = ('id', 'start_time', 'instructor_name', 'instr', 'studio_link', 'comments','created_on')
+    change_list_template = "admin/schyoga/event/change_list_filter_sidebar.html"
 
     def studio_link(self, obj):
         """
@@ -34,7 +35,10 @@ class EventAdmin(admin.ModelAdmin):
         if not instructor_name:
             return
 
-        if instructor_name.strip() == '':
+        #if instructor_name.strip() == '':
+        #    return
+
+        if Instructor.clean_up_name(instructor_name) == '':
             return
 
         instructor_name_url = Instructor.convert_to_url_name(instructor_name)
@@ -44,7 +48,8 @@ class EventAdmin(admin.ModelAdmin):
 
         add_url = reverse('admin:%s_%s_add' % ("schyoga", "instructor"))
         add_url = add_url +('?name_url=%s&instructor_name=%s&aliases=%s&state_name_url=%s&studios=%s'% (instructor_name_url,instructor_name,instructor_name,state_name_url,studio_id))
-        add_link = '<a href="{0}" target="_blank" title="Add: {1}"><span class="glyphicon glyphicon-floppy-disk"></span> Add New</a>'.format(add_url, instructor_name)
+        add_link='<a href="'+add_url+'" target="_blank" title="Add: '+instructor_name+'"><span class="glyphicon glyphicon-floppy-disk"></span> Add New</a>'
+
 
         instructor_sub_names = instructor_name.split(" ")
         matching_instructors = Instructor.objects.all().filter(aliases__contains=instructor_name)

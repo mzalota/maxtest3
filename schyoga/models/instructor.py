@@ -120,6 +120,9 @@ class Instructor(models.Model):
         if clean_name.lower() == 'tba':
             return ''
 
+        if clean_name.lower() == 'to be determined':
+            return ''
+
         if clean_name.lower() == 'teacher teacher':
             return ''
 

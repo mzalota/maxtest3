@@ -7,6 +7,7 @@ from schyoga.models import Studio
 
 class StudioAdmin(admin.ModelAdmin):
     list_per_page = 250
+    change_list_template = "admin/schyoga/studio/change_list_filter_sidebar.html"
 
     #fields = ('name', 'nameForURL', 'instructors')
 

@@ -5,6 +5,9 @@ import warnings
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+GRAPPELLI_ADMIN_TITLE = "ScheduleYoga.com Admin"
+
+
 ADMINS = (
     ('Developer of SchYoga', 'mzalota@yahoo.com'),
 )

@@ -101,11 +101,14 @@ If you get error about .wsgi file, then you probably need to reboot the whole se
 Change collation of the DB:
 
 select * from information_schema.schemata where schema_name = 'schyoga4';
-select * from information_schema.tables where table_schema = 'schyoga4' and table_name in ('schyoga_parsing_history', 'schyoga_event');
+
+select * from information_schema.tables where table_schema = 'schyoga4' and table_name in ('schyoga_parsing_history', 'schyoga_event', 'schyoga_instructor');
 
 ALTER DATABASE schyoga4 CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci'
 ALTER TABLE schyoga_parsing_history convert to character set DEFAULT COLLATE DEFAULT;
 ALTER TABLE schyoga_event convert to character set DEFAULT COLLATE DEFAULT;
+ALTER TABLE schyoga_instructor convert to character set DEFAULT COLLATE DEFAULT;
+
 
 -----------backup/old
 

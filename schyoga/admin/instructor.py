@@ -11,7 +11,7 @@ class Instructor_ConentInline(admin.StackedInline):
 
 class InstructorAdmin(admin.ModelAdmin):
 
-    #change_list_template = "admin/change_list_filter_sidebar.html"
+    change_list_template = "admin/schyoga/instructor/change_list_filter_sidebar.html"
     search_fields = ['instructor_name','aliases']
     #list_filter = ('state_name_url',)
 

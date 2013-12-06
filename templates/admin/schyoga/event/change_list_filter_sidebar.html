@@ -1,0 +1,25 @@
+{% extends "admin/change_list_filter_sidebar.html" %}
+{% block extrastyle %}
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.css">
+    {{ block.super }}
+
+     <style>
+{#        table#result_list td:nth-child(1) {width: 18em;} {#Column: link to studio's Site Conf#}
+{#        table#result_list td:nth-child(5) {width: 8em;} {#Column: link to studio's home page#}
+    </style>
+
+     <style>
+        /*Adjust the height of Headers so that they don't take up half of the page*/
+        header > h1 {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            padding: 0;
+        }
+        #search {
+            width: auto;
+        }
+        #search input[type=text] {
+            width: 85%;
+        }
+     </style>
+{% endblock %}
