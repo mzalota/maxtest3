@@ -13,7 +13,7 @@ TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '../../','templates').r
 #TEMPLATE_DEBUG = DEBUG
 
 DEBUG = False
-#TEMPLATE_DEBUG = False
+
 
 MANAGERS = ADMINS
 
@@ -76,12 +76,23 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
+        #'logfile': {
+        #    'level':'DEBUG',
+        #    'class':'logging.handlers.RotatingFileHandler',
+        #    'filename':  "/tmp/django.log",
+        #    'maxBytes': 5000000,
+        #    'backupCount': 8,
+        #    'formatter': 'verbose',
+        #},
         'logfile': {
             'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'class':'logging.handlers.TimedRotatingFileHandler',
             'filename':  "/tmp/django.log",
-            'maxBytes': 5000000,
-            'backupCount': 8,
+            #'when' : 'midnight',
+            #'interval' :    1,
+            'when' : 'D',
+            'interval' : 3,
+            'backupCount' : 10,
             'formatter': 'verbose',
         },
     },
