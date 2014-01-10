@@ -9,7 +9,10 @@ from operator import itemgetter, attrgetter
 
 class Schedule():
 
-    def __init__(self, events, startDate=datetime.datetime.now(), numDays=14):
+    def __init__(self, events, startDate, numDays=14):
+        if not startDate:
+            startDate=datetime.datetime.now()
+
         self.events = events
         self.__startDate = startDate
         self.__numDays = numDays

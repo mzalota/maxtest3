@@ -100,10 +100,11 @@ class StudioViews(View):
     def schedule(self, request, studio, state, curPage):
         #TODO: V.2. filter events from DB by date, so that dates on the calendar correspond with what was pulled from DB
 
-        startDateStr = datetime.datetime.now().strftime('%Y-%m-%d')
+        startDate = datetime.datetime.now()
+        startDateStr = startDate.strftime('%Y-%m-%d')
         events = studio.event_set.all().order_by('start_time').filter(start_time__gt=startDateStr)
 
-        sched = Schedule(events)
+        sched = Schedule(events, startDate)
         #sched = Schedule(events, datetime.datetime(2013, 8, 6), 14)
 
         return render_to_response('studio/schedule.html',

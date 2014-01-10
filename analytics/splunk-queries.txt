@@ -1,0 +1,114 @@
+http://204.236.217.131:8000/en-US/app/launcher/home
+
+FIX BUG: This url should not work http://www.scheduleyoga.com/connecticut/studios/pure-yoga-new-york/
+
+TODO: add "mobile phone" flag
+
+--- SPLUNK Queries
+
+
+
+!!!!Master query at this point
+sourcetype=access_combined NOT mod_pagespeed NOT [| inputlookup useragent_crawler.csv | fields useragent] NOT [| inputlookup clientip_crawler.csv | fields clientip] status=200 uri!="/static*" method=GET  NOT useragent=*facebookexternalhit*   NOT ModPagespeed      | rex field=uri "^/(?<obj_state>[-\w]*)/(?<obj_type>[-\w\d]*)/(?<obj_name>[-\w\d]*)[/]?(.*)$"             | eval clientip_firsthalf=mvindex(split(clientip,"."),0).".".mvindex(split(clientip,"."),1)               | eval obj_name=nullif(obj_name,"")                     | iplocation clientip                       | search CountryCode=CA OR CountryCode=US NOT City=Dallas            | eval search_term=replace(urldecode(trim(coalesce(q,p,pq))),"\"","'")  |transaction clientip_firsthalf useragent maxpause=30m delim="~" mvlist=(referer_domain,file,uri,obj_state,obj_type,obj_name,req_time) | fillnull value=NULL search_term referer_domain useragent    | eval page_landing=mvindex(uri,0) | eval page_exit=mvindex(uri,(eventcount-1)) | search eventcount>0 |table  clientip City Region Country _time req_time date_year date_month date_mday date_wday date_hour date_minute duration eventcount page_landing page_exit obj_state obj_type obj_name file  uri search_term referer_domain useragent  | sort -_time
+
+
+!!!!!Repeat visitors (add this to the end of the query)
+| stats count as cnt by useragent clientip  | sort -cnt
+
+
+
+***Exclude requests from certain IPs because they are crawlers
+sourcetype=access_combined NOT [| inputlookup crawler_clientip.csv | fields clientip]
+
+
+
+***Group into transactions by Client IP
+eventtype="Access_Combined: No Crawlers"  [| inputlookup useragent_mobile.csv | return 100 $useragent] status=200 uri!="/static*" method=GET   | transaction maxspan=30m clientip | sort -_time
+
+
+*** Only mobile technology
+eventtype="Access_Combined: No Crawlers" [| inputlookup useragent_mobile.csv | return 100 $useragent] status=200 uri!="/static*" method=GET  | stats count(useragent) as cnt_ua by useragent | sort -cnt_ua
+
+
+*** Not mobile technology
+eventtype="Access_Combined: No Crawlers" | iplocation clientip  |search CountryCode=US NOT [| inputlookup useragent_mobile.csv | fields useragent] status=200 uri!="/static*" method=GET  | stats count(useragent) as cnt_ua by useragent | sort -cnt_ua
+
+
+--- SPLUNK Configuration
+
+Regex to extract error name and description:
+(.*)]\s(?P<FIELDNAME1>[^:\s\[]+):\s(?P<FIELDNAME2>[^\n]+)
+
+
+Regex to extract ClientIP and Port
+
+
+
+
+
+Save the following query as Event Type ""Access_Combined: No Crawlers"
+sourcetype="access_combined"  NOT ( "Googlebot" OR "bingbot" OR "AhrefsBot" OR "Yandexbot" OR Baiduspider OR UnisterBot OR Crawler OR spbot OR MJ12bot OR Mail.RU_Bot OR msnbot-media OR spider OR 360Spider OR CJNetworkQuality OR SeznamBot OR nutch- OR CCBot OR YandexImages OR Ezooms OR SiteExplorer OR archive.org_bot OR Exabot OR BIXOCRAWLER OR SemrushBot OR URLAppendBot OR TurnitinBot OR SurveyBot OR Genieo) NOT ("186.77.194.41" OR "88.214.193.210" OR "10.179.7.244" OR "186.77.198.169" OR "91.207.9.226" OR "91.207.4.206" OR "46.119.124.60" OR "46.118.152.240" OR "199.187.122.91")
+
+
+Save lookup file "useragent_mobile.csv" into /opt/splunk/etc/apps/search/lookups/ directory
+
+content of the file should be:
+useragent
+IPad;
+IPod;
+
+
+
+
+sourcetype="access_combined" clientip!="10.179.7.244" NOT ("Googlebot" OR "bingbot" OR "AhrefsBot" OR "Yandexbot" OR Baiduspider)
+
+
+
+144.76.4.165	1,001	6.461%
+5.9.223.170	1,001	6.461%
+162.243.84.215	601	3.879%
+162.243.88.181	601	3.879%
+186.77.194.41	534	3.447%
+144.76.95.231	301	1.943%
+69.197.129.42	301	1.943%
+88.214.193.210	285	1.84%
+61.135.189.175	255	1.646%
+162.243.46.73
+
+
+
+sourcetype="access_combined" clientip!="10.179.7.244" NOT ( "Googlebot" OR "bingbot" OR "AhrefsBot" OR "Yandexbot" OR Baiduspider OR UnisterBot OR Crawler OR spbot OR MJ12bot OR Mail.RU_Bot OR msnbot-media OR spider OR 360Spider OR CJNetworkQuality OR SeznamBot OR nutch- OR CCBot OR YandexImages OR Ezooms OR SiteExplorer OR archive.org_bot OR Exabot OR BIXOCRAWLER OR SemrushBot OR URLAppendBot OR TurnitinBot OR SurveyBot OR Genieo)
+
+
+sourcetype="access_combined"  NOT ( "Googlebot" OR "bingbot" OR "AhrefsBot" OR "Yandexbot" OR Baiduspider OR UnisterBot OR Crawler OR spbot OR MJ12bot OR Mail.RU_Bot OR msnbot-media OR spider OR 360Spider OR CJNetworkQuality OR SeznamBot OR nutch- OR CCBot OR YandexImages OR Ezooms OR SiteExplorer OR archive.org_bot OR Exabot OR BIXOCRAWLER OR SemrushBot OR URLAppendBot OR TurnitinBot OR SurveyBot OR Genieo) NOT ("186.77.194.41" OR "88.214.193.210" OR "10.179.7.244" OR "186.77.198.169") clientip="91.207.9.226"
+
+sourcetype="access_combined"  NOT ( "Googlebot" OR "bingbot" OR "AhrefsBot" OR "Yandexbot" OR Baiduspider OR UnisterBot OR Crawler OR spbot OR MJ12bot OR Mail.RU_Bot OR msnbot-media OR spider OR 360Spider OR CJNetworkQuality OR SeznamBot OR nutch- OR CCBot OR YandexImages OR Ezooms OR SiteExplorer OR archive.org_bot OR Exabot OR BIXOCRAWLER OR SemrushBot OR URLAppendBot OR TurnitinBot OR SurveyBot OR Genieo) NOT ("186.77.194.41" OR "88.214.193.210" OR "10.179.7.244" OR "186.77.198.169" OR "91.207.9.226" OR "91.207.4.206" OR "46.119.124.60" OR "46.118.152.240")
+
+
+eventtype="Access_Combined: No Crawlers" useragent!="Mozilla*"
+
+useragent=("facebookexternalhit" OR "masscan" "WWW-Mechanize" OR "Apache-HttpClient" OR "Python-urllib" OR "Wget" OR "ZmEu")
+
+
+
+eventtype="Access_Combined: No Crawlers" useragent!="Mozilla*" useragent!="-" useragent=ZmEu
+\
+
+| where useragent like("%(iPod;%" OR "%(iPad;%")
+
+
+
+
+----Group into transactions by Client IP
+
+eventtype="Access_Combined: No Crawlers"  [| inputlookup useragent_mobile.csv | return 100 $useragent] status=200 uri!="/static*" method=GET   | transaction maxspan=30m clientip | sort -_time
+
+eventtype="Access_Combined: No Crawlers"  status=200 uri!="/static*" method=GET  | stats count(useragent) by useragent
+
+
+
+
+
+-------- KMeans not workinb
+
+sourcetype=access_combined NOT mod_pagespeed NOT [| inputlookup useragent_crawler.csv | fields useragent] NOT [| inputlookup clientip_crawler.csv | fields clientip] status=200 uri!="/static*" method=GET              | iplocation clientip            | search CountryCode=US OR CountryCode=CA  | transaction maxpause=30m clientip      | kmeans cfield=kmzal k=10 uri referer_domain root

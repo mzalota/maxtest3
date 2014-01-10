@@ -41,6 +41,14 @@ def show_top_nav(context):
 
 @register.assignment_tag
 def events_from_calendar(o, eventDate, eventTime):
+    """
+
+    @type o: bizobj.Schedule
+    @type eventDate: datetime
+    @type eventTime: datetime
+    @rtype: list(Event)
+    """
+
     try:
         return o.getEventsByDateAndTime(eventDate, eventTime)
     except:
