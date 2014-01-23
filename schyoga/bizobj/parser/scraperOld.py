@@ -17,6 +17,7 @@ class ScraperOld:
     START_TIME = 'start-time'
     CLASS_NAME = 'class-name'
     TEACHER_NAME = 'teacher-name'
+    LOCATION = 'location'
     DURATION = 'duration'
     EVENT_DATE = 'date'
 

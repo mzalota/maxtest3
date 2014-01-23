@@ -2,10 +2,14 @@
 
 import collections
 import datetime
+import logging
+from django.core import serializers
 
 from operator import itemgetter, attrgetter
 #from schyoga.models import Event
 #import schyoga.models.event
+
+logger = logging.getLogger(__name__)
 
 class Schedule():
 
@@ -97,3 +101,17 @@ class Schedule():
             return None
 
         return self.__orgEvents[eventTimeStr][eventDate]
+
+
+    def print_db_events(self):
+        if not self.events:
+            logger.debug("No Events to print:")
+            return
+
+        logger.debug("Events are:")
+        for idx, event in enumerate(self.events):
+            logger.debug( str(idx)+": "+event.comments + ", "+repr(event.start_time)+", "+event.instructor_name)
+
+        if self.events:
+            json_db_events = serializers.serialize('json', self.events)
+            logger.debug( json_db_events)

@@ -1,13 +1,15 @@
 import logging
 import datetime
 import time
-from django.core import serializers
+from schyoga.bizobj.parser.scraperOld import ScraperOld
+
 from schyoga.models.event import Event
 from schyoga.models.studio import Studio
 from schyoga.scraper.scraper import Scraper
 
 from schyoga.scraper.steps.dealwithnewinstructors import DealWithNewInstructors
 from schyoga.scraper.steps.extracteventsfrommbo import ExtractEventsFromMBO
+from schyoga.scraper.steps.filterevents import FilterEvents
 
 from schyoga.scraper.steps.linktoknowninstructors import LinkToKnownInstructors
 
@@ -27,7 +29,7 @@ def run():
     logger.debug("starting script: parse")
 
     scraper = Scraper()
-    studios = Studio.objects.all().filter(id__gte=44).filter(id__lte=44).order_by('id')
+    studios = Studio.objects.all().filter(id__gte=1).filter(id__lte=200).order_by('id')
     for studio in studios:
         process_studio(scraper, studio)
 
@@ -57,10 +59,17 @@ def process_studio(scraper, studio):
         return
 
     config_parse = json.loads(config_parse_json)
+
+
+
     for step in config_parse:
         logger.debug("Processing step: "+step['step_name'])
+        if (step.has_key('filters')):
+            filters = step['filters']
+        else:
+            filters = None
         if step['step_name'] == 'MBOLParseHtml':
-            process_step(scraper, studio, step['headers'])
+            process_step(scraper, studio, step['headers'],filters)
         else:
             logger.error("Unrecognized Parsing step: "+step['step_name'])
 
@@ -87,9 +96,9 @@ def iso_to_gregorian(iso_year, iso_week, iso_day):
     return year_start + datetime.timedelta(days=iso_day-1, weeks=iso_week-1)
 
 
-def process_step(scraper, studio, headers):
+def process_step(scraper, studio, headers, filters):
 
-    instructors_file_path = "C:/tmp/unknown_instructors2.csv"
+    instructors_file_path = "C:/tmp/unknown_instructors3.csv"
 
     logger.debug("Parsing events out of MindBodyOnline HTML")
 
@@ -101,7 +110,7 @@ def process_step(scraper, studio, headers):
     wk2 = 'week_'+str(current_week_num+1)
     wk3 = 'week_'+str(current_week_num+2)
 
-    htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2,wk3]) .filter(scrape_uuid__in=['69625d0f-7706-11e3-9ed9-00256444d517','00'])
+    htmls = studio.parsing_history_set.filter(comment__in=[wk1, wk2,wk3]) .filter(scrape_uuid__in=['c524960f-81e5-11e3-a0ec-00256444d517','7ac9da6e-81f0-11e3-a553-00256444d517','f6c613b0-81ef-11e3-8215-00256444d517'])
     if not htmls or len(htmls) <= 0:
         logger.error("No parsed_history objects found ")
         return
@@ -114,34 +123,24 @@ def process_step(scraper, studio, headers):
 
     for html in htmls:
         html_str = html.calendar_html
-        db_events = parsing_html(headers, html_str, instructors_file_path, scraper, studio)
+        db_events = parsing_html(headers, html_str, instructors_file_path, scraper, studio, filters)
 
         #scraper.vars['db_events'] = db_events
         #print_db_events(db_events)
+
         if db_events:
+            logger.info("Saving to DB "+str(len(db_events))+" to DB")
             for db_event in db_events:
                 db_event.save()
 
 
-def print_db_events(db_events):
-
-    if not db_events:
-        logger.debug("No Events were Parsed out:")
-        return
-
-    logger.debug("Parsed Out DB Events are :")
-    for idx, db_event in enumerate(db_events):
-        logger.debug( str(idx)+": "+db_event.comments + ", "+repr(db_event.start_time)+", "+db_event.instructor_name)
-
-    if db_events:
-        json_db_events = serializers.serialize('json', db_events)
-        print json_db_events
-
-
-def parsing_html(headers, html_str, instructors_file_path, scraper, studio):
+def parsing_html(headers, html_str, instructors_file_path, scraper, studio, filters):
 
     parsed_events = ExtractEventsFromMBO(scraper).run(html_str, headers)
-    db_events = PrepareEventsForDB(scraper).run(studio, parsed_events)
+
+    parsed_events_new = FilterEvents(scraper).run(parsed_events,filters)
+
+    db_events = PrepareEventsForDB(scraper).run(studio, parsed_events_new)
     studio_instructors = studio.instructors.all()
     instructors_unmatched = LinkToKnownInstructors(scraper).run2(studio_instructors, db_events)
     DealWithNewInstructors(scraper).run(studio, instructors_unmatched, instructors_file_path)

@@ -102,5 +102,10 @@ LOGGING = {
             'propagate': True,
             'level': 'INFO', # DEBUG mode is too verbose
         },
+        'schyoga.scraper.steps.filterevents': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'DEBUG', # DEBUG mode is too verbose
+        },
     },
 }

@@ -57,6 +57,7 @@ class ExtractEventsFromMBO:
                     startTime = eventData.get(ScraperOld.START_TIME)
                     className = eventData.get(ScraperOld.CLASS_NAME)
                     teacher = eventData.get(ScraperOld.TEACHER_NAME)
+                    location = eventData.get(ScraperOld.LOCATION)
                     duration = eventData.get(ScraperOld.DURATION)
 
                     #controlTag.string = control_msg

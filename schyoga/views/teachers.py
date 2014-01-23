@@ -62,9 +62,11 @@ class TeacherViews(View):
 
     def profile(self, request, instructor, state, cur_page):
 
-        startDateStr = datetime.datetime.now().strftime('%Y-%m-%d')
+        startDate = datetime.datetime.now()
+        startDateStr = startDate.strftime('%Y-%m-%d')
+
         events = instructor.event_set.all().order_by('start_time').filter(start_time__gt=startDateStr)
-        calendar = Schedule(events)
+        calendar = Schedule(events, startDate)
 
         #TODO: get list of studios where instructor teaches from "Instructor-Studio" relationship, instead of from events
 

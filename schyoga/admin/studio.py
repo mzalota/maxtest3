@@ -8,12 +8,14 @@ from schyoga.models import Studio
 class StudioAdmin(admin.ModelAdmin):
     list_per_page = 250
     change_list_template = "admin/schyoga/studio/change_list_filter_sidebar.html"
+    save_as = True
+    save_on_top = True
 
     #fields = ('name', 'nameForURL', 'instructors')
 
     fieldsets = (
         ('', {
-            'fields': (('name', 'nameForURL'))
+            'fields': (('name', 'nameForURL', 'state_name_url'))
         }),
         ('Instructors', {
             #'description': "bla-bla",
