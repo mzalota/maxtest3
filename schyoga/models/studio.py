@@ -23,6 +23,8 @@ class Studio(models.Model):
     mindbodyonline_id = models.CharField(max_length=10, blank=True, null=True)
     created_on = models.DateTimeField()
     modified_on = models.DateTimeField()
+    #created_on = models.DateTimeField(auto_now_add=True, editable=False)
+    #modified_on = models.DateTimeField(auto_now=True)
     fbPageID = None #'balancedyoga'   #'balancedyoga'
     instructors = models.ManyToManyField("Instructor", blank=True, null=True, db_table="schyoga_instructor_studios")
 

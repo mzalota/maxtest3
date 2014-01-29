@@ -29,7 +29,7 @@ def run():
     logger.debug("starting script: parse")
 
     scraper = Scraper()
-    studios = Studio.objects.all().filter(id__gte=1).filter(id__lte=200).order_by('id')
+    studios = Studio.objects.all().filter(id__gte=65).filter(id__lte=65).order_by('id')
     for studio in studios:
         process_studio(scraper, studio)
 

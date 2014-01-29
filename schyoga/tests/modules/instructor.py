@@ -1,6 +1,7 @@
 from time import sleep
 from unittest import TestCase
 from mock import patch
+from schyoga.models import Studio
 from schyoga.models.instructor import Instructor
 #from schyoga.models.studio import Studio
 
@@ -12,6 +13,7 @@ class TestInstructor(TestCase):
         list_of_aliases = list(["value1", "value2"])
         #ACT
         newObj = Instructor()
+        newObj.name_url = "test_saving_alias_as_list"
         newObj.aliases_list = list_of_aliases
         newObj.save()
         id = newObj.id
@@ -25,9 +27,186 @@ class TestInstructor(TestCase):
         #ASSERT 2
         self.assertIsNotNone(fetchObj)
         self.assertListEqual(fetchObj.aliases_list, list_of_aliases)
-        sleep(20)
+        #sleep(20)
+
+    def test_query_db_by_alias_case_insensitive(self):
+        #ARRANGE
+        aliases = " ValuE1 ; value2 "
+        instructor_name = 'value1'
+
+        #ACT
+        newObj = Instructor()
+        newObj.name_url = "test_query_db_by_alias_case_insensitive"
+        newObj.aliases = aliases
+        newObj.save()
+
+        instructors = Instructor.objects.all().filter(aliases__icontains=instructor_name)
+
+        #ASSERT
+        self.assertIsNotNone(instructors)
+        self.assertEqual(len(instructors), 1)
+        self.assertEqual(instructors[0].id, newObj.id)
+        #sleep(20)
 
     #TODO: V.2. read Django Best Practices http://blog.apps.chicagotribune.com/2010/02/26/best-practices/
+
+    @patch('schyoga.models.Event')
+    def test_link_to_event_valid_instructor_name(self, event):
+        #ARRANGE
+        studio_1 = Studio()
+        studio_1.save()
+        studio_2 = Studio()
+        studio_2.save()
+        instructor = Instructor()
+        instructor.aliases_list = list(['Aimee McCabe - Karr', ])
+        instructor.name_url = 'test_link_to_event_valid_instructor_name2'
+        instructor.save()
+        instructor.studios.add(studio_1)
+        event.instructor_name = ' Teacher_AMK '
+        event.studio = studio_2
+
+        #ACT
+        instructor.link_to_event(event)
+        new_aliases_list = instructor.aliases_list
+        new_studio_list = instructor.studios
+
+        #ASSERT
+        self.assertIsNotNone(new_aliases_list)
+        self.assertEqual(len(new_aliases_list), 2)
+        self.assertIn('Teacher_AMK', new_aliases_list)
+        self.assertIsNotNone(new_studio_list)
+        self.assertEqual(new_studio_list.count() , 2)
+        #self.assertIn(studio_2, new_studio_list.values_list(id))
+
+
+    @patch('schyoga.models.Event')
+    def test_link_to_event_duplicate_studio(self, event):
+        #ARRANGE
+        studio_1 = Studio()
+        studio_1.save()
+
+        instructor = Instructor()
+        instructor.aliases_list = list(['Aimee McCabe - Karr', ])
+        instructor.name_url = 'test_link_to_event_duplicate_studio'
+        instructor.save()
+        instructor.studios.add(studio_1)
+
+        event.instructor_name = ' Teacher_AMK '
+        event.studio = studio_1
+
+        #ACT
+        instructor.link_to_event(event)
+        new_aliases_list = instructor.aliases_list
+        new_studio_list = instructor.studios
+
+        #ASSERT
+        self.assertIsNotNone(new_studio_list)
+        self.assertEqual(new_studio_list.count(), 1)
+
+
+    @patch('schyoga.models.Event')
+    def test_link_to_event_empty_instructor_name(self, event):
+        #ARRANGE
+        instructor = Instructor()
+        instructor.aliases_list = list(['Aimee McCabe - Karr', ])
+        event.instructor_name = '  '
+
+        #ACT
+        instructor.link_to_event(event)
+        new_aliases_list = instructor.aliases_list
+
+        #ASSERT
+        self.assertIsNotNone(instructor)
+        self.assertEqual(len(new_aliases_list), 1)
+        self.assertIn('Aimee McCabe - Karr', new_aliases_list)
+
+
+    @patch('schyoga.models.Event')
+    def test_link_to_event_invalid_instructor_name(self, event):
+        #ARRANGE
+        instructor = Instructor()
+        instructor.aliases_list = list(['Aimee McCabe - Karr', ])
+        event.instructor_name = ' TBA '
+
+        #ACT
+        instructor.link_to_event(event)
+        new_aliases_list = instructor.aliases_list
+
+        #ASSERT
+        self.assertIsNotNone(instructor)
+        self.assertEqual(len(new_aliases_list), 1)
+        self.assertIn('Aimee McCabe - Karr', new_aliases_list)
+
+
+    def test_add_alias_duplicate_alias(self):
+        #ARRANGE
+        instructor = Instructor()
+        instructor.aliases = 'Aimee McCabe - Karr; Teacher 1; Instructor_A'
+        new_alias = ' instructor_a '
+
+        #ACT
+        instructor.add_alias(new_alias)
+        new_aliases_list = instructor.aliases_list
+
+        #ASSERT
+        self.assertIsNotNone(new_aliases_list)
+        self.assertEqual(len(new_aliases_list), 3)
+        self.assertIn('Aimee McCabe - Karr', new_aliases_list)
+        self.assertIn('Teacher 1', new_aliases_list)
+        self.assertIn('Instructor_A', new_aliases_list)
+
+
+    def test_add_alias_empty_alias(self):
+        #ARRANGE
+        instructor = Instructor()
+        instructor.aliases = ''
+        new_alias = ' Instructor_A '
+
+        #ACT
+        instructor.add_alias(new_alias)
+        new_aliases_list = instructor.aliases_list
+
+        #ASSERT
+        self.assertIsNotNone(new_aliases_list)
+        self.assertEqual(len(new_aliases_list), 1)
+        self.assertIn('Instructor_A', new_aliases_list)
+
+
+    def test_alias_list_field_is_null(self):
+        #ARRANGE
+        instructor = Instructor()
+        instructor.aliases = None
+
+        #ACT
+        new_aliases_list = instructor.aliases_list
+
+        #ASSERT
+        self.assertIsNotNone(new_aliases_list)
+        self.assertEqual(len(new_aliases_list), 0)
+
+    def test_alias_list_field_is_empty_string(self):
+        #ARRANGE
+        instructor = Instructor()
+        instructor.aliases = ''
+
+        #ACT
+        new_aliases_list = instructor.aliases_list
+
+        #ASSERT
+        self.assertIsNotNone(new_aliases_list)
+        self.assertEqual(len(new_aliases_list), 0)
+
+    def test_alias_list_field_is_white_space(self):
+        #ARRANGE
+        instructor = Instructor()
+        instructor.aliases = '  '
+
+        #ACT
+        new_aliases_list = instructor.aliases_list
+
+        #ASSERT
+        self.assertIsNotNone(new_aliases_list)
+        self.assertEqual(len(new_aliases_list), 0)
 
     def test_clean_up_name(self):
         #ARRANGE
@@ -193,6 +372,18 @@ class TestInstructor(TestCase):
     #TODO: V.2. Understand difference between Mock Patterns: 'action -> assertion' vs 'record -> replay' (http://docs.python.org/dev/library/unittest.mock)
 
 
+    def test_capitalilze(self):
+        #ARRANGE
+        instructor_name = ' aimee mcCabe -   Karr  '
+
+        #ACT
+        instructor_name_caps = Instructor._Instructor__capitalize(instructor_name)
+
+        #ASSERT
+        self.assertIsNotNone(instructor_name_caps)
+        self.assertEqual(instructor_name_caps, 'Aimee McCabe - Karr')
+
+
     @patch('schyoga.models.Instructor')
     def test_find_by_alias_one_instructor(self, instructor_1):
         #ARRANGE
@@ -256,4 +447,21 @@ class TestInstructor(TestCase):
         self.assertEqual(len(instructors), 2)
         self.assertIn(instructor_1,instructors)
         self.assertIn(instructor_2,instructors)
-        #self.assertEqual(instructors[0], instructor_2)
+
+
+    @patch('schyoga.models.Instructor')
+    @patch('schyoga.models.Instructor')
+    def test_find_by_alias_with_space_different_case(self, instructor_1, instructor_2):
+        #ARRANGE
+        instructor_1.aliases_list = ['Aimee McCabe - Karr', ' teacher_1     ']
+        instructor_2.aliases_list = ['Nadya Zalota', 'Yogi_1' ]
+
+        studio_instructors = list([instructor_1, instructor_2])
+
+        #ACT
+        instructors = Instructor.find_by_alias(studio_instructors, 'Teacher_1')
+
+        #ASSERT
+        self.assertIsNotNone(instructors)
+        self.assertEqual(len(instructors), 1)
+        self.assertEqual(instructors[0], instructor_1)

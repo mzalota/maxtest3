@@ -17,8 +17,5 @@ class Event(models.Model):
         app_label="schyoga"
 
 
-
-
-
 #alter table schyoga_event MODIFY COLUMN instructor_id int(11) default NULL;
 #alter table schyoga_event MODIFY COLUMN comments varchar(100) default NULL;

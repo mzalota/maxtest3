@@ -33,6 +33,12 @@ class LinkToKnownInstructors:
 
     #TODO: WORK ON THIS FUNCTION.
     def run2(self, studio, db_events):
+        """
+
+        @type studio: schyoga.models.studio.Studio
+        @type db_events: list of schyoga.models.event.Event
+        @return:
+        """
         logger.debug("Linking parsed instructors to known instructors")
         unmatched = set()
 

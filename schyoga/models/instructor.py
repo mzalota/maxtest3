@@ -4,6 +4,7 @@ import datetime
 from django.db import models
 
 from schyoga.bizobj.schedule import Schedule
+from schyoga.models import Event
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +51,28 @@ class Instructor(models.Model):
         return u"%s (%s)" % (self.instructor_name, self.id)
 
 
+    def link_to_event(self, event):
+        """
+
+        @type event: Event
+        """
+        if not event:
+            return
+
+        clean_name = event.instructor_name
+        clean_name = clean_name.strip()
+        clean_name = Instructor.clean_up_name(clean_name)
+
+        if not clean_name or len(clean_name)==0:
+            return
+
+        self.add_alias(event.instructor_name)
+
+        assert event.studio
+        self.studios.add(event.studio)
+
+        return
+
     @property
     def schedule_next_week(self):
         start_date = datetime.datetime.now()
@@ -65,13 +88,6 @@ class Instructor(models.Model):
         return Schedule(events,start_date,7)
 
     @property
-    def aliases_list(self):
-        """
-        :return:
-        """
-        return self.aliases.split(";")
-
-    @property
     def content(self):
         #content_count = self.instructor_content_set.count()
         content_set = self.instructor_content_set.all()
@@ -82,10 +98,43 @@ class Instructor(models.Model):
 
         return result
 
+    @property
+    def aliases_list(self):
+        """
+
+        @rtype: list of str
+        """
+        if not self.aliases:
+            return list()
+
+        if self.aliases.strip() == '':
+            return list()
+
+        aliases_raw = self.aliases.split(";")
+        aliases_striped = [item.strip() for item in aliases_raw]
+
+        return aliases_striped
 
     @aliases_list.setter
     def aliases_list(self, value):
         self.aliases = ";".join(value)
+
+    def add_alias(self, new_alias):
+        """
+        Add new alias to existing list. If its a duplicate don't add it
+
+        @type new_alias: str
+        """
+        if not self.aliases_list or len(self.aliases_list)<=0:
+            self.aliases = new_alias
+            return
+
+        #compare case-insensitively - lower case to lower case
+        if new_alias.strip().lower() in [alias.strip().lower() for alias in self.aliases_list]:
+            #its a duplicate alias
+            return
+
+        self.aliases = self.aliases+";"+new_alias
 
 
     @staticmethod
@@ -146,21 +195,31 @@ class Instructor(models.Model):
 
     @staticmethod
     def __capitalize(line):
+        line = line.strip()
         if len(line) <= 0:
             return ""
-        else:
-            return ' '.join([s[0].upper() + s[1:] for s in line.split(' ')])
+
+        if not " " in line:
+            return line.capitalize()
+
+        line = " ".join(line.split()) #get rid of consecutive spaces
+
+        #capitalize first letter after the space
+        return ' '.join([s[0].upper() + s[1:] for s in line.split(' ')])
+
 
     @staticmethod
     def find_by_alias(studio_instructors, name):
         instructors_by_alias = dict()
         for instructor in studio_instructors: #studio.instructors.all():
             for alias in instructor.aliases_list:
-                if not instructors_by_alias.has_key(alias):
-                    instructors_by_alias[alias] = list()
-                instructors_by_alias[alias].append(instructor)
+                alias_normalized = Instructor.__capitalize(alias)
+                if not instructors_by_alias.has_key(alias_normalized):
+                    instructors_by_alias[alias_normalized] = list()
+                instructors_by_alias[alias_normalized].append(instructor)
 
-        if instructors_by_alias.has_key(name):
-            return instructors_by_alias[name]
+        name_normalized = Instructor.__capitalize(name.strip())
+        if instructors_by_alias.has_key(name_normalized):
+            return instructors_by_alias[name_normalized]
         else:
             return None
