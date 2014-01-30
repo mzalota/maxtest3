@@ -20,6 +20,7 @@ class PrepareEventsForDB:
         @type parsed_events: list of dict
         @type studio: Studio
         @type: list of Event
+        @rtype: list of Event
         """
         logger.debug("creating Event objects for saving to DB ")
 
@@ -33,7 +34,11 @@ class PrepareEventsForDB:
 
             start_time = parsed_event[ScraperOld.START_TIME]
             event_date = parsed_event[ScraperOld.EVENT_DATE]
-            dt = parser.parse(event_date + " " + start_time)
+            try:
+                dt = parser.parse(event_date + " " + start_time)
+            except ValueError as e:
+                logger.error("Could not understand the format of the date: " + event_date + " " + start_time + ". Exception Message is: " + repr(e.message) + ". Event data is: " + repr(parsed_event))
+                continue
 
             instructor_name_clean = Instructor.clean_up_name(parsed_event[ScraperOld.TEACHER_NAME])
 
@@ -50,10 +55,11 @@ class PrepareEventsForDB:
                 db_event.full_clean()
                 db_events.append(db_event)
             except ValidationError as e:
-                logger.error("Could not validate event #"+str(idx)+". Message is: "+repr(e.messages) +". Event data is: "+repr(parsed_event))
+                logger.error("Could not validate event #" + str(idx) + ". Message is: " + repr(
+                    e.messages) + ". Event data is: " + repr(parsed_event))
                 db_events.append(None)
                 continue
 
         return db_events
 
-            # use this function to enter into DB Event.objects.get_or_create()
+        # use this function to enter into DB Event.objects.get_or_create()

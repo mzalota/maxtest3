@@ -1,28 +1,9 @@
 import logging
-import datetime
-from django.core import serializers
-from schyoga.bizobj.parser.scraperOld import ScraperOld
-from schyoga.models import Instructor
-from schyoga.models.event import Event
 from schyoga.models.studio import Studio
 from schyoga.scraper.scraper import Scraper
-from schyoga.scraper.steps.clickelement import ClickElement
-from schyoga.scraper.steps.clicklink import ClickLink
 from schyoga.scraper.steps.crawlmbo import CrawlMBO
-from schyoga.scraper.steps.dealwithnewinstructors import DealWithNewInstructors
-from schyoga.scraper.steps.extracteventsfrommbo import ExtractEventsFromMBO
-from schyoga.scraper.steps.extracthtmlsnippet import ExtractHtmlSnippet
-from schyoga.scraper.steps.linktoknowninstructors import LinkToKnownInstructors
-from schyoga.scraper.steps.loadurl import LoadUrl
-from schyoga.scraper.steps.prepareeventsfordb import PrepareEventsForDB
-from schyoga.scraper.steps.readpagecontent import ReadPageContent
-from schyoga.scraper.steps.savehtmltodb import SaveHtmlToDB
-from schyoga.scraper.steps.standardizeinstructornames import StandardizeInstructorNames
-from schyoga.scraper.steps.waitforelement import WaitForElement
-from schyoga.scraper.steps.waitforframe import WaitForFrame
 
-import io, json
-import codecs
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +19,6 @@ def run():
 
 
 def process_studio(scraper, studio):
-
     """
 
     @type scraper: Scraper

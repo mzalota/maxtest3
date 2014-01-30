@@ -1,11 +1,12 @@
 #from unittest import TestCase
+from time import sleep
 from django.db import connection
 from django.test import TestCase
-from mock import patch, Mock
 from schyoga.bizobj.parser.scraperOld import ScraperOld
 from schyoga.models import Parsing_History, Instructor
 import os.path
 from dateutil import parser
+import datetime
 
 import schyoga
 
@@ -14,8 +15,13 @@ from schyoga.models.event import Event
 from schyoga.models.studio import Studio
 from schyoga.scraper.scraper import Scraper
 from schyoga.scraper.steps.linktoknowninstructors import LinkToKnownInstructors
+from schyoga.scraper.steps.parsembo import parseMBO
 from schyoga.scraper.steps.prepareeventsfordb import PrepareEventsForDB
 from schyoga.scraper.steps.standardizeinstructornames import StandardizeInstructorNames
+
+
+#following link explains why the data is not loaded into DB automatically when test is run as it would with syncdb
+#https://code.djangoproject.com/ticket/16550
 
 
 class ScraperTestCase(TestCase):
@@ -149,7 +155,9 @@ class ScraperTestCase(TestCase):
         self.assertEqual(len(events), 62)
 
 
-class PrepareEventsForDBTestCase(TestCase):
+
+
+class ParserStepTestCase(TestCase):
 
     def setUp(self):
         #Load data into schyoga_studio table for testing
@@ -158,8 +166,88 @@ class PrepareEventsForDBTestCase(TestCase):
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        #following link explains why the data is not loaded into DB automatically when test is run as it would with syncdb
-        #https://code.djangoproject.com/ticket/16550
+    def load_html_from_file(self, file_name):
+        resources_dir = schyoga.__path__[0] + "\\..\\resources"
+        path = resources_dir + "\\"+file_name
+        with open(path) as myfile:
+            htmlText = myfile.read()
+        return htmlText
+
+    def test_run_happy_path(self):
+
+        #ARRANGE
+        htmlText_1 = self.load_html_from_file("110_ishta-yoga-upper-east-side.html")
+        htmlText_2 = self.load_html_from_file("110_ishta-yoga-upper-east-side_wk_2014_06.html")
+
+        studio = Studio.objects.get(pk=110)
+
+        parsing_history = Parsing_History()
+        parsing_history.studio = studio
+        parsing_history.calendar_html = htmlText_1
+        parsing_history.comment = 'week_2014_05'
+        parsing_history.save()
+
+        parsing_history2 = Parsing_History()
+        parsing_history2.studio = studio
+        parsing_history2.calendar_html = htmlText_2
+        parsing_history2.comment = 'week_2014_06'
+        parsing_history2.save()
+
+        scraper = Scraper()
+        filters = {"field_name":"location", "field_value":"ISHTA Upper East Side"}
+        headers = ["start-time", "sign-up","class-name","teacher-name","location","duration"]
+
+        #ACT
+        events = parseMBO(scraper).run(studio, headers, filters)
+
+        ##ASSERT
+        self.assertIsNotNone(events)
+        self.assertEqual(len(events), 92)
+
+
+    def test_get_htmls_ignore_older_parsing_history(self):
+
+        #ARRANGE
+        htmlText_1 = self.load_html_from_file("110_ishta-yoga-upper-east-side.html")
+        htmlText_2 = self.load_html_from_file("110_ishta-yoga-upper-east-side_wk_2014_06.html")
+
+        studio = Studio.objects.get(pk=110)
+
+        p_h_first = Parsing_History()
+        p_h_first.studio = studio
+        p_h_first.calendar_html = htmlText_2
+        p_h_first.comment = 'week_2014_05'
+        p_h_first.save()
+
+        p_h_second_but_newest = Parsing_History()
+        p_h_second_but_newest.studio = studio
+        p_h_second_but_newest.calendar_html = htmlText_1
+        p_h_second_but_newest.comment = 'week_2014_05'
+        p_h_second_but_newest.save()
+        sleep(2)
+
+        p_h_third = Parsing_History()
+        p_h_third.studio = studio
+        p_h_third.calendar_html = htmlText_2
+        p_h_third.comment = 'week_2014_05'
+        p_h_third.save()
+        sleep(2)
+
+        p_h_first.last_crawling = datetime.datetime(2014, 1, 28,2,0,0)
+        p_h_first.save()
+        p_h_second_but_newest.last_crawling = datetime.datetime(2014, 1, 29,1,0,0)
+        p_h_second_but_newest.save()
+        p_h_third.last_crawling = datetime.datetime(2014, 1, 28,3,0,0)
+        p_h_third.save()
+
+        scraper = Scraper()
+
+        #ACT
+        html = parseMBO(scraper).retrieve_html_by_week(studio, 5, 2014)
+
+        ##ASSERT
+        self.assertIsNotNone(html)
+        self.assertEqual(html, htmlText_1)
 
     def test_run(self):
 

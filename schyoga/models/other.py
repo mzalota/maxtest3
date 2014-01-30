@@ -29,7 +29,7 @@ class Parsing_History(models.Model):
     #studio_id = models.IntegerField()
     scrape_uuid = models.CharField(max_length=36)
     comment = models.CharField(max_length=100, blank=True, null=True)
-    last_crawling = models.DateTimeField(auto_now=True)
+    last_crawling = models.DateTimeField(auto_now_add=True)
     calendar_html = models.TextField(blank=True, null=True)
 
     class Meta:

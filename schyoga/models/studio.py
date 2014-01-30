@@ -21,11 +21,9 @@ class Studio(models.Model):
     site_image_cloudinary_id = models.CharField(max_length=150, blank=True, null=True)
     xpath = models.CharField(max_length=1024)
     mindbodyonline_id = models.CharField(max_length=10, blank=True, null=True)
-    created_on = models.DateTimeField()
-    modified_on = models.DateTimeField()
-    #created_on = models.DateTimeField(auto_now_add=True, editable=False)
-    #modified_on = models.DateTimeField(auto_now=True)
     fbPageID = None #'balancedyoga'   #'balancedyoga'
+    created_on = models.DateTimeField(auto_now_add=True, editable=False)
+    modified_on = models.DateTimeField(auto_now=True)
     instructors = models.ManyToManyField("Instructor", blank=True, null=True, db_table="schyoga_instructor_studios")
 
     class Meta:

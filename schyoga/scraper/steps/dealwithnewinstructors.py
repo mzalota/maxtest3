@@ -9,21 +9,21 @@ class DealWithNewInstructors:
     def __init__(self, scraper):
         self.scraper = scraper
 
-
     def run(self, studio, unmatched_instructors, file_path):
-        logger.debug("Logging new instructors to file C:/tmp/unknown_instructors.csv")
+        logger.debug("Logging new instructors to file "+file_path)
         formated_list = "" #"studio_id,studio_name,state,instructor_name,instructor_name_for_url"
         for instructor in unmatched_instructors:
-            formated_list += "\r\n"
-            clean_instructor = Instructor.clean_up_name(instructor)
-            if len(clean_instructor) == 0:
-                if len(instructor) == 0:
-                    logger.warn("Ignoring invalid instructor name: "+instructor)
+            if len(instructor) == 0:
+                #instructor name is empty. Skip it
                 continue
 
-            formated_list += str(studio.id)+","+studio.name+","+studio.state_name_url+", "+instructor+", "+Instructor.convert_to_url_name(instructor)
+            clean_instructor = Instructor.clean_up_name(instructor)
+            if len(clean_instructor) == 0:
+                logger.warn("Ignoring invalid instructor name: "+instructor)
+                continue
 
-            #logger.debug("Logging to file new instructor: "+instructor)
+            formated_list += "\r\n"
+            formated_list += str(studio.id)+","+studio.name+","+studio.state_name_url+", "+instructor+", "+Instructor.convert_to_url_name(instructor)
 
         self.writeToFile(formated_list, file_path)
 

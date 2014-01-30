@@ -115,3 +115,53 @@ class Schedule():
         if self.events:
             json_db_events = serializers.serialize('json', self.events)
             logger.debug( json_db_events)
+
+
+
+
+
+    @staticmethod
+    def get_week_start_and_end_for_date(date):
+        """
+        Return the date of Monday before and after parameter
+
+        @type date: datetime.datetime
+        @rtype: datetime.datetime
+        @rtype: datetime.datetime
+        """
+
+        current_date_iso = date.isocalendar()
+        current_week_num = current_date_iso[1]
+        current_year = current_date_iso[0]
+        first_day_of_the_week_iso = (current_year, current_week_num, 1)
+        first_day_of_the_week_gregorian = Schedule.iso_to_gregorian(*first_day_of_the_week_iso)
+
+        start_date = datetime.datetime(first_day_of_the_week_gregorian.year, first_day_of_the_week_gregorian.month,first_day_of_the_week_gregorian.day)
+        end_date = start_date + datetime.timedelta(days=7)
+
+        return start_date, end_date
+
+    #@staticmethod
+    #def get_week_start_and_end_for_week(year, week_num):
+    #    first_day_of_the_week_iso = (year, week_num, 1)
+    #    first_day_of_the_week_gregorian = Schedule.iso_to_gregorian(*first_day_of_the_week_iso)
+    #
+    #    start_date = datetime.datetime(first_day_of_the_week_gregorian.year, first_day_of_the_week_gregorian.month,first_day_of_the_week_gregorian.day)
+    #    end_date = start_date + datetime.timedelta(days=7)
+    #
+    #    return start_date, end_date
+    #
+    #this snippet came from here
+    #http://stackoverflow.com/questions/304256/whats-the-best-way-to-find-the-inverse-of-datetime-isocalendar
+    @staticmethod
+    def iso_year_start(iso_year):
+        "The gregorian calendar date of the first day of the given ISO year"
+        fourth_jan = datetime.date(iso_year, 1, 4)
+        delta = datetime.timedelta(fourth_jan.isoweekday() - 1)
+        return fourth_jan - delta
+
+    @staticmethod
+    def iso_to_gregorian(iso_year, iso_week, iso_day):
+        "Gregorian calendar date for the given ISO year, week and day"
+        year_start = Schedule.iso_year_start(iso_year)
+        return year_start + datetime.timedelta(days=iso_day - 1, weeks=iso_week - 1)

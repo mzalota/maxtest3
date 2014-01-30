@@ -12,6 +12,7 @@ class StudioAdmin(admin.ModelAdmin):
     save_on_top = True
 
     #fields = ('name', 'nameForURL', 'instructors')
+    readonly_fields = ("created_on","modified_on")
 
     fieldsets = (
         ('', {

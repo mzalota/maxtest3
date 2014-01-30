@@ -7,6 +7,9 @@ Natural Language processing in Python http://www.tryolabs.com/
 --- thai music:
 http://www.youtube.com/watch?v=yiHukM7rQk8&list=PLCB56AF96663F11DA
 
+Okean Elzy
+http://www.youtube.com/watch?v=3PazGN6BMrc&list=PL2C383F5503A2182D
+
 Traditional Nicaraguan music:
 Carlos Mejía Godoy y grupe "Los De Palacaguina"
 
@@ -27,16 +30,32 @@ Check competitors:
 0.9) http://ommmm.com/teacher/new-york-city-eric-elven
 0.10) http://newsle.com/person/ericelven/37385878
 0.11) http://www.alignyo.com/local-classes/new-york-city/homegirl-yoga-with-halle-becker ; http://www.alignyo.com/interviews/new-york-city/halle-becker-apr-11 ; http://www.alignyo.com/blog/get-to-know-halle-becker-creator-of-homegirl-yoga
+0.12) https://yourtrainer.com/yoga-instructors/new-york/new-york/allison-richard-11217
+0.13) http://www.alignyo.com/authors/allison-richard
+0.14) http://classtivity.com/ishta-yoga-downtown-new-york#schedule
+0.15) http://seekretreat.com/people/julie-weber/#.UugmRtLnat8
+0.17) http://www.yogaalliance.org/TeacherPublicProfile?tid=20105
 
 1) http://yoganonymous.com/
 2) http://findsportsnow.com/about
 3) http://centzy.com/
 4) http://www.wellandgoodnyc.com/
 
+Claim Profile capability here:
+http://ommmm.com/teacher/brooklyn-natalia-vasakova
 
 
-Explore installing better Admin UI:
-https://django-grappelli.readthedocs.org/en/latest/quickstart.html
+---
+Fixing column and rows when scrolling down and/or up
+http://stackoverflow.com/questions/1312236/how-do-i-create-an-html-table-with-fixed-frozen-left-column-and-scrollable-body?lq=1
+http://jsfiddle.net/emn13/YMvk9/
+http://fixedheadertable.com/
+
+http://stackoverflow.com/questions/3402295/html-table-with-horizontal-scrolling-first-column-fixed
+http://ludo.cubicphuse.nl/jquery-treetable/
+
+
+http://iphone4simulator.com/
 
 ----To enable facebook javascript:
 
@@ -70,6 +89,11 @@ sudo yum install python-pip
 sudo pip install selenium
 
 **** compile firefox
+DEBUG 2014-01-07 09:13:06,437 parse 3960 5616 Starting to Parse schedule for studio: 30, Dharma Yoga Center
+DEBUG 2014-01-07 09:13:06,437 parse 3960 5616 Processing step: MBOLParseHtml
+DEBUG 2014-01-07 09:13:06,437 parse 3960 5616 Parsing events out of MindBodyOnline HTML
+WARNING 2014-01-07 09:13:06,562 extracteventsfrommbo 3960 5616 Encountered more columns: 7. Expected columns: 6
+
 http://joekiller.com/2012/06/03/install-firefox-on-amazon-linux-x86_64-compiling-gtk/
 
 create virtual display (as descirbed here: http://itsallabtamil.blogspot.com/2013/02/setting-up-chrome-firefox-ec2-selenium-java.html)
@@ -103,3 +127,6 @@ ipconfig /registerdns
         })
         </script>
         Send some of your <h4 class="rotate">positivity, prana, qi, love</h4> back to {{ instructor.instructor_name }}
+
+
+
